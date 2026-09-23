@@ -15,9 +15,18 @@ router:
 continual:
   experts_trainable_during_warmup: true
   freeze_experts_after_warmup: true
+
   replay_size: 256
+
   stability_kl: true
+  routing_kl_weight: 0.1
+
   dense_ewc: true
+  dense_ewc_weight: 1.0e-5
+
+  fisher_steps: 16
+  task_replay_samples: 256
+  stability_batch_size: 32
 
 systems:
   backend: reference
