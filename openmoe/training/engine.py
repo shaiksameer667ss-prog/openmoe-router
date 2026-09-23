@@ -762,7 +762,18 @@ def train_steps(
 
         loss.backward()
 
+        # Protect previously learned classifier rows when requested.
+        # Gradient masking alone is not sufficient with AdamW because
+        # decoupled weight decay can still modify zero-gradient rows.
+        if hasattr(model, "mask_head_old_row_gradients"):
+            model.mask_head_old_row_gradients()
+
         optimizer.step()
+
+        # Explicitly restore protected classifier rows after AdamW.
+        # This guarantees that old classifier rows remain unchanged.
+        if hasattr(model, "restore_frozen_head_rows"):
+            model.restore_frozen_head_rows()
 
         if post_step is not None:
             post_step(
