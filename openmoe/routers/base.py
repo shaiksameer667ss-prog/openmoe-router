@@ -34,21 +34,33 @@ class RouterBase(nn.Module):
         temperature: float = 1.0,
     ) -> None:
         super().__init__()
+
         if hidden_dim <= 0 or num_experts <= 0:
             raise ValueError("hidden_dim and num_experts must be positive")
+
         if not 1 <= top_k <= num_experts:
             raise ValueError("top_k must be in [1, num_experts]")
+
         if temperature <= 0:
             raise ValueError("temperature must be positive")
+
         self.hidden_dim = hidden_dim
         self.num_experts = num_experts
         self.top_k = top_k
         self.temperature = float(temperature)
+
         self.proj = nn.Linear(hidden_dim, num_experts, bias=False)
+
+        # Controls both:
+        # 1. gradient-based updates to router parameters
+        # 2. non-gradient state updates such as routing bias / memory
+        self._updates_enabled = True
 
     def compute_logits(self, x: Tensor) -> Tensor:
         if x.shape[-1] != self.hidden_dim:
-            raise ValueError(f"expected last dimension {self.hidden_dim}, got {x.shape[-1]}")
+            raise ValueError(
+                f"expected last dimension {self.hidden_dim}, got {x.shape[-1]}"
+            )
         return self.proj(x)
 
     @staticmethod
@@ -57,17 +69,45 @@ class RouterBase(nn.Module):
         log_z = torch.logsumexp(logits.float(), dim=-1)
         return log_z.square().mean()
 
-    def _route(self, logits: Tensor, selection_logits: Tensor | None = None) -> RoutingResult:
+    def _route(
+        self,
+        logits: Tensor,
+        selection_logits: Tensor | None = None,
+    ) -> RoutingResult:
         selection = logits if selection_logits is None else selection_logits
-        _, indices = torch.topk(selection, k=self.top_k, dim=-1)
+
+        _, indices = torch.topk(
+            selection,
+            k=self.top_k,
+            dim=-1,
+        )
+
         chosen = logits.gather(-1, indices)
-        gates = torch.softmax(chosen / self.temperature, dim=-1)
+
+        gates = torch.softmax(
+            chosen / self.temperature,
+            dim=-1,
+        )
+
         return RoutingResult(
             indices=indices,
             gates=gates,
             logits=logits,
             selection_logits=selection,
         )
+
+    def set_trainable(self, trainable: bool) -> None:
+        """Enable or disable router learning and non-gradient state updates.
+
+        When disabled:
+        - router projection parameters stop receiving gradients
+        - routing-bias updates are disabled
+        - continual expert-memory updates are disabled
+
+        Routing itself still operates normally during forward passes.
+        """
+        self.proj.requires_grad_(trainable)
+        self._updates_enabled = bool(trainable)
 
     def forward(self, x: Tensor) -> RoutingResult:
         raise NotImplementedError
