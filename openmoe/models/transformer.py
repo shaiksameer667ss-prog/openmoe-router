@@ -137,17 +137,28 @@ class TinyMoETransformer(nn.Module):
             std=0.02,
         )
 
-    def forward(
+        # Classifier-row protection state.
+        #
+        # When set_head_old_rows_frozen(n) is called, rows [0:n]
+        # are restored after every optimizer step. This is necessary
+        # because AdamW weight decay can change parameters even when
+        # their gradients are zero.
+        self._head_frozen_upto = 0
+        self._head_frozen_weight: Tensor | None = None
+        self._head_frozen_bias: Tensor | None = None
+
+    def _extract_backbone_features(
         self,
         images: Tensor,
-    ) -> ClassifierOutput:
+    ) -> tuple[Tensor, list[dict[str, Tensor]]]:
+        """Run the transformer backbone and return pooled features."""
         x = self.patch_embed(images)
 
         x = x.flatten(2).transpose(1, 2)
 
         x = x + self.pos_embed
 
-        telemetry = []
+        telemetry: list[dict[str, Tensor]] = []
 
         for block in self.blocks:
             x, stats = block(x)
@@ -155,10 +166,31 @@ class TinyMoETransformer(nn.Module):
 
         x = self.norm(x).mean(dim=1)
 
+        return x, telemetry
+
+    def forward(
+        self,
+        images: Tensor,
+    ) -> ClassifierOutput:
+        x, telemetry = self._extract_backbone_features(
+            images
+        )
+
         return ClassifierOutput(
             self.head(x),
             telemetry,
         )
+
+    def extract_features(
+        self,
+        images: Tensor,
+    ) -> Tensor:
+        """Return pooled backbone features immediately before the classifier."""
+        x, _ = self._extract_backbone_features(
+            images
+        )
+
+        return x
 
     def set_experts_trainable(
         self,
@@ -207,6 +239,78 @@ class TinyMoETransformer(nn.Module):
     ) -> None:
         """Enable or disable classifier head parameters."""
         self.head.requires_grad_(trainable)
+
+    def set_head_old_rows_frozen(
+        self,
+        num_old_classes: int,
+    ) -> None:
+        """Protect classifier rows belonging to previously learned classes.
+
+        The rows are restored after optimizer steps by
+        restore_frozen_head_rows(). Explicit restoration is used because
+        AdamW weight decay can modify parameters even when gradients are
+        zero.
+        """
+        if num_old_classes < 0:
+            raise ValueError(
+                "num_old_classes must be non-negative"
+            )
+
+        if num_old_classes > self.head.out_features:
+            raise ValueError(
+                "num_old_classes cannot exceed the number of classifier classes"
+            )
+
+        self._head_frozen_upto = num_old_classes
+
+        if num_old_classes == 0:
+            self._head_frozen_weight = None
+            self._head_frozen_bias = None
+            return
+
+        self._head_frozen_weight = (
+            self.head.weight[:num_old_classes]
+            .detach()
+            .clone()
+        )
+
+        if self.head.bias is not None:
+            self._head_frozen_bias = (
+                self.head.bias[:num_old_classes]
+                .detach()
+                .clone()
+            )
+        else:
+            self._head_frozen_bias = None
+
+    def restore_frozen_head_rows(self) -> None:
+        """Restore classifier rows protected by set_head_old_rows_frozen()."""
+        if self._head_frozen_upto <= 0:
+            return
+
+        if self._head_frozen_weight is None:
+            return
+
+        num_old_classes = self._head_frozen_upto
+
+        with torch.no_grad():
+            self.head.weight[:num_old_classes].copy_(
+                self._head_frozen_weight.to(
+                    device=self.head.weight.device,
+                    dtype=self.head.weight.dtype,
+                )
+            )
+
+            if (
+                self.head.bias is not None
+                and self._head_frozen_bias is not None
+            ):
+                self.head.bias[:num_old_classes].copy_(
+                    self._head_frozen_bias.to(
+                        device=self.head.bias.device,
+                        dtype=self.head.bias.dtype,
+                    )
+                )
 
 
 class TinyDenseTransformer(nn.Module):
