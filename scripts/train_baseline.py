@@ -1,3 +1,4 @@
+```python
 from __future__ import annotations
 
 import argparse
@@ -634,17 +635,26 @@ def main() -> None:
         "accuracy_matrix": accuracies,
         "history": history,
         "stability": {
+            "active": bool(
+                use_stability
+            ),
             "routing_kl_enabled": bool(
-                routing_kl_weight > 0.0
+                use_stability
+                and routing_kl_weight > 0.0
             ),
             "routing_kl_weight": (
                 routing_kl_weight
+                if use_stability
+                else 0.0
             ),
             "dense_ewc_enabled": bool(
-                dense_ewc_weight > 0.0
+                use_stability
+                and dense_ewc_weight > 0.0
             ),
             "dense_ewc_weight": (
                 dense_ewc_weight
+                if use_stability
+                else 0.0
             ),
         },
         "config": cfg,
@@ -662,3 +672,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+```
