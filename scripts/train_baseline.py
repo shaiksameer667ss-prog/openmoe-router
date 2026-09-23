@@ -222,6 +222,11 @@ def apply_forgetting_decomposition(
         # belonging to classes learned before the current task.
         return
 
+    if decomposition == "head_masked":
+        # Keep the backbone/router/classifier trainable. The actual
+        # intervention is applied to the Task 1+ CE loss in train_steps().
+        return
+
     raise ValueError(
         f"unknown decomposition: {decomposition}"
     )
@@ -343,6 +348,7 @@ def main() -> None:
             "router_shared_frozen",
             "head_only",
             "head_frozen_old",
+            "head_masked",
         ],
         help=(
             "For continual MoE experiments, freeze selected "
@@ -574,6 +580,23 @@ def main() -> None:
                 f"[0:{task_id * classes_per_task})"
             )
 
+        # For head_masked, old classifier logits are masked only in the
+        # new-task CE loss. Evaluation still uses the complete classifier.
+        head_mask_old_classes = 0
+
+        if (
+            args.decomposition == "head_masked"
+            and task_id >= 1
+        ):
+            head_mask_old_classes = (
+                task_id * classes_per_task
+            )
+
+            print(
+                "masked classifier logits for CE: "
+                f"[0:{head_mask_old_classes})"
+            )
+
         warmup = min(
             args.steps,
             10,
@@ -585,6 +608,9 @@ def main() -> None:
             optimizer,
             device,
             warmup,
+            head_mask_old_classes=(
+                head_mask_old_classes
+            ),
         )
 
         history.extend(
@@ -641,6 +667,9 @@ def main() -> None:
             device,
             remaining,
             post_step=after_step,
+            head_mask_old_classes=(
+                head_mask_old_classes
+            ),
             stability_state=(
                 stability_state
                 if use_stability
@@ -732,6 +761,14 @@ def main() -> None:
             "mode": (
                 "old_rows_frozen"
                 if args.decomposition == "head_frozen_old"
+                else "none"
+            ),
+        },
+        "head_logit_masking": {
+            "active": args.decomposition == "head_masked",
+            "mode": (
+                "old_classes_masked_in_training_ce"
+                if args.decomposition == "head_masked"
                 else "none"
             ),
         },

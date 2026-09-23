@@ -644,6 +644,7 @@ def train_steps(
     device: torch.device,
     steps: int,
     post_step: PostStep | None = None,
+    head_mask_old_classes: int = 0,
     stability_state: (
         ContinualStabilityState | None
     ) = None,
@@ -653,6 +654,11 @@ def train_steps(
 ) -> list[dict[str, float]]:
     """Run a fixed number of optimizer steps."""
     model.train()
+
+    if head_mask_old_classes < 0:
+        raise ValueError(
+            "head_mask_old_classes must be non-negative"
+        )
 
     history: list[
         dict[str, float]
@@ -680,9 +686,30 @@ def train_steps(
             images
         )
 
+        task_logits = output.logits
+
+        if head_mask_old_classes > 0:
+            if (
+                head_mask_old_classes
+                >= task_logits.shape[-1]
+            ):
+                raise ValueError(
+                    "head_mask_old_classes must be smaller "
+                    "than the number of classifier classes"
+                )
+
+            task_logits = task_logits.clone()
+
+            task_logits[
+                :,
+                :head_mask_old_classes,
+            ] = float(
+                "-inf"
+            )
+
         task_loss = (
             F.cross_entropy(
-                output.logits,
+                task_logits,
                 labels,
             )
         )
