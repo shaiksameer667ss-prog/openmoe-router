@@ -23,7 +23,7 @@ wandb/
 
 # Local datasets/cache
 .data/
-data/
+/data/
 .cache/
 
 # IDE noise
