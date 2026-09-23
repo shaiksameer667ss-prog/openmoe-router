@@ -114,6 +114,7 @@ def observe_continual_memory(
             .flatten(2)
             .transpose(1, 2)
         )
+
         x = x + model.pos_embed
 
         for block in model.blocks:
@@ -188,6 +189,32 @@ def update_router_biases(
             expert_load=expert_load,
             target_load=target_load,
         )
+
+
+def apply_forgetting_decomposition(
+    model: TinyMoETransformer,
+    decomposition: str,
+) -> None:
+    """Apply the requested retention/decomposition intervention."""
+    if decomposition == "none":
+        return
+
+    if decomposition == "router_frozen":
+        model.set_router_trainable(False)
+        return
+
+    if decomposition == "shared_frozen":
+        model.set_shared_trainable(False)
+        return
+
+    if decomposition == "router_shared_frozen":
+        model.set_router_trainable(False)
+        model.set_shared_trainable(False)
+        return
+
+    raise ValueError(
+        f"unknown decomposition: {decomposition}"
+    )
 
 
 def build_stability_state(
@@ -294,6 +321,22 @@ def main() -> None:
             "bias",
             "continual",
         ],
+    )
+
+    parser.add_argument(
+        "--decomposition",
+        default="none",
+        choices=[
+            "none",
+            "router_frozen",
+            "shared_frozen",
+            "router_shared_frozen",
+        ],
+        help=(
+            "For continual MoE experiments, freeze selected "
+            "components starting with Task 1. Task 0 remains "
+            "fully trainable."
+        ),
     )
 
     parser.add_argument(
@@ -419,6 +462,15 @@ def main() -> None:
             depth=2,
         ).to(device)
 
+    if (
+        args.decomposition != "none"
+        and args.router == "dense"
+    ):
+        raise ValueError(
+            "--decomposition requires an MoE router, "
+            "not --router dense"
+        )
+
     optimizer = torch.optim.AdamW(
         model.parameters(),
         lr=3e-4,
@@ -477,6 +529,23 @@ def main() -> None:
     for task_id, loader in enumerate(
         stream
     ):
+        # Task 0 is fully trainable.
+        # Starting with Task 1, apply the requested
+        # forgetting-decomposition intervention.
+        if (
+            task_id == 1
+            and args.decomposition != "none"
+        ):
+            apply_forgetting_decomposition(
+                model,
+                args.decomposition,
+            )
+
+            print(
+                "applied forgetting decomposition: "
+                f"{args.decomposition}"
+            )
+
         warmup = min(
             args.steps,
             10,
@@ -629,6 +698,7 @@ def main() -> None:
 
     payload = {
         "router": args.router,
+        "decomposition": args.decomposition,
         "seed": args.seed,
         "device": str(device),
         "elapsed_sec": elapsed,
