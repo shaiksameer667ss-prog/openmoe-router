@@ -180,6 +180,34 @@ class TinyMoETransformer(nn.Module):
                 trainable
             )
 
+    def set_shared_trainable(
+        self,
+        trainable: bool,
+    ) -> None:
+        """Enable or disable shared transformer parameters.
+
+        This excludes:
+        - MoE expert parameters
+        - router parameters/state
+        - classifier head
+        """
+        self.patch_embed.requires_grad_(trainable)
+        self.pos_embed.requires_grad_(trainable)
+
+        for block in self.blocks:
+            block.norm1.requires_grad_(trainable)
+            block.attn.requires_grad_(trainable)
+            block.norm2.requires_grad_(trainable)
+
+        self.norm.requires_grad_(trainable)
+
+    def set_head_trainable(
+        self,
+        trainable: bool,
+    ) -> None:
+        """Enable or disable classifier head parameters."""
+        self.head.requires_grad_(trainable)
+
 
 class TinyDenseTransformer(nn.Module):
     """Dense FFN control model with the same tokenization and attention stack."""
