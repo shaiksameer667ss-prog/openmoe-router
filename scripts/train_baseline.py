@@ -1,4 +1,3 @@
-```python
 from __future__ import annotations
 
 import argparse
@@ -126,9 +125,11 @@ def observe_continual_memory(
                 h,
                 need_weights=False,
             )
+
             x = x + attn
 
             normed = block.norm2(x)
+
             flat = normed.reshape(
                 -1,
                 normed.shape[-1],
@@ -376,7 +377,8 @@ def main() -> None:
         )
     else:
         stream = build_split_cifar100_stream(
-            tasks=tasks
+            root=".data",
+            tasks=tasks,
         )
         num_classes = 100
 
@@ -572,8 +574,6 @@ def main() -> None:
             for item in step_history
         )
 
-        # Consolidate the completed task only
-        # after its optimizer updates are finished.
         if (
             use_stability
             and stability_state is not None
@@ -672,4 +672,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-```
