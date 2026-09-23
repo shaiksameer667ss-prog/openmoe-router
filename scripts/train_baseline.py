@@ -212,6 +212,16 @@ def apply_forgetting_decomposition(
         model.set_shared_trainable(False)
         return
 
+    if decomposition == "head_only":
+        model.set_router_trainable(False)
+        model.set_shared_trainable(False)
+        return
+
+    if decomposition == "head_frozen_old":
+        # Keep the backbone/router trainable, but protect classifier rows
+        # belonging to classes learned before the current task.
+        return
+
     raise ValueError(
         f"unknown decomposition: {decomposition}"
     )
@@ -331,6 +341,8 @@ def main() -> None:
             "router_frozen",
             "shared_frozen",
             "router_shared_frozen",
+            "head_only",
+            "head_frozen_old",
         ],
         help=(
             "For continual MoE experiments, freeze selected "
@@ -546,6 +558,22 @@ def main() -> None:
                 f"{args.decomposition}"
             )
 
+        # For head_frozen_old, expand the protected classifier prefix
+        # at each task transition. Task 1 protects Task 0 classes,
+        # Task 2 protects Tasks 0-1 classes, and so on.
+        if (
+            args.decomposition == "head_frozen_old"
+            and task_id >= 1
+        ):
+            model.set_head_old_rows_frozen(
+                task_id * classes_per_task
+            )
+
+            print(
+                "protected classifier rows: "
+                f"[0:{task_id * classes_per_task})"
+            )
+
         warmup = min(
             args.steps,
             10,
@@ -699,6 +727,14 @@ def main() -> None:
     payload = {
         "router": args.router,
         "decomposition": args.decomposition,
+        "head_row_protection": {
+            "active": args.decomposition == "head_frozen_old",
+            "mode": (
+                "old_rows_frozen"
+                if args.decomposition == "head_frozen_old"
+                else "none"
+            ),
+        },
         "seed": args.seed,
         "device": str(device),
         "elapsed_sec": elapsed,
