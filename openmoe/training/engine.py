@@ -25,16 +25,22 @@ def move_batch(batch, device: torch.device):
 
 
 def _is_expert_parameter(name: str) -> bool:
-    """Identify routed expert weights that dense EWC must leave untouched."""
-    return ".moe.experts." in name or ".moe.shared_experts." in name
+    """Identify routed expert weights excluded from dense EWC."""
+    return (
+        ".moe.experts." in name
+        or ".moe.shared_experts." in name
+    )
 
 
-def snapshot_dense_parameters(model: nn.Module) -> dict[str, Tensor]:
-    """Take a detached snapshot of all non-expert parameters."""
+def snapshot_dense_parameters(
+    model: nn.Module,
+) -> dict[str, Tensor]:
+    """Snapshot trainable non-expert parameters."""
     return {
         name: parameter.detach().clone()
         for name, parameter in model.named_parameters()
-        if parameter.requires_grad and not _is_expert_parameter(name)
+        if parameter.requires_grad
+        and not _is_expert_parameter(name)
     }
 
 
@@ -46,13 +52,14 @@ def compute_fisher(
 ) -> dict[str, Tensor]:
     """Estimate diagonal Fisher information for dense/shared parameters.
 
-    The Fisher estimate uses task cross-entropy only. Routed expert
-    parameters are excluded so EWC protects the shared/dense subnetwork.
+    Expert FFN parameters are excluded. The Fisher estimate is computed
+    from task cross-entropy using squared gradients.
     """
     dense_parameters = [
         (name, parameter)
         for name, parameter in model.named_parameters()
-        if parameter.requires_grad and not _is_expert_parameter(name)
+        if parameter.requires_grad
+        and not _is_expert_parameter(name)
     ]
 
     if not dense_parameters or max_steps <= 0:
@@ -62,7 +69,10 @@ def compute_fisher(
     model.eval()
 
     fisher = {
-        name: torch.zeros_like(parameter, device=parameter.device)
+        name: torch.zeros_like(
+            parameter,
+            device=parameter.device,
+        )
         for name, parameter in dense_parameters
     }
 
@@ -76,31 +86,54 @@ def compute_fisher(
             iterator = iter(loader)
             batch = next(iterator)
 
-        images, labels, _ = move_batch(batch, device)
+        images, labels, _ = move_batch(
+            batch,
+            device,
+        )
 
-        model.zero_grad(set_to_none=True)
+        model.zero_grad(
+            set_to_none=True
+        )
 
         output = model(images)
-        loss = F.cross_entropy(output.logits, labels)
+
+        loss = F.cross_entropy(
+            output.logits,
+            labels,
+        )
 
         grads = torch.autograd.grad(
             loss,
-            [parameter for _, parameter in dense_parameters],
+            [
+                parameter
+                for _, parameter in dense_parameters
+            ],
             allow_unused=True,
             retain_graph=False,
         )
 
-        for (name, _), grad in zip(dense_parameters, grads):
+        for (name, _), grad in zip(
+            dense_parameters,
+            grads,
+        ):
             if grad is not None:
-                fisher[name].add_(grad.detach().float().square())
+                fisher[name].add_(
+                    grad.detach()
+                    .float()
+                    .square()
+                )
 
         used_steps += 1
 
     if used_steps:
         for value in fisher.values():
-            value.div_(float(used_steps))
+            value.div_(
+                float(used_steps)
+            )
 
-    model.zero_grad(set_to_none=True)
+    model.zero_grad(
+        set_to_none=True
+    )
 
     if was_training:
         model.train()
@@ -108,7 +141,9 @@ def compute_fisher(
     return fisher
 
 
-def _routing_distributions(output) -> list[Tensor]:
+def _routing_distributions(
+    output,
+) -> list[Tensor]:
     """Convert router logits into full expert probability distributions."""
     distributions: list[Tensor] = []
 
@@ -133,22 +168,56 @@ def capture_routing_reference(
     images: Tensor,
     device: torch.device,
 ) -> list[Tensor]:
-    """Capture frozen routing distributions for representative inputs."""
+    """Capture frozen routing distributions for representative inputs.
+
+    References are stored with shape:
+
+        [num_images, num_tokens, num_experts]
+
+    The routing tensors emitted by the model are token-flattened, so this
+    function restores the image/token structure before saving them.
+    """
     was_training = model.training
     model.eval()
 
     with torch.no_grad():
-        output = model(
-            images.to(
-                device,
-                non_blocking=True,
-            )
+        device_images = images.to(
+            device,
+            non_blocking=True,
         )
 
-        references = [
-            distribution.cpu()
-            for distribution in _routing_distributions(output)
-        ]
+        output = model(
+            device_images
+        )
+
+        references: list[Tensor] = []
+
+        for distribution in _routing_distributions(
+            output
+        ):
+            num_images = images.shape[0]
+
+            if distribution.shape[0] % num_images != 0:
+                raise RuntimeError(
+                    "routing distribution token count "
+                    "is not divisible by the number "
+                    "of input images"
+                )
+
+            num_tokens = (
+                distribution.shape[0]
+                // num_images
+            )
+
+            references.append(
+                distribution.reshape(
+                    num_images,
+                    num_tokens,
+                    distribution.shape[-1],
+                )
+                .detach()
+                .cpu()
+            )
 
     if was_training:
         model.train()
@@ -161,9 +230,11 @@ def collect_replay_images(
     max_samples: int,
     device: torch.device,
 ) -> Tensor:
-    """Collect at most max_samples task examples and keep them on CPU."""
+    """Collect at most max_samples images and keep them on CPU."""
     if max_samples <= 0:
-        raise ValueError("max_samples must be positive")
+        raise ValueError(
+            "max_samples must be positive"
+        )
 
     chunks: list[Tensor] = []
     seen = 0
@@ -174,13 +245,17 @@ def collect_replay_images(
             device,
         )
 
-        take = min(
-            images.shape[0],
-            max_samples - seen,
+        remaining = (
+            max_samples - seen
         )
 
-        if take <= 0:
+        if remaining <= 0:
             break
+
+        take = min(
+            images.shape[0],
+            remaining,
+        )
 
         chunks.append(
             images[:take]
@@ -206,7 +281,7 @@ def collect_replay_images(
 
 @dataclass
 class ContinualStabilityState:
-    """Frozen references for routing consistency and dense EWC."""
+    """Frozen routing and dense-parameter references."""
 
     fisher: dict[str, Tensor] = field(
         default_factory=dict
@@ -220,7 +295,10 @@ class ContinualStabilityState:
         default_factory=dict
     )
 
-    task_routing_reference: dict[int, list[Tensor]] = field(
+    task_routing_reference: dict[
+        int,
+        list[Tensor],
+    ] = field(
         default_factory=dict
     )
 
@@ -246,7 +324,7 @@ class ContinualStabilityState:
         fisher_steps: int = 16,
         task_replay_samples: int = 256,
     ) -> None:
-        """Freeze the current task's routing and dense-importance state."""
+        """Store old-task routing and parameter stability state."""
         if replay_size <= 0:
             raise ValueError(
                 "replay_size must be positive"
@@ -260,14 +338,12 @@ class ContinualStabilityState:
 
         self.task_images[int(task_id)] = images
 
-        # Capture routing behavior once at the task boundary.
-        # These references remain frozen so KL measures cumulative drift.
-        self.task_routing_reference[int(task_id)] = (
-            capture_routing_reference(
-                model,
-                images,
-                device,
-            )
+        self.task_routing_reference[
+            int(task_id)
+        ] = capture_routing_reference(
+            model,
+            images,
+            device,
         )
 
         new_fisher = compute_fisher(
@@ -294,7 +370,9 @@ class ContinualStabilityState:
                     )
 
         self.parameter_reference = (
-            snapshot_dense_parameters(model)
+            snapshot_dense_parameters(
+                model
+            )
         )
 
         self._trim_replay(
@@ -305,7 +383,7 @@ class ContinualStabilityState:
         self,
         replay_size: int,
     ) -> None:
-        """Keep a balanced replay set across seen tasks."""
+        """Keep replay examples approximately balanced over tasks."""
         task_ids = sorted(
             self.task_images
         )
@@ -313,15 +391,34 @@ class ContinualStabilityState:
         if not task_ids:
             return
 
-        base = replay_size // len(task_ids)
-        remainder = replay_size % len(task_ids)
+        base = replay_size // len(
+            task_ids
+        )
 
-        new_images: dict[int, Tensor] = {}
-        new_refs: dict[int, list[Tensor]] = {}
+        remainder = replay_size % len(
+            task_ids
+        )
 
-        for position, task_id in enumerate(task_ids):
-            quota = base + (
-                1 if position < remainder else 0
+        new_images: dict[
+            int,
+            Tensor,
+        ] = {}
+
+        new_refs: dict[
+            int,
+            list[Tensor],
+        ] = {}
+
+        for position, task_id in enumerate(
+            task_ids
+        ):
+            quota = (
+                base
+                + (
+                    1
+                    if position < remainder
+                    else 0
+                )
             )
 
             quota = max(
@@ -329,8 +426,15 @@ class ContinualStabilityState:
                 1,
             )
 
-            images = self.task_images[task_id]
-            references = self.task_routing_reference[task_id]
+            images = self.task_images[
+                task_id
+            ]
+
+            references = (
+                self.task_routing_reference[
+                    task_id
+                ]
+            )
 
             if images.shape[0] > quota:
                 indices = torch.linspace(
@@ -354,11 +458,19 @@ class ContinualStabilityState:
             else:
                 refs = references
 
-            new_images[task_id] = images
+            new_images[task_id] = (
+                images
+            )
+
             new_refs[task_id] = refs
 
-        self.task_images = new_images
-        self.task_routing_reference = new_refs
+        self.task_images = (
+            new_images
+        )
+
+        self.task_routing_reference = (
+            new_refs
+        )
 
     def routing_consistency_loss(
         self,
@@ -366,16 +478,22 @@ class ContinualStabilityState:
         device: torch.device,
         max_samples: int = 32,
     ) -> Tensor:
-        """Measure current-vs-frozen routing drift on old-task data."""
+        """Compute KL between current and frozen old-task routing."""
         if not self.has_routing_reference():
             return torch.zeros(
                 (),
                 device=device,
             )
 
+        if max_samples <= 0:
+            raise ValueError(
+                "max_samples must be positive"
+            )
+
         samples_per_task = max(
             1,
-            max_samples // len(self.task_images),
+            max_samples
+            // len(self.task_images),
         )
 
         losses: list[Tensor] = []
@@ -386,10 +504,20 @@ class ContinualStabilityState:
         for task_id in sorted(
             self.task_images
         ):
-            images = self.task_images[task_id]
-            references = self.task_routing_reference[task_id]
+            images = self.task_images[
+                task_id
+            ]
 
-            if images.numel() == 0 or not references:
+            references = (
+                self.task_routing_reference[
+                    task_id
+                ]
+            )
+
+            if (
+                images.numel() == 0
+                or not references
+            ):
                 continue
 
             if images.shape[0] > samples_per_task:
@@ -420,14 +548,45 @@ class ContinualStabilityState:
                 )
             )
 
-            current = _routing_distributions(
-                output
+            current_distributions = (
+                _routing_distributions(
+                    output
+                )
             )
 
-            for current_distribution, reference in zip(
-                current,
+            for (
+                current_distribution,
+                reference,
+            ) in zip(
+                current_distributions,
                 batch_references,
             ):
+                # Current router distribution:
+                # [batch * tokens, experts]
+                current_distribution = (
+                    current_distribution.reshape(
+                        -1,
+                        current_distribution.shape[-1],
+                    )
+                )
+
+                # Reference distribution:
+                # [batch, tokens, experts]
+                reference = reference.reshape(
+                    -1,
+                    reference.shape[-1],
+                )
+
+                if (
+                    current_distribution.shape
+                    != reference.shape
+                ):
+                    raise RuntimeError(
+                        "routing reference shape mismatch: "
+                        f"current={tuple(current_distribution.shape)}, "
+                        f"reference={tuple(reference.shape)}"
+                    )
+
                 losses.append(
                     routing_kl(
                         current_distribution,
@@ -456,7 +615,7 @@ class ContinualStabilityState:
         model: nn.Module,
         device: torch.device,
     ) -> Tensor:
-        """Compute EWC over shared/dense parameters only."""
+        """Compute Fisher-weighted EWC on dense/shared parameters."""
         if not self.has_dense_reference():
             return torch.zeros(
                 (),
@@ -466,7 +625,15 @@ class ContinualStabilityState:
         return fisher_ewc_loss(
             model.named_parameters(),
             self.fisher,
-            self.parameter_reference,
+            {
+                name: reference.to(
+                    device,
+                    non_blocking=True,
+                )
+                for name, reference in (
+                    self.parameter_reference.items()
+                )
+            },
         ).to(device)
 
 
@@ -477,14 +644,19 @@ def train_steps(
     device: torch.device,
     steps: int,
     post_step: PostStep | None = None,
-    stability_state: ContinualStabilityState | None = None,
+    stability_state: (
+        ContinualStabilityState | None
+    ) = None,
     routing_kl_weight: float = 0.0,
     dense_ewc_weight: float = 0.0,
     stability_batch_size: int = 32,
 ) -> list[dict[str, float]]:
+    """Run a fixed number of optimizer steps."""
     model.train()
 
-    history: list[dict[str, float]] = []
+    history: list[
+        dict[str, float]
+    ] = []
 
     iterator = iter(loader)
 
@@ -504,11 +676,15 @@ def train_steps(
             set_to_none=True
         )
 
-        output = model(images)
+        output = model(
+            images
+        )
 
-        task_loss = nn.functional.cross_entropy(
-            output.logits,
-            labels,
+        task_loss = (
+            F.cross_entropy(
+                output.logits,
+                labels,
+            )
         )
 
         loss = task_loss
@@ -532,7 +708,10 @@ def train_steps(
                     + routing.z_loss
                 )
 
-        loss = loss + z_loss_total
+        loss = (
+            loss
+            + z_loss_total
+        )
 
         routing_kl_value = torch.zeros(
             (),
@@ -595,19 +774,24 @@ def train_steps(
             {
                 "step": float(step),
                 "loss": float(
-                    loss.detach().cpu()
+                    loss.detach()
+                    .cpu()
                 ),
                 "task_loss": float(
-                    task_loss.detach().cpu()
+                    task_loss.detach()
+                    .cpu()
                 ),
                 "z_loss": float(
-                    z_loss_total.detach().cpu()
+                    z_loss_total.detach()
+                    .cpu()
                 ),
                 "routing_kl": float(
-                    routing_kl_value.detach().cpu()
+                    routing_kl_value.detach()
+                    .cpu()
                 ),
                 "dense_ewc": float(
-                    dense_ewc_value.detach().cpu()
+                    dense_ewc_value.detach()
+                    .cpu()
                 ),
             }
         )
@@ -620,9 +804,11 @@ def evaluate(
     loader: Iterable,
     device: torch.device,
 ) -> float:
+    """Evaluate classification accuracy."""
     model.eval()
 
-    correct = total = 0
+    correct = 0
+    total = 0
 
     with torch.no_grad():
         for batch in loader:
@@ -637,7 +823,9 @@ def evaluate(
 
             correct += int(
                 (
-                    logits.argmax(dim=-1)
+                    logits.argmax(
+                        dim=-1
+                    )
                     == labels
                 ).sum()
             )
@@ -653,6 +841,7 @@ def evaluate(
 def summarize_metrics(
     accuracy_matrix: Tensor,
 ) -> dict[str, float]:
+    """Summarize continual-learning accuracy and forgetting."""
     f = forgetting(
         accuracy_matrix
     )
@@ -673,12 +862,15 @@ def write_json(
     path: str | Path,
     payload: dict,
 ) -> None:
-    Path(path).parent.mkdir(
+    """Write experiment payload as formatted JSON."""
+    output_path = Path(path)
+
+    output_path.parent.mkdir(
         parents=True,
         exist_ok=True,
     )
 
-    Path(path).write_text(
+    output_path.write_text(
         json.dumps(
             payload,
             indent=2,
