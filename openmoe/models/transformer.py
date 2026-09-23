@@ -283,6 +283,24 @@ class TinyMoETransformer(nn.Module):
         else:
             self._head_frozen_bias = None
 
+    def mask_head_old_row_gradients(self) -> None:
+        """Zero gradients for classifier rows protected as old classes."""
+        if self._head_frozen_upto <= 0:
+            return
+
+        if self.head.weight.grad is not None:
+            self.head.weight.grad[
+                :self._head_frozen_upto
+            ].zero_()
+
+        if (
+            self.head.bias is not None
+            and self.head.bias.grad is not None
+        ):
+            self.head.bias.grad[
+                :self._head_frozen_upto
+            ].zero_()
+
     def restore_frozen_head_rows(self) -> None:
         """Restore classifier rows protected by set_head_old_rows_frozen()."""
         if self._head_frozen_upto <= 0:
