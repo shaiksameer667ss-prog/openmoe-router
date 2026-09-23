@@ -1,0 +1,26 @@
+model:
+  hidden_dim: 32
+  ff_dim: 64
+  num_experts: 4
+  top_k: 2
+router:
+  type: top2
+  memory_lambda: 0.0
+  memory_momentum: 0.99
+  z_loss_weight: 0.0
+  bias_lr: 0.0
+  temperature: 1.0
+continual:
+  experts_trainable_during_warmup: true
+  freeze_experts_after_warmup: false
+  replay_size: 32
+  stability_kl: false
+  dense_ewc: false
+systems:
+  backend: reference
+  capacity_factor: 1.25
+  profile_every: 20
+experiment:
+  classes_per_task: 5
+  tasks: 2
+  seeds: [0]

@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Train baseline",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "scripts.train_baseline",
+      "args": ["--config", "configs/phase1.yaml", "--steps", "50"],
+      "console": "integratedTerminal"
+    }
+  ]
+}

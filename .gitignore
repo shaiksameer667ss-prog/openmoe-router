@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+.env
+.DS_Store
+.ipynb_checkpoints/
+*.egg-info/
+build/
+dist/
+
+# Experiment outputs
+experiments/results/*
+!experiments/results/.gitkeep
+experiments/checkpoints/*
+!experiments/checkpoints/.gitkeep
+experiments/artifacts/*
+!experiments/artifacts/.gitkeep
+wandb/
+
+# Local datasets/cache
+.data/
+data/
+.cache/
+
+# IDE noise
+.vscode/*.log

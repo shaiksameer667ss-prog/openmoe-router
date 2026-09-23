@@ -1,0 +1,24 @@
+flowchart TD
+    A[Image / Token Stream] --> B[Patch Embedding]
+    B --> C[Transformer Block]
+    C --> D[Dense Self-Attention]
+    C --> E[Router]
+    E --> E1[Learned Affinity z]
+    E --> E2[Routing Memory m]
+    E --> E3[Non-gradient Bias b]
+    E1 --> F[Top-K Selection]
+    E2 --> F
+    E3 --> F
+    F --> G[Token Dispatch]
+    G --> H1[Expert 0]
+    G --> H2[Expert 1]
+    G --> H3[... Expert N]
+    H1 --> I[Weighted Gather]
+    H2 --> I
+    H3 --> I
+    I --> J[Residual]
+    J --> K[Classifier]
+    K --> L[Continual Metrics]
+    L --> M[Accuracy / Forgetting / BWT]
+    L --> N[Entropy / Gini / Dead Experts]
+    L --> O[VRAM / Latency / Throughput]

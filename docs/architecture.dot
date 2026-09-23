@@ -1,0 +1,17 @@
+digraph G {
+  rankdir=LR;
+  node [shape=box, style="rounded"];
+  input [label="Image / Token Stream"];
+  patch [label="Patch Embedding"];
+  attn [label="Dense Self-Attention"];
+  router [label="Router\nz + memory + bias"];
+  select [label="Top-K Selection"];
+  dispatch [label="Reference / Triton\nToken Dispatch"];
+  experts [label="Frozen / Trainable\nExpert FFNs"];
+  gather [label="Weighted Gather"];
+  head [label="Classifier"];
+  metrics [label="Continual Metrics\nAccuracy / Forgetting / Routing / Systems"];
+  input -> patch -> attn;
+  attn -> router;
+  router -> select -> dispatch -> experts -> gather -> head -> metrics;
+}

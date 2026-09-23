@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openmoe-router"
+version = "0.1.0"
+description = "Research-grade continual-learning Mixture-of-Experts routing framework"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "torch>=2.4",
+  "numpy>=1.26",
+  "pyyaml>=6.0",
+  "pytest>=8.0",
+]
+
+[project.optional-dependencies]
+data = ["datasets>=3.0", "torchvision>=0.19"]
+triton = ["triton>=3.0"]
+logging = ["wandb>=0.18"]
+all = ["datasets>=3.0", "torchvision>=0.19", "triton>=3.0", "wandb>=0.18"]
+
+default = ["datasets>=3.0", "torchvision>=0.19", "wandb>=0.18"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.setuptools.packages.find]
+include = ["openmoe*"]
