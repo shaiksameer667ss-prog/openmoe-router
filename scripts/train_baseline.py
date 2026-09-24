@@ -688,7 +688,7 @@ def main() -> None:
         else None
     )
 
-    replay_history: list[dict[str, float]] = []
+    replay_history: list[dict[str, object]] = []
 
     started = time.perf_counter()
 
@@ -989,9 +989,22 @@ def main() -> None:
                 task_id=task_id,
             )
 
+            accounting = (
+                replay_buffer.last_add_task_accounting
+            )
+
+            if accounting is None:
+                raise RuntimeError(
+                    "Replay accounting was not populated after "
+                    "add_task_examples()."
+                )
+
             replay_history.append(
                 {
                     "task_id": float(task_id),
+                    "incoming_examples": float(
+                        accounting["incoming_examples"]
+                    ),
                     "stored_examples": float(
                         replay_buffer.num_samples
                     ),
@@ -1007,6 +1020,12 @@ def main() -> None:
                     "total_bytes": float(
                         replay_buffer.total_bytes
                     ),
+                    "per_task_stored": accounting[
+                        "per_task_stored"
+                    ],
+                    "per_task_retained": accounting[
+                        "per_task_retained"
+                    ],
                 }
             )
 
@@ -1142,11 +1161,27 @@ def main() -> None:
                 if args.replay
                 else "none"
             ),
+            "per_task_stored": [
+                item["per_task_stored"]
+                for item in replay_history
+            ],
+            "per_task_retained": [
+                item["per_task_retained"]
+                for item in replay_history
+            ],
             "memory_history": replay_history,
         },
         "stability": {
             "active": bool(
                 use_stability
+            ),
+            "stability_active": bool(
+                use_stability
+            ),
+            "stability_mechanisms_disabled": (
+                ["ewc", "routing_kl"]
+                if args.replay
+                else []
             ),
             "routing_kl_enabled": bool(
                 use_stability

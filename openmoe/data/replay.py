@@ -44,6 +44,7 @@ class ReplayBuffer:
         self._images: Tensor | None = None
         self._labels: Tensor | None = None
         self._task_ids: Tensor | None = None
+        self._last_add_task_accounting: dict[str, object] | None = None
 
     @property
     def num_samples(self) -> int:
@@ -94,6 +95,11 @@ class ReplayBuffer:
             )
 
         return self._task_ids
+
+    @property
+    def last_add_task_accounting(self) -> dict[str, object] | None:
+        """Accounting from the most recent add_task_examples call."""
+        return self._last_add_task_accounting
 
     @property
     def image_bytes(self) -> int:
@@ -147,6 +153,11 @@ class ReplayBuffer:
         At most ``capacity`` new examples are read from the loader. After
         merging them with existing replay examples, deterministic task-balanced
         retention enforces the cumulative capacity.
+
+        ``last_add_task_accounting`` records the task counts before and after
+        the retention step. ``per_task_stored`` therefore describes the
+        cumulative candidate pool immediately before capacity-based retention,
+        while ``per_task_retained`` describes the actual buffer afterward.
         """
         images_chunks: list[Tensor] = []
         labels_chunks: list[Tensor] = []
@@ -157,16 +168,14 @@ class ReplayBuffer:
         for batch in loader:
             images, labels, batch_task_ids = batch
 
-            remaining = (
-                self.capacity - collected
-            )
+            remaining = self.capacity - collected
 
             if remaining <= 0:
                 break
 
             take = min(
-                int(images.shape[0]),
                 remaining,
+                int(images.shape[0]),
             )
 
             if take <= 0:
@@ -176,6 +185,8 @@ class ReplayBuffer:
                 images[:take]
                 .detach()
                 .cpu()
+                .float()
+                .contiguous()
             )
 
             labels_chunks.append(
@@ -183,6 +194,7 @@ class ReplayBuffer:
                 .detach()
                 .cpu()
                 .long()
+                .contiguous()
             )
 
             if torch.is_tensor(batch_task_ids):
@@ -191,6 +203,7 @@ class ReplayBuffer:
                     .detach()
                     .cpu()
                     .long()
+                    .contiguous()
                 )
             else:
                 task_tensor = torch.full(
@@ -199,9 +212,7 @@ class ReplayBuffer:
                     dtype=torch.long,
                 )
 
-            task_chunks.append(
-                task_tensor
-            )
+            task_chunks.append(task_tensor)
 
             collected += take
 
@@ -209,9 +220,33 @@ class ReplayBuffer:
                 break
 
         if not images_chunks:
-            raise ValueError(
-                "loader produced no replay examples"
-            )
+            existing_counts = {
+                str(int(task)): int(
+                    (self.task_ids == int(task)).sum().item()
+                )
+                for task in torch.unique(
+                    self.task_ids,
+                    sorted=True,
+                ).tolist()
+            }
+
+            self._last_add_task_accounting = {
+                "task_id": int(task_id),
+                "incoming_examples": 0,
+                "pre_retention_task_counts": dict(
+                    existing_counts
+                ),
+                "post_retention_task_counts": dict(
+                    existing_counts
+                ),
+                "per_task_stored": dict(
+                    existing_counts
+                ),
+                "per_task_retained": dict(
+                    existing_counts
+                ),
+            }
+            return
 
         parts_images: list[Tensor] = []
         parts_labels: list[Tensor] = []
@@ -228,36 +263,86 @@ class ReplayBuffer:
                 self._task_ids
             )
 
-        parts_images.extend(
-            images_chunks
-        )
-        parts_labels.extend(
-            labels_chunks
-        )
-        parts_task_ids.extend(
-            task_chunks
-        )
-
         new_images = torch.cat(
-            parts_images,
+            images_chunks,
             dim=0,
         )
 
         new_labels = torch.cat(
-            parts_labels,
+            labels_chunks,
             dim=0,
         )
 
         new_task_ids = torch.cat(
+            task_chunks,
+            dim=0,
+        )
+
+        parts_images.append(new_images)
+        parts_labels.append(new_labels)
+        parts_task_ids.append(new_task_ids)
+
+        merged_images = torch.cat(
+            parts_images,
+            dim=0,
+        )
+
+        merged_labels = torch.cat(
+            parts_labels,
+            dim=0,
+        )
+
+        merged_task_ids = torch.cat(
             parts_task_ids,
             dim=0,
         )
 
+        pre_retention_task_counts = {
+            str(int(task)): int(
+                (
+                    merged_task_ids == int(task)
+                ).sum().item()
+            )
+            for task in torch.unique(
+                merged_task_ids,
+                sorted=True,
+            ).tolist()
+        }
+
         self._set_contents(
-            new_images,
-            new_labels,
-            new_task_ids,
+            merged_images,
+            merged_labels,
+            merged_task_ids,
         )
+
+        post_retention_task_counts = {
+            str(int(task)): int(
+                (
+                    self.task_ids == int(task)
+                ).sum().item()
+            )
+            for task in torch.unique(
+                self.task_ids,
+                sorted=True,
+            ).tolist()
+        }
+
+        self._last_add_task_accounting = {
+            "task_id": int(task_id),
+            "incoming_examples": int(collected),
+            "pre_retention_task_counts": dict(
+                pre_retention_task_counts
+            ),
+            "post_retention_task_counts": dict(
+                post_retention_task_counts
+            ),
+            "per_task_stored": dict(
+                pre_retention_task_counts
+            ),
+            "per_task_retained": dict(
+                post_retention_task_counts
+            ),
+        }
 
     def sample(
         self,

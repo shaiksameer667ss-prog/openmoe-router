@@ -598,3 +598,72 @@ def test_replay_mix_loader_skips_incomplete_current_batch() -> None:
     )
 
     assert mixed == []
+
+
+def test_replay_buffer_records_pre_and_post_retention_task_counts() -> None:
+    import torch
+
+    from openmoe.data.replay import ReplayBuffer
+
+    def make_loader(task_id: int):
+        images = torch.zeros(
+            4,
+            3,
+            32,
+            32,
+            dtype=torch.float32,
+        )
+        labels = torch.arange(
+            4,
+            dtype=torch.long,
+        )
+        task_ids = torch.full(
+            (4,),
+            task_id,
+            dtype=torch.long,
+        )
+        return [
+            (
+                images,
+                labels,
+                task_ids,
+            )
+        ]
+
+    buffer = ReplayBuffer(
+        capacity=4,
+    )
+
+    buffer.add_task_examples(
+        make_loader(0),
+        task_id=0,
+    )
+
+    first = buffer.last_add_task_accounting
+
+    assert first is not None
+    assert first["incoming_examples"] == 4
+    assert first["per_task_stored"] == {"0": 4}
+    assert first["per_task_retained"] == {"0": 4}
+
+    buffer.add_task_examples(
+        make_loader(1),
+        task_id=1,
+    )
+
+    second = buffer.last_add_task_accounting
+
+    assert second is not None
+    assert second["incoming_examples"] == 4
+
+    assert second["per_task_stored"] == {
+        "0": 4,
+        "1": 4,
+    }
+
+    assert second["per_task_retained"] == {
+        "0": 2,
+        "1": 2,
+    }
+
+    assert buffer.num_samples == 4
