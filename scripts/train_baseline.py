@@ -29,6 +29,10 @@ from openmoe.training.engine import (
     train_steps,
     write_json,
 )
+from openmoe.training.freezing import (
+    clear_optimizer_state_for_frozen_parameters,
+    clear_optimizer_state_rows,
+)
 from openmoe.utils.repro import seed_everything
 
 
@@ -196,6 +200,7 @@ def update_router_biases(
 
 def apply_forgetting_decomposition(
     model: TinyMoETransformer,
+    optimizer: torch.optim.Optimizer,
     decomposition: str,
 ) -> None:
     """Apply the requested retention/decomposition intervention."""
@@ -204,20 +209,36 @@ def apply_forgetting_decomposition(
 
     if decomposition == "router_frozen":
         model.set_router_trainable(False)
+        clear_optimizer_state_for_frozen_parameters(
+            optimizer,
+            model,
+        )
         return
 
     if decomposition == "shared_frozen":
         model.set_shared_trainable(False)
+        clear_optimizer_state_for_frozen_parameters(
+            optimizer,
+            model,
+        )
         return
 
     if decomposition == "router_shared_frozen":
         model.set_router_trainable(False)
         model.set_shared_trainable(False)
+        clear_optimizer_state_for_frozen_parameters(
+            optimizer,
+            model,
+        )
         return
 
     if decomposition == "head_only":
         model.set_router_trainable(False)
         model.set_shared_trainable(False)
+        clear_optimizer_state_for_frozen_parameters(
+            optimizer,
+            model,
+        )
         return
 
     if decomposition == "head_frozen_old":
@@ -229,14 +250,14 @@ def apply_forgetting_decomposition(
         # Keep the backbone/router/classifier trainable. The actual
         # intervention is applied to the Task 1+ CE loss in train_steps().
         return
+
     if decomposition == "head_masked_ncm":
         # Keep the backbone/router/classifier trainable. Old-class logits
         # are masked during Task 1+ training, and NCM is used for evaluation.
         return
 
     if decomposition == "head_masked_frozen_old":
-        # Combine old-class CE masking with the existing classifier-row
-        # protection mechanism applied at each Task 1+ boundary.
+        # Combine old-class CE masking with classifier-row protection.
         return
 
     if decomposition == "head_ncm":
@@ -614,6 +635,7 @@ def main() -> None:
         ):
             apply_forgetting_decomposition(
                 model,
+                optimizer,
                 args.decomposition,
             )
 
@@ -632,13 +654,30 @@ def main() -> None:
             }
             and task_id >= 1
         ):
-            model.set_head_old_rows_frozen(
+            num_old_classes = (
                 task_id * classes_per_task
             )
 
+            model.set_head_old_rows_frozen(
+                num_old_classes
+            )
+
+            clear_optimizer_state_rows(
+                optimizer,
+                model.head.weight,
+                num_old_classes,
+            )
+
+            if model.head.bias is not None:
+                clear_optimizer_state_rows(
+                    optimizer,
+                    model.head.bias,
+                    num_old_classes,
+                )
+
             print(
                 "protected classifier rows: "
-                f"[0:{task_id * classes_per_task})"
+                f"[0:{num_old_classes})"
             )
 
         # For head_masked, old classifier logits are masked only in the
@@ -699,6 +738,11 @@ def main() -> None:
         ):
             model.set_experts_trainable(
                 False
+            )
+
+            clear_optimizer_state_for_frozen_parameters(
+                optimizer,
+                model,
             )
 
         remaining = max(
