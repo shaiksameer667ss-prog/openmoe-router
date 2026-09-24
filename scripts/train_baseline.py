@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 import time
@@ -465,6 +465,14 @@ def main() -> None:
         ),
     )
 
+    parser.add_argument(
+        "--checkpoint-dir",
+        default=None,
+        help=(
+            "Optional directory for saving model checkpoints "
+            "at each task boundary."
+        ),
+    )
     args = parser.parse_args()
 
     if args.replay and args.decomposition != "none":
@@ -983,6 +991,23 @@ def main() -> None:
             f"accuracies={row}"
         )
 
+        if args.checkpoint_dir is not None:
+            checkpoint_dir = Path(args.checkpoint_dir)
+            checkpoint_dir.mkdir(parents=True, exist_ok=True)
+            checkpoint_path = checkpoint_dir / f"task_{task_id}.pt"
+            torch.save(
+                {
+                    "task_id": int(task_id),
+                    "model_state_dict": model.state_dict(),
+                    "seed": int(args.seed),
+                    "decomposition": args.decomposition,
+                },
+                checkpoint_path,
+            )
+            print(
+                f"saved boundary checkpoint: {checkpoint_path}"
+            )
+
         if (
             args.replay
             and replay_buffer is not None
@@ -1299,3 +1324,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
