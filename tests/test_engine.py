@@ -1,8 +1,8 @@
-﻿import torch
+import torch
 
 from openmoe.models.transformer import TinyMoETransformer
 from openmoe.routers.topk import TopKRouter
-from openmoe.training.engine import train_steps
+from openmoe.training.engine import evaluate_ncm, train_steps
 
 
 def make_model(num_classes=10):
@@ -116,3 +116,50 @@ def test_head_masked_old_class_logits_are_excluded_from_ce():
     assert torch.all(
         logits.grad[:, 4:] != 0
     )
+
+def test_evaluate_ncm_uses_class_means():
+    class FeatureModel(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+
+        def extract_features(self, images):
+            return images[:, :2]
+
+    model = FeatureModel()
+
+    images = torch.tensor(
+        [
+            [0.0, 0.0],
+            [0.2, 0.0],
+            [10.0, 10.0],
+            [10.2, 10.0],
+        ],
+        dtype=torch.float32,
+    )
+
+    labels = torch.tensor(
+        [0, 0, 1, 1],
+        dtype=torch.long,
+    )
+
+    task_ids = torch.zeros(
+        4,
+        dtype=torch.long,
+    )
+
+    loader = [
+        (
+            images,
+            labels,
+            task_ids,
+        )
+    ]
+
+    accuracy = evaluate_ncm(
+        model=model,
+        prototype_loaders=[loader],
+        evaluation_loader=loader,
+        device=torch.device("cpu"),
+    )
+
+    assert accuracy == 1.0

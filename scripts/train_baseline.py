@@ -23,6 +23,7 @@ from openmoe.routers.topk import (
 from openmoe.training.engine import (
     ContinualStabilityState,
     evaluate,
+    evaluate_ncm,
     train_steps,
     write_json,
 )
@@ -226,6 +227,9 @@ def apply_forgetting_decomposition(
         # Keep the backbone/router/classifier trainable. The actual
         # intervention is applied to the Task 1+ CE loss in train_steps().
         return
+    if decomposition == "head_ncm":
+        # NCM changes evaluation only; keep the training parameters unchanged.
+        return
 
     raise ValueError(
         f"unknown decomposition: {decomposition}"
@@ -349,6 +353,7 @@ def main() -> None:
             "head_only",
             "head_frozen_old",
             "head_masked",
+            "head_ncm",
         ],
         help=(
             "For continual MoE experiments, freeze selected "
@@ -728,17 +733,27 @@ def main() -> None:
                 replay_size=stability_replay_size,
             )
 
-        row = [
-            evaluate(
-                model,
-                seen_loader,
-                device,
-            )
-            for seen_loader in (
-                stream[: task_id + 1]
-            )
-        ]
+        seen_loaders = stream[: task_id + 1]
 
+        if args.decomposition == "head_ncm":
+            row = [
+                evaluate_ncm(
+                    model=model,
+                    prototype_loaders=seen_loaders,
+                    evaluation_loader=seen_loader,
+                    device=device,
+                )
+                for seen_loader in seen_loaders
+            ]
+        else:
+            row = [
+                evaluate(
+                    model,
+                    seen_loader,
+                    device,
+                )
+                for seen_loader in seen_loaders
+            ]
         accuracies.append(
             row
         )
@@ -770,6 +785,39 @@ def main() -> None:
                 "old_classes_masked_in_training_ce"
                 if args.decomposition == "head_masked"
                 else "none"
+            ),
+        },
+        "ncm_protocol": {
+            "active": args.decomposition == "head_ncm",
+            "method": (
+                "nearest_class_mean"
+                if args.decomposition == "head_ncm"
+                else "none"
+            ),
+            "feature_source": (
+                "model.extract_features"
+                if args.decomposition == "head_ncm"
+                else "none"
+            ),
+            "prototype_data": (
+                "all_seen_task_training_samples"
+                if args.decomposition == "head_ncm"
+                else "none"
+            ),
+            "evaluation_data": (
+                "each_seen_task_loader"
+                if args.decomposition == "head_ncm"
+                else "none"
+            ),
+            "distance": (
+                "squared_euclidean"
+                if args.decomposition == "head_ncm"
+                else "none"
+            ),
+            "classifier_head_used": (
+                False
+                if args.decomposition == "head_ncm"
+                else None
             ),
         },
         "seed": args.seed,

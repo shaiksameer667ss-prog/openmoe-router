@@ -876,6 +876,128 @@ def evaluate(
     )
 
 
+
+def evaluate_ncm(
+    model: nn.Module,
+    prototype_loaders: Iterable,
+    evaluation_loader: Iterable,
+    device: torch.device,
+) -> float:
+    """Evaluate one task with a nearest-class-mean classifier."""
+    was_training = model.training
+    model.eval()
+
+    feature_sums: dict[int, Tensor] = {}
+    feature_counts: dict[int, int] = {}
+
+    with torch.no_grad():
+        for loader in prototype_loaders:
+            for batch in loader:
+                images, labels, _ = move_batch(
+                    batch,
+                    device,
+                )
+
+                features = model.extract_features(
+                    images
+                )
+
+                for class_id in labels.unique():
+                    class_value = int(
+                        class_id.item()
+                    )
+
+                    mask = labels == class_id
+                    class_features = features[mask]
+
+                    feature_sum = class_features.sum(
+                        dim=0
+                    )
+
+                    if class_value in feature_sums:
+                        feature_sums[class_value] += (
+                            feature_sum
+                        )
+                        feature_counts[class_value] += (
+                            int(class_features.shape[0])
+                        )
+                    else:
+                        feature_sums[class_value] = (
+                            feature_sum.clone()
+                        )
+                        feature_counts[class_value] = (
+                            int(class_features.shape[0])
+                        )
+
+        if not feature_sums:
+            if was_training:
+                model.train()
+
+            return 0.0
+
+        class_ids = sorted(
+            feature_sums.keys()
+        )
+
+        prototypes = torch.stack(
+            [
+                feature_sums[class_id]
+                / feature_counts[class_id]
+                for class_id in class_ids
+            ]
+        )
+
+        correct = 0
+        total = 0
+
+        class_id_tensor = torch.tensor(
+            class_ids,
+            device=device,
+            dtype=torch.long,
+        )
+
+        for batch in evaluation_loader:
+            images, labels, _ = move_batch(
+                batch,
+                device,
+            )
+
+            features = model.extract_features(
+                images
+            )
+
+            distances = (
+                (
+                    features.unsqueeze(1)
+                    - prototypes.unsqueeze(0)
+                )
+                .square()
+                .sum(dim=-1)
+            )
+
+            nearest = distances.argmin(
+                dim=-1
+            )
+
+            predicted_labels = class_id_tensor[
+                nearest
+            ].to(labels.dtype)
+
+            correct += int(
+                (
+                    predicted_labels == labels
+                ).sum()
+            )
+
+            total += labels.numel()
+
+    if was_training:
+        model.train()
+
+    return correct / max(
+        total,
+        1,
+    )
 def summarize_metrics(
     accuracy_matrix: Tensor,
 ) -> dict[str, float]:
