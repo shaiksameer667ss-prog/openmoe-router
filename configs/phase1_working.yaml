@@ -13,6 +13,10 @@ router:
   temperature: 1.0
 
 continual:
+  probe:
+    enabled: false
+    ridge_lambda: 1.0e-2
+
   experts_trainable_during_warmup: true
   freeze_experts_after_warmup: true
 
