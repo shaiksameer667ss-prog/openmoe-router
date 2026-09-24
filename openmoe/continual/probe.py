@@ -523,3 +523,120 @@ def evaluate_linear_probe(
             predictions == labels
         ).float().mean().item()
     )
+
+
+def evaluate_probe_suite(
+    model: nn.Module,
+    prototype_loaders,
+    evaluation_loaders,
+    device: torch.device,
+    ridge_lambda: float = 1e-2,
+) -> dict[str, object]:
+    """Evaluate learned head, refit NCM, and linear probe.
+
+    The linear probe is fitted once using all samples from all seen
+    prototype loaders, so every evaluation loader is scored in the
+    same all-seen-class probe space.
+    """
+    if not prototype_loaders:
+        raise ValueError(
+            "prototype_loaders must not be empty"
+        )
+
+    if not evaluation_loaders:
+        raise ValueError(
+            "evaluation_loaders must not be empty"
+        )
+
+    feature_chunks: list[Tensor] = []
+    label_chunks: list[Tensor] = []
+
+    for loader in prototype_loaders:
+        features, labels = collect_features(
+            model=model,
+            loader=loader,
+            device=device,
+        )
+
+        feature_chunks.append(features)
+        label_chunks.append(labels)
+
+    all_features = torch.cat(
+        feature_chunks,
+        dim=0,
+    )
+    all_labels = torch.cat(
+        label_chunks,
+        dim=0,
+    )
+
+    linear_probe = fit_linear_probe(
+        features=all_features,
+        labels=all_labels,
+        ridge_lambda=ridge_lambda,
+    )
+
+    boundary_results: list[dict[str, float]] = []
+
+    for evaluation_loader in evaluation_loaders:
+        learned_head_accuracy = evaluate_learned_head(
+            model=model,
+            loader=evaluation_loader,
+            device=device,
+        )
+
+        ncm_refit_accuracy = evaluate_ncm_refit(
+            model=model,
+            prototype_loaders=prototype_loaders,
+            evaluation_loader=evaluation_loader,
+            device=device,
+        )
+
+        linear_probe_accuracy = evaluate_linear_probe(
+            model=model,
+            probe=linear_probe,
+            evaluation_loader=evaluation_loader,
+            device=device,
+        )
+
+        boundary_results.append(
+            {
+                "learned_head": float(
+                    learned_head_accuracy
+                ),
+                "ncm_refit": float(
+                    ncm_refit_accuracy
+                ),
+                "linear_probe": float(
+                    linear_probe_accuracy
+                ),
+            }
+        )
+
+    return {
+        "learned_head": [
+            item["learned_head"]
+            for item in boundary_results
+        ],
+        "ncm_refit": [
+            item["ncm_refit"]
+            for item in boundary_results
+        ],
+        "linear_probe": [
+            item["linear_probe"]
+            for item in boundary_results
+        ],
+        "ridge_lambda": float(
+            linear_probe.ridge_lambda
+        ),
+        "ridge_normalization": (
+            linear_probe.ridge_normalization
+        ),
+        "ridge_effective_lambda": float(
+            linear_probe.effective_lambda
+        ),
+        "class_ids": [
+            int(value)
+            for value in linear_probe.class_ids.tolist()
+        ],
+    }
