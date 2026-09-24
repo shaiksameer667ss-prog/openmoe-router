@@ -229,6 +229,11 @@ def apply_forgetting_decomposition(
         # Keep the backbone/router/classifier trainable. The actual
         # intervention is applied to the Task 1+ CE loss in train_steps().
         return
+    if decomposition == "head_masked_ncm":
+        # Keep the backbone/router/classifier trainable. Old-class logits
+        # are masked during Task 1+ training, and NCM is used for evaluation.
+        return
+
     if decomposition == "head_ncm":
         # NCM changes evaluation only; keep the training parameters unchanged.
         return
@@ -355,6 +360,7 @@ def main() -> None:
             "head_only",
             "head_frozen_old",
             "head_masked",
+            "head_masked_ncm",
             "head_ncm",
         ],
         help=(
@@ -631,7 +637,10 @@ def main() -> None:
         head_mask_old_classes = 0
 
         if (
-            args.decomposition == "head_masked"
+            args.decomposition in {
+                "head_masked",
+                "head_masked_ncm",
+            }
             and task_id >= 1
         ):
             head_mask_old_classes = (
@@ -802,7 +811,10 @@ def main() -> None:
             : task_id + 1
         ]
 
-        if args.decomposition == "head_ncm":
+        if args.decomposition in {
+            "head_ncm",
+            "head_masked_ncm",
+        }:
             row = [
                 evaluate_ncm(
                     model=model,
@@ -847,43 +859,70 @@ def main() -> None:
             ),
         },
         "head_logit_masking": {
-            "active": args.decomposition == "head_masked",
+            "active": args.decomposition in {
+                "head_masked",
+                "head_masked_ncm",
+            },
             "mode": (
                 "old_classes_masked_in_training_ce"
-                if args.decomposition == "head_masked"
+                if args.decomposition in {
+                    "head_masked",
+                    "head_masked_ncm",
+                }
                 else "none"
             ),
         },
         "ncm_protocol": {
-            "active": args.decomposition == "head_ncm",
+            "active": args.decomposition in {
+                "head_ncm",
+                "head_masked_ncm",
+            },
             "method": (
                 "nearest_class_mean"
-                if args.decomposition == "head_ncm"
+                if args.decomposition in {
+                    "head_ncm",
+                    "head_masked_ncm",
+                }
                 else "none"
             ),
             "feature_source": (
                 "model.extract_features"
-                if args.decomposition == "head_ncm"
+                if args.decomposition in {
+                    "head_ncm",
+                    "head_masked_ncm",
+                }
                 else "none"
             ),
             "prototype_data": (
                 "all_seen_task_training_samples"
-                if args.decomposition == "head_ncm"
+                if args.decomposition in {
+                    "head_ncm",
+                    "head_masked_ncm",
+                }
                 else "none"
             ),
             "evaluation_data": (
                 "heldout_test_task_loader"
-                if args.decomposition == "head_ncm"
+                if args.decomposition in {
+                    "head_ncm",
+                    "head_masked_ncm",
+                }
                 else "none"
             ),
             "distance": (
                 "squared_euclidean"
-                if args.decomposition == "head_ncm"
+                if args.decomposition in {
+                    "head_ncm",
+                    "head_masked_ncm",
+                }
                 else "none"
             ),
             "classifier_head_used": (
                 False
-                if args.decomposition == "head_ncm"
+                if args.decomposition in {
+                    "head_ncm",
+                    "head_masked_ncm",
+                }
                 else None
             ),
         },
