@@ -1,0 +1,39 @@
+model:
+  hidden_dim: 256
+  ff_dim: 1024
+  num_experts: 8
+  top_k: 2
+
+router:
+  type: continual
+  memory_lambda: 0.25
+  memory_momentum: 0.99
+  z_loss_weight: 5.0e-7
+  bias_lr: 1.0e-3
+  temperature: 1.0
+
+continual:
+  experts_trainable_during_warmup: true
+  freeze_experts_after_warmup: true
+
+  replay_size: 256
+
+  stability_kl: true
+  routing_kl_weight: 0.1
+
+  dense_ewc: true
+  dense_ewc_weight: 1.0e-5
+
+  fisher_steps: 16
+  task_replay_samples: 256
+  stability_batch_size: 32
+
+systems:
+  backend: reference
+  capacity_factor: 1.25
+  profile_every: 200
+
+experiment:
+  classes_per_task: 20
+  tasks: 5
+  seeds: [0, 1, 2]

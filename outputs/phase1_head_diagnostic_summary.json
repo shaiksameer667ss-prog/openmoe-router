@@ -1,0 +1,315 @@
+{
+  "protocol": {
+    "dataset": "CIFAR-100",
+    "tasks": 5,
+    "classes_per_task": 20,
+    "steps": 200,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "evaluation": "heldout_test_task_loader",
+    "ncm_prototypes": "all_seen_task_training_samples"
+  },
+  "results": {
+    "head_ncm": {
+      "0": {
+        "accuracy_matrix": [
+          [
+            0.307
+          ],
+          [
+            0.203,
+            0.2575
+          ],
+          [
+            0.121,
+            0.1715,
+            0.2605
+          ],
+          [
+            0.098,
+            0.1215,
+            0.18,
+            0.2325
+          ],
+          [
+            0.089,
+            0.0975,
+            0.15,
+            0.163,
+            0.2045
+          ]
+        ],
+        "stability": {
+          "active": true,
+          "dense_ewc_enabled": true,
+          "dense_ewc_weight": 1e-05,
+          "routing_kl_enabled": true,
+          "routing_kl_weight": 0.1
+        },
+        "ncm_protocol": {
+          "active": true,
+          "classifier_head_used": false,
+          "distance": "squared_euclidean",
+          "evaluation_data": "heldout_test_task_loader",
+          "feature_source": "model.extract_features",
+          "method": "nearest_class_mean",
+          "prototype_data": "all_seen_task_training_samples"
+        },
+        "head_logit_masking": {
+          "active": false,
+          "mode": "none"
+        }
+      },
+      "1": {
+        "accuracy_matrix": [
+          [
+            0.2805
+          ],
+          [
+            0.195,
+            0.243
+          ],
+          [
+            0.118,
+            0.175,
+            0.2655
+          ],
+          [
+            0.0845,
+            0.123,
+            0.167,
+            0.233
+          ],
+          [
+            0.0935,
+            0.106,
+            0.141,
+            0.145,
+            0.1995
+          ]
+        ],
+        "stability": {
+          "active": true,
+          "dense_ewc_enabled": true,
+          "dense_ewc_weight": 1e-05,
+          "routing_kl_enabled": true,
+          "routing_kl_weight": 0.1
+        },
+        "ncm_protocol": {
+          "active": true,
+          "classifier_head_used": false,
+          "distance": "squared_euclidean",
+          "evaluation_data": "heldout_test_task_loader",
+          "feature_source": "model.extract_features",
+          "method": "nearest_class_mean",
+          "prototype_data": "all_seen_task_training_samples"
+        },
+        "head_logit_masking": {
+          "active": false,
+          "mode": "none"
+        }
+      },
+      "2": {
+        "accuracy_matrix": [
+          [
+            0.316
+          ],
+          [
+            0.187,
+            0.2425
+          ],
+          [
+            0.1135,
+            0.17,
+            0.283
+          ],
+          [
+            0.0925,
+            0.133,
+            0.172,
+            0.2405
+          ],
+          [
+            0.085,
+            0.097,
+            0.161,
+            0.1545,
+            0.202
+          ]
+        ],
+        "stability": {
+          "active": true,
+          "dense_ewc_enabled": true,
+          "dense_ewc_weight": 1e-05,
+          "routing_kl_enabled": true,
+          "routing_kl_weight": 0.1
+        },
+        "ncm_protocol": {
+          "active": true,
+          "classifier_head_used": false,
+          "distance": "squared_euclidean",
+          "evaluation_data": "heldout_test_task_loader",
+          "feature_source": "model.extract_features",
+          "method": "nearest_class_mean",
+          "prototype_data": "all_seen_task_training_samples"
+        },
+        "head_logit_masking": {
+          "active": false,
+          "mode": "none"
+        }
+      }
+    },
+    "head_masked": {
+      "0": {
+        "accuracy_matrix": [
+          [
+            0.326
+          ],
+          [
+            0.19,
+            0.2435
+          ],
+          [
+            0.0605,
+            0.166,
+            0.2855
+          ],
+          [
+            0.042,
+            0.1175,
+            0.2075,
+            0.1805
+          ],
+          [
+            0.028,
+            0.081,
+            0.17,
+            0.201,
+            0.085
+          ]
+        ],
+        "stability": {
+          "active": true,
+          "dense_ewc_enabled": true,
+          "dense_ewc_weight": 1e-05,
+          "routing_kl_enabled": true,
+          "routing_kl_weight": 0.1
+        },
+        "ncm_protocol": {
+          "active": false,
+          "classifier_head_used": null,
+          "distance": "none",
+          "evaluation_data": "none",
+          "feature_source": "none",
+          "method": "none",
+          "prototype_data": "none"
+        },
+        "head_logit_masking": {
+          "active": true,
+          "mode": "old_classes_masked_in_training_ce"
+        }
+      },
+      "1": {
+        "accuracy_matrix": [
+          [
+            0.301
+          ],
+          [
+            0.1575,
+            0.264
+          ],
+          [
+            0.134,
+            0.0975,
+            0.1795
+          ],
+          [
+            0.068,
+            0.124,
+            0.161,
+            0.1675
+          ],
+          [
+            0.0515,
+            0.0845,
+            0.1355,
+            0.1925,
+            0.1425
+          ]
+        ],
+        "stability": {
+          "active": true,
+          "dense_ewc_enabled": true,
+          "dense_ewc_weight": 1e-05,
+          "routing_kl_enabled": true,
+          "routing_kl_weight": 0.1
+        },
+        "ncm_protocol": {
+          "active": false,
+          "classifier_head_used": null,
+          "distance": "none",
+          "evaluation_data": "none",
+          "feature_source": "none",
+          "method": "none",
+          "prototype_data": "none"
+        },
+        "head_logit_masking": {
+          "active": true,
+          "mode": "old_classes_masked_in_training_ce"
+        }
+      },
+      "2": {
+        "accuracy_matrix": [
+          [
+            0.3415
+          ],
+          [
+            0.1825,
+            0.2695
+          ],
+          [
+            0.125,
+            0.159,
+            0.2305
+          ],
+          [
+            0.122,
+            0.102,
+            0.136,
+            0.148
+          ],
+          [
+            0.0705,
+            0.1305,
+            0.142,
+            0.15,
+            0.114
+          ]
+        ],
+        "stability": {
+          "active": true,
+          "dense_ewc_enabled": true,
+          "dense_ewc_weight": 1e-05,
+          "routing_kl_enabled": true,
+          "routing_kl_weight": 0.1
+        },
+        "ncm_protocol": {
+          "active": false,
+          "classifier_head_used": null,
+          "distance": "none",
+          "evaluation_data": "none",
+          "feature_source": "none",
+          "method": "none",
+          "prototype_data": "none"
+        },
+        "head_logit_masking": {
+          "active": true,
+          "mode": "old_classes_masked_in_training_ce"
+        }
+      }
+    }
+  }
+}
