@@ -10,6 +10,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from openmoe.continual.probe import (
     collect_features,
     evaluate_learned_head,
+    evaluate_linear_probe,
     evaluate_ncm_frozen,
     evaluate_ncm_refit,
     fit_linear_probe,
@@ -946,3 +947,51 @@ def test_probe_uses_eval_and_no_grad() -> None:
     )
 
     assert model.training is True
+
+
+def test_evaluate_linear_probe_classifies_seen_classes() -> None:
+    model = ToyProbeModel()
+
+    images = torch.tensor(
+        [
+            [2.0, 0.0],
+            [3.0, 0.0],
+            [0.0, 2.0],
+            [0.0, 3.0],
+            [-2.0, -2.0],
+            [-3.0, -3.0],
+        ],
+        dtype=torch.float32,
+    )
+
+    labels = torch.tensor(
+        [0, 0, 1, 1, 2, 2],
+        dtype=torch.long,
+    )
+
+    loader = make_loader(
+        images,
+        labels,
+        batch_size=2,
+    )
+
+    features, collected_labels = collect_features(
+        model=model,
+        loader=loader,
+        device=torch.device("cpu"),
+    )
+
+    probe = fit_linear_probe(
+        features=features,
+        labels=collected_labels,
+        ridge_lambda=1e-2,
+    )
+
+    accuracy = evaluate_linear_probe(
+        model=model,
+        probe=probe,
+        evaluation_loader=loader,
+        device=torch.device("cpu"),
+    )
+
+    assert accuracy == pytest.approx(1.0)

@@ -59,7 +59,6 @@ def collect_features(
                     .long()
                     .cpu()
                 )
-
     finally:
         if was_training:
             model.train()
@@ -136,7 +135,6 @@ def evaluate_learned_head(
                 )
 
                 total += labels.numel()
-
     finally:
         if was_training:
             model.train()
@@ -282,7 +280,6 @@ def evaluate_ncm_frozen(
                 )
 
                 total += labels.numel()
-
     finally:
         if was_training:
             model.train()
@@ -293,6 +290,8 @@ def evaluate_ncm_frozen(
         )
 
     return correct / total
+
+
 @dataclass(frozen=True)
 class LinearProbe:
     """Closed-form centered ridge linear classifier."""
@@ -313,8 +312,8 @@ def fit_linear_probe(
     """Fit a deterministic centered ridge classifier.
 
     Features are centered and one-hot targets are centered.
-    The intercept is recovered from the original feature/target means
-    and is not regularized.
+    The intercept is recovered from the original feature/target
+    means and is not regularized.
 
     The effective ridge penalty is:
 
@@ -439,4 +438,88 @@ def fit_linear_probe(
         ridge_lambda=float(ridge_lambda),
         ridge_normalization="trace_gram_over_feature_dim",
         effective_lambda=float(effective_lambda),
+    )
+
+
+def evaluate_linear_probe(
+    model: nn.Module,
+    probe: LinearProbe,
+    evaluation_loader,
+    device: torch.device,
+) -> float:
+    """Evaluate a fitted linear probe on current backbone features.
+
+    The probe is deterministic and does not modify the model.
+    Features are collected with eval mode and torch.no_grad().
+    """
+    if probe.weights.ndim != 2:
+        raise ValueError(
+            "probe.weights must have shape [D, C]"
+        )
+
+    if probe.bias.ndim != 1:
+        raise ValueError(
+            "probe.bias must have shape [C]"
+        )
+
+    if probe.weights.shape[1] != probe.bias.shape[0]:
+        raise ValueError(
+            "probe weight and bias class dimensions do not match"
+        )
+
+    if (
+        probe.class_ids.ndim != 1
+        or probe.class_ids.shape[0] != probe.bias.shape[0]
+    ):
+        raise ValueError(
+            "probe.class_ids must have shape [C]"
+        )
+
+    features, labels = collect_features(
+        model=model,
+        loader=evaluation_loader,
+        device=device,
+    )
+
+    if (
+        features.shape[1]
+        != probe.weights.shape[0]
+    ):
+        raise ValueError(
+            "feature dimension does not match "
+            "linear probe dimension"
+        )
+
+    probe_weights = probe.weights.to(
+        features.device,
+        non_blocking=True,
+    ).float()
+
+    probe_bias = probe.bias.to(
+        features.device,
+        non_blocking=True,
+    ).float()
+
+    class_ids = probe.class_ids.to(
+        features.device,
+        non_blocking=True,
+    ).long()
+
+    logits = (
+        features.float() @ probe_weights
+        + probe_bias
+    )
+
+    nearest = logits.argmax(
+        dim=-1
+    )
+
+    predictions = class_ids[
+        nearest
+    ]
+
+    return float(
+        (
+            predictions == labels
+        ).float().mean().item()
     )
