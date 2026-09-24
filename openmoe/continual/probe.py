@@ -1,4 +1,6 @@
-﻿from __future__ import annotations
+from __future__ import annotations
+
+from dataclasses import dataclass
 
 import torch
 from torch import Tensor, nn
@@ -9,7 +11,7 @@ def collect_features(
     loader,
     device: torch.device,
 ) -> tuple[Tensor, Tensor]:
-    """Collect model backbone features and labels on CPU."""
+    """Collect backbone features and labels on CPU."""
     was_training = model.training
     model.eval()
 
@@ -51,6 +53,7 @@ def collect_features(
                     .float()
                     .cpu()
                 )
+
                 label_chunks.append(
                     labels.detach()
                     .long()
@@ -67,6 +70,373 @@ def collect_features(
         )
 
     return (
-        torch.cat(feature_chunks, dim=0),
-        torch.cat(label_chunks, dim=0),
+        torch.cat(
+            feature_chunks,
+            dim=0,
+        ),
+        torch.cat(
+            label_chunks,
+            dim=0,
+        ),
+    )
+
+
+def evaluate_learned_head(
+    model: nn.Module,
+    loader,
+    device: torch.device,
+) -> float:
+    """Evaluate the checkpoint's existing learned classifier head."""
+    was_training = model.training
+    model.eval()
+
+    correct = 0
+    total = 0
+
+    try:
+        with torch.no_grad():
+            for batch in loader:
+                if len(batch) != 3:
+                    raise ValueError(
+                        "expected loader batches as "
+                        "(images, labels, task_id)"
+                    )
+
+                images, labels, _ = batch
+
+                output = model(
+                    images.to(
+                        device,
+                        non_blocking=True,
+                    )
+                )
+
+                logits = output.logits
+
+                if logits.ndim != 2:
+                    raise ValueError(
+                        "model output logits must have shape [B, C]"
+                    )
+
+                if logits.shape[0] != images.shape[0]:
+                    raise ValueError(
+                        "model output changed the batch dimension"
+                    )
+
+                labels = labels.to(
+                    device,
+                    non_blocking=True,
+                )
+
+                correct += int(
+                    (
+                        logits.argmax(dim=-1)
+                        == labels
+                    ).sum().item()
+                )
+
+                total += labels.numel()
+
+    finally:
+        if was_training:
+            model.train()
+
+    if total == 0:
+        raise ValueError(
+            "cannot evaluate an empty loader"
+        )
+
+    return correct / total
+
+
+def evaluate_ncm_refit(
+    model: nn.Module,
+    prototype_loaders,
+    evaluation_loader,
+    device: torch.device,
+) -> float:
+    """Evaluate NCM with prototypes refit from current features."""
+    from openmoe.training.engine import evaluate_ncm
+
+    return evaluate_ncm(
+        model=model,
+        prototype_loaders=prototype_loaders,
+        evaluation_loader=evaluation_loader,
+        device=device,
+    )
+
+
+def evaluate_ncm_frozen(
+    model: nn.Module,
+    prototypes: dict[int, Tensor],
+    evaluation_loader,
+    device: torch.device,
+) -> float:
+    """Evaluate frozen raw class-mean prototypes with squared Euclidean distance."""
+    if not prototypes:
+        raise ValueError(
+            "prototypes must not be empty"
+        )
+
+    was_training = model.training
+    model.eval()
+
+    class_ids = sorted(prototypes)
+
+    prototype_tensor = torch.stack(
+        [
+            prototypes[class_id]
+            .detach()
+            .float()
+            .cpu()
+            for class_id in class_ids
+        ],
+        dim=0,
+    )
+
+    if prototype_tensor.ndim != 2:
+        raise ValueError(
+            "prototypes must contain [D] vectors"
+        )
+
+    correct = 0
+    total = 0
+
+    class_id_tensor = torch.tensor(
+        class_ids,
+        dtype=torch.long,
+        device=device,
+    )
+
+    prototypes_device = prototype_tensor.to(
+        device,
+        non_blocking=True,
+    )
+
+    try:
+        with torch.no_grad():
+            for batch in evaluation_loader:
+                if len(batch) != 3:
+                    raise ValueError(
+                        "expected loader batches as "
+                        "(images, labels, task_id)"
+                    )
+
+                images, labels, _ = batch
+
+                features = model.extract_features(
+                    images.to(
+                        device,
+                        non_blocking=True,
+                    )
+                )
+
+                if features.ndim != 2:
+                    raise ValueError(
+                        "model.extract_features must "
+                        "return a [B, D] tensor"
+                    )
+
+                if features.shape[0] != images.shape[0]:
+                    raise ValueError(
+                        "model.extract_features changed "
+                        "the batch dimension"
+                    )
+
+                features = (
+                    features.detach()
+                    .float()
+                )
+
+                if (
+                    features.shape[1]
+                    != prototypes_device.shape[1]
+                ):
+                    raise ValueError(
+                        "feature dimension does not match "
+                        "prototype dimension"
+                    )
+
+                distances = (
+                    features.unsqueeze(1)
+                    - prototypes_device.unsqueeze(0)
+                ).square().sum(dim=-1)
+
+                nearest = distances.argmin(
+                    dim=-1
+                )
+
+                predictions = class_id_tensor[
+                    nearest
+                ]
+
+                labels = labels.to(
+                    device,
+                    non_blocking=True,
+                )
+
+                correct += int(
+                    (
+                        predictions == labels
+                    ).sum().item()
+                )
+
+                total += labels.numel()
+
+    finally:
+        if was_training:
+            model.train()
+
+    if total == 0:
+        raise ValueError(
+            "cannot evaluate an empty loader"
+        )
+
+    return correct / total
+@dataclass(frozen=True)
+class LinearProbe:
+    """Closed-form centered ridge linear classifier."""
+
+    weights: Tensor
+    bias: Tensor
+    class_ids: Tensor
+    ridge_lambda: float
+    ridge_normalization: str
+    effective_lambda: float
+
+
+def fit_linear_probe(
+    features: Tensor,
+    labels: Tensor,
+    ridge_lambda: float = 1e-2,
+) -> LinearProbe:
+    """Fit a deterministic centered ridge classifier.
+
+    Features are centered and one-hot targets are centered.
+    The intercept is recovered from the original feature/target means
+    and is not regularized.
+
+    The effective ridge penalty is:
+
+        ridge_lambda * trace(Xc^T Xc) / d
+
+    where d is the feature dimension.
+    """
+    if features.ndim != 2:
+        raise ValueError(
+            "features must have shape [N, D]"
+        )
+
+    if labels.ndim != 1:
+        raise ValueError(
+            "labels must have shape [N]"
+        )
+
+    if features.shape[0] != labels.shape[0]:
+        raise ValueError(
+            "features and labels must have the same number of samples"
+        )
+
+    if features.shape[0] == 0:
+        raise ValueError(
+            "cannot fit a linear probe on empty data"
+        )
+
+    if ridge_lambda < 0.0:
+        raise ValueError(
+            "ridge_lambda must be non-negative"
+        )
+
+    x = features.detach().float()
+    y = labels.detach().long()
+
+    class_ids = torch.unique(
+        y,
+        sorted=True,
+    )
+
+    if class_ids.numel() == 0:
+        raise ValueError(
+            "labels must contain at least one class"
+        )
+
+    num_classes = class_ids.numel()
+    feature_dim = x.shape[1]
+
+    x_mean = x.mean(
+        dim=0,
+        keepdim=True,
+    )
+
+    x_centered = x - x_mean
+
+    class_matches = (
+        y.unsqueeze(1)
+        == class_ids.unsqueeze(0)
+    )
+
+    targets = class_matches.to(
+        dtype=x.dtype,
+        device=x.device,
+    )
+
+    y_mean = targets.mean(
+        dim=0,
+        keepdim=True,
+    )
+
+    y_centered = targets - y_mean
+
+    gram = (
+        x_centered.transpose(0, 1)
+        @ x_centered
+    )
+
+    trace_scale = (
+        torch.trace(gram)
+        / float(feature_dim)
+        if feature_dim > 0
+        else torch.tensor(
+            0.0,
+            dtype=x.dtype,
+            device=x.device,
+        )
+    )
+
+    effective_lambda = (
+        float(ridge_lambda)
+        * float(trace_scale.item())
+    )
+
+    regularized = gram + (
+        effective_lambda
+        * torch.eye(
+            feature_dim,
+            dtype=x.dtype,
+            device=x.device,
+        )
+    )
+
+    rhs = (
+        x_centered.transpose(0, 1)
+        @ y_centered
+    )
+
+    weights = torch.linalg.solve(
+        regularized,
+        rhs,
+    )
+
+    bias = (
+        y_mean.squeeze(0)
+        - x_mean.squeeze(0) @ weights
+    )
+
+    return LinearProbe(
+        weights=weights.detach().clone(),
+        bias=bias.detach().clone(),
+        class_ids=class_ids.detach().clone(),
+        ridge_lambda=float(ridge_lambda),
+        ridge_normalization="trace_gram_over_feature_dim",
+        effective_lambda=float(effective_lambda),
     )
