@@ -234,6 +234,11 @@ def apply_forgetting_decomposition(
         # are masked during Task 1+ training, and NCM is used for evaluation.
         return
 
+    if decomposition == "head_masked_frozen_old":
+        # Combine old-class CE masking with the existing classifier-row
+        # protection mechanism applied at each Task 1+ boundary.
+        return
+
     if decomposition == "head_ncm":
         # NCM changes evaluation only; keep the training parameters unchanged.
         return
@@ -361,6 +366,7 @@ def main() -> None:
             "head_frozen_old",
             "head_masked",
             "head_masked_ncm",
+            "head_masked_frozen_old",
             "head_ncm",
         ],
         help=(
@@ -616,11 +622,14 @@ def main() -> None:
                 f"{args.decomposition}"
             )
 
-        # For head_frozen_old, expand the protected classifier prefix
-        # at each task transition. Task 1 protects Task 0 classes,
-        # Task 2 protects Tasks 0-1 classes, and so on.
+        # For head_frozen_old and head_masked_frozen_old, expand the
+        # protected classifier prefix at each task transition. Task 1
+        # protects Task 0 classes, Task 2 protects Tasks 0-1 classes, and so on.
         if (
-            args.decomposition == "head_frozen_old"
+            args.decomposition in {
+                "head_frozen_old",
+                "head_masked_frozen_old",
+            }
             and task_id >= 1
         ):
             model.set_head_old_rows_frozen(
@@ -640,6 +649,7 @@ def main() -> None:
             args.decomposition in {
                 "head_masked",
                 "head_masked_ncm",
+                "head_masked_frozen_old",
             }
             and task_id >= 1
         ):
@@ -851,10 +861,16 @@ def main() -> None:
         "router": args.router,
         "decomposition": args.decomposition,
         "head_row_protection": {
-            "active": args.decomposition == "head_frozen_old",
+            "active": args.decomposition in {
+                "head_frozen_old",
+                "head_masked_frozen_old",
+            },
             "mode": (
                 "old_rows_frozen"
-                if args.decomposition == "head_frozen_old"
+                if args.decomposition in {
+                    "head_frozen_old",
+                    "head_masked_frozen_old",
+                }
                 else "none"
             ),
         },
@@ -862,12 +878,14 @@ def main() -> None:
             "active": args.decomposition in {
                 "head_masked",
                 "head_masked_ncm",
+                "head_masked_frozen_old",
             },
             "mode": (
                 "old_classes_masked_in_training_ce"
                 if args.decomposition in {
                     "head_masked",
                     "head_masked_ncm",
+                    "head_masked_frozen_old",
                 }
                 else "none"
             ),
