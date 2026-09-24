@@ -43,6 +43,9 @@ from openmoe.utils.repro import seed_everything
 REPLAY_CURRENT_BATCH_SIZE = 64
 REPLAY_BATCH_SIZE = 64
 
+STABILITY_METHOD_STATE_BYTES = 8_911_776
+REPLAY_EXAMPLE_BYTES = 12_304
+
 REPLAY_CAPACITIES = {
     "sample_matched": 256,
     "byte_matched": 724,
@@ -1156,6 +1159,43 @@ def main() -> None:
                 if args.replay
                 else 0
             ),
+            "memory": {
+                "target_bytes": (
+                    STABILITY_METHOD_STATE_BYTES
+                    if args.replay
+                    else 0
+                ),
+                "actual_bytes": (
+                    replay_buffer.total_bytes
+                    if args.replay
+                    else 0
+                ),
+                "matching_protocol": (
+                    args.replay_match
+                    if args.replay
+                    else "none"
+                ),
+                "relation_to_target": (
+                    (
+                        "under"
+                        if replay_buffer.total_bytes
+                        < STABILITY_METHOD_STATE_BYTES
+                        else (
+                            "equal"
+                            if replay_buffer.total_bytes
+                            == STABILITY_METHOD_STATE_BYTES
+                            else "over"
+                        )
+                    )
+                    if args.replay
+                    else "none"
+                ),
+                "per_example_bytes": (
+                    REPLAY_EXAMPLE_BYTES
+                    if args.replay
+                    else 0
+                ),
+            },
             "router_state_rehearsal": (
                 "replay_examples_are_seen_by_the_full_model_and_router"
                 if args.replay
@@ -1182,6 +1222,11 @@ def main() -> None:
                 ["ewc", "routing_kl"]
                 if args.replay
                 else []
+            ),
+            "method_state_memory_target_bytes": (
+                STABILITY_METHOD_STATE_BYTES
+                if args.replay
+                else 0
             ),
             "routing_kl_enabled": bool(
                 use_stability
