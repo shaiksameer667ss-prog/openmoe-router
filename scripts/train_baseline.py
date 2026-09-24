@@ -7,6 +7,8 @@ from pathlib import Path
 import torch
 import yaml
 
+from openmoe.continual.drift import DriftState
+
 from openmoe.data.streams import (
     build_split_cifar100_stream,
     make_synthetic_stream,
@@ -518,6 +520,38 @@ def main() -> None:
             ContinualStabilityState()
         )
 
+    drift_cfg = continual_cfg.get(
+        "drift",
+        {}
+    )
+
+    use_drift = bool(
+        drift_cfg.get(
+            "enabled",
+            False,
+        )
+    )
+
+    drift_state = (
+        DriftState()
+        if use_drift
+        else None
+    )
+
+    drift_samples_per_class = int(
+        drift_cfg.get(
+            "samples_per_class",
+            32,
+        )
+    )
+
+    drift_batch_size = int(
+        drift_cfg.get(
+            "batch_size",
+            32,
+        )
+    )
+
     routing_kl_weight = 0.0
 
     if continual_cfg.get(
@@ -740,6 +774,29 @@ def main() -> None:
                 replay_size=stability_replay_size,
             )
 
+        if drift_state is not None:
+            drift_state.capture_task_reference(
+                model=model,
+                loader=loader,
+                task_id=task_id,
+                device=device,
+                samples_per_class=(
+                    drift_samples_per_class
+                ),
+                batch_size=(
+                    drift_batch_size
+                ),
+            )
+
+            drift_state.measure_boundary(
+                model=model,
+                boundary=task_id,
+                device=device,
+                batch_size=(
+                    drift_batch_size
+                ),
+            )
+
         seen_loaders = stream[: task_id + 1]
         seen_evaluation_loaders = evaluation_stream[
             : task_id + 1
@@ -856,6 +913,43 @@ def main() -> None:
                 dense_ewc_weight
                 if use_stability
                 else 0.0
+            ),
+        },
+        "feature_drift": {
+            "active": bool(
+                use_drift
+            ),
+            "feature_source": (
+                "model.extract_features"
+                if use_drift
+                else "none"
+            ),
+            "reference_samples_per_class": (
+                drift_samples_per_class
+                if use_drift
+                else 0
+            ),
+            "batch_size": (
+                drift_batch_size
+                if use_drift
+                else 0
+            ),
+            "metrics": {
+                "l2": (
+                    "euclidean_norm_of_class_mean_difference"
+                    if use_drift
+                    else "none"
+                ),
+                "cosine": (
+                    "cosine_similarity_of_class_means"
+                    if use_drift
+                    else "none"
+                ),
+            },
+            "boundaries": (
+                drift_state.history
+                if drift_state is not None
+                else {}
             ),
         },
         "config": cfg,
