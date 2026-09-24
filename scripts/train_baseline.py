@@ -441,10 +441,17 @@ def main() -> None:
             classes_per_task=classes_per_task,
             seed=args.seed,
         )
+        evaluation_stream = stream
     else:
         stream = build_split_cifar100_stream(
             root=".data",
             tasks=tasks,
+            train=True,
+        )
+        evaluation_stream = build_split_cifar100_stream(
+            root=".data",
+            tasks=tasks,
+            train=False,
         )
         num_classes = 100
 
@@ -734,25 +741,28 @@ def main() -> None:
             )
 
         seen_loaders = stream[: task_id + 1]
+        seen_evaluation_loaders = evaluation_stream[
+            : task_id + 1
+        ]
 
         if args.decomposition == "head_ncm":
             row = [
                 evaluate_ncm(
                     model=model,
                     prototype_loaders=seen_loaders,
-                    evaluation_loader=seen_loader,
+                    evaluation_loader=evaluation_loader,
                     device=device,
                 )
-                for seen_loader in seen_loaders
+                for evaluation_loader in seen_evaluation_loaders
             ]
         else:
             row = [
                 evaluate(
                     model,
-                    seen_loader,
+                    evaluation_loader,
                     device,
                 )
-                for seen_loader in seen_loaders
+                for evaluation_loader in seen_evaluation_loaders
             ]
         accuracies.append(
             row
@@ -805,7 +815,7 @@ def main() -> None:
                 else "none"
             ),
             "evaluation_data": (
-                "each_seen_task_loader"
+                "heldout_test_task_loader"
                 if args.decomposition == "head_ncm"
                 else "none"
             ),
