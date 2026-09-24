@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Iterable, Iterator
 
 import torch
 from torch import Tensor
@@ -24,9 +25,9 @@ class ReplayBuffer:
         label:    int64 scalar
         task_id:  int64 scalar
 
-    New task examples are collected incrementally and capped at the buffer
-    capacity before being merged with existing replay data. Retention after
-    merging is deterministic and approximately balanced across seen tasks.
+    New task examples are collected incrementally and capped before being
+    merged with existing replay data. Retention is deterministic and
+    approximately balanced across seen tasks.
     """
 
     def __init__(
@@ -212,9 +213,9 @@ class ReplayBuffer:
                 "loader produced no replay examples"
             )
 
-        parts_images = []
-        parts_labels = []
-        parts_task_ids = []
+        parts_images: list[Tensor] = []
+        parts_labels: list[Tensor] = []
+        parts_task_ids: list[Tensor] = []
 
         if self._images is not None:
             parts_images.append(
@@ -336,9 +337,20 @@ class ReplayBuffer:
             )
 
         if num_samples == 0:
-            self._images = images.detach().cpu()
-            self._labels = labels.detach().cpu().long()
-            self._task_ids = task_ids.detach().cpu().long()
+            self._images = (
+                images.detach()
+                .cpu()
+            )
+            self._labels = (
+                labels.detach()
+                .cpu()
+                .long()
+            )
+            self._task_ids = (
+                task_ids.detach()
+                .cpu()
+                .long()
+            )
             return
 
         if num_samples <= self.capacity:
@@ -448,3 +460,109 @@ class ReplayBuffer:
             selected,
             dim=0,
         )
+
+
+class ReplayMixLoader:
+    """Mix replay examples into an existing task loader.
+
+    For Task 1+, each emitted batch contains:
+        64 current-task examples
+        64 replay examples
+        128 total examples
+
+    The underlying task loader currently emits 128-example batches. The
+    wrapper takes a 64-example prefix from each full current batch. Incomplete
+    current batches are skipped so replay batches remain exactly balanced.
+
+    When the replay buffer is empty, the original current batch is emitted
+    unchanged. This makes Task 0 use the existing 128-example training path.
+    """
+
+    def __init__(
+        self,
+        current_loader: Iterable,
+        replay_buffer: ReplayBuffer,
+        current_batch_size: int = 64,
+        replay_batch_size: int = 64,
+        generator: torch.Generator | None = None,
+    ) -> None:
+        if current_batch_size <= 0:
+            raise ValueError(
+                "current_batch_size must be positive"
+            )
+
+        if replay_batch_size <= 0:
+            raise ValueError(
+                "replay_batch_size must be positive"
+            )
+
+        self.current_loader = current_loader
+        self.replay_buffer = replay_buffer
+        self.current_batch_size = int(
+            current_batch_size
+        )
+        self.replay_batch_size = int(
+            replay_batch_size
+        )
+        self.generator = generator
+
+    def __iter__(
+        self,
+    ) -> Iterator:
+        for batch in self.current_loader:
+            images, labels, task_ids = batch
+
+            if self.replay_buffer.is_empty:
+                yield (
+                    images,
+                    labels,
+                    task_ids,
+                )
+                continue
+
+            if (
+                images.shape[0]
+                < self.current_batch_size
+            ):
+                continue
+
+            current_images = images[
+                :self.current_batch_size
+            ]
+
+            current_labels = labels[
+                :self.current_batch_size
+            ]
+
+            current_task_ids = task_ids[
+                :self.current_batch_size
+            ]
+
+            replay = self.replay_buffer.sample(
+                self.replay_batch_size,
+                generator=self.generator,
+            )
+
+            yield (
+                torch.cat(
+                    [
+                        current_images,
+                        replay.images,
+                    ],
+                    dim=0,
+                ),
+                torch.cat(
+                    [
+                        current_labels,
+                        replay.labels,
+                    ],
+                    dim=0,
+                ),
+                torch.cat(
+                    [
+                        current_task_ids,
+                        replay.task_ids,
+                    ],
+                    dim=0,
+                ),
+            )

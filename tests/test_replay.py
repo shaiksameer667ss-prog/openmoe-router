@@ -4,7 +4,10 @@ from __future__ import annotations
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
-from openmoe.data.replay import ReplayBuffer
+from openmoe.data.replay import (
+    ReplayBuffer,
+    ReplayMixLoader,
+)
 
 
 def make_loader(
@@ -43,6 +46,40 @@ def make_loader(
     return DataLoader(
         dataset,
         batch_size=4,
+        shuffle=False,
+    )
+
+
+def make_large_loader(
+    task_id: int,
+    num_samples: int,
+    batch_size: int = 128,
+) -> DataLoader:
+    images = torch.rand(
+        num_samples,
+        3,
+        32,
+        32,
+    )
+
+    labels = torch.arange(
+        num_samples,
+        dtype=torch.long,
+    )
+
+    task_ids = torch.full(
+        (num_samples,),
+        task_id,
+        dtype=torch.long,
+    )
+
+    return DataLoader(
+        TensorDataset(
+            images,
+            labels,
+            task_ids,
+        ),
+        batch_size=batch_size,
         shuffle=False,
     )
 
@@ -288,21 +325,21 @@ def test_replay_buffer_byte_accounting() -> None:
     )
 
 
-def test_722_examples_fit_measured_stability_budget() -> None:
+def test_724_examples_fit_measured_stability_budget() -> None:
     per_example_bytes = (
         3 * 32 * 32 * 4
         + 8
         + 8
     )
 
-    stability_budget = 8_895_264
+    stability_budget = 8_911_776
 
     samples = (
         stability_budget
         // per_example_bytes
     )
 
-    assert samples == 722
+    assert samples == 724
 
     assert (
         samples * per_example_bytes
@@ -382,3 +419,182 @@ def test_invalid_sample_size_fails() -> None:
         raise AssertionError(
             "Expected invalid sample size to fail"
         )
+
+
+def test_empty_replay_mix_loader_returns_original_batch() -> None:
+    buffer = ReplayBuffer(
+        capacity=8,
+    )
+
+    loader = make_large_loader(
+        task_id=0,
+        num_samples=128,
+        batch_size=128,
+    )
+
+    batches = list(
+        ReplayMixLoader(
+            loader,
+            buffer,
+            current_batch_size=64,
+            replay_batch_size=64,
+        )
+    )
+
+    assert len(batches) == 1
+
+    images, labels, task_ids = batches[0]
+
+    assert images.shape[0] == 128
+    assert labels.shape[0] == 128
+    assert task_ids.shape[0] == 128
+
+
+def test_replay_mix_loader_produces_64_plus_64_batches() -> None:
+    replay_buffer = ReplayBuffer(
+        capacity=128,
+    )
+
+    replay_buffer.add_task_examples(
+        make_large_loader(
+            task_id=0,
+            num_samples=128,
+            batch_size=128,
+        ),
+        task_id=0,
+    )
+
+    current_loader = make_large_loader(
+        task_id=1,
+        num_samples=128,
+        batch_size=128,
+    )
+
+    mixed = list(
+        ReplayMixLoader(
+            current_loader,
+            replay_buffer,
+            current_batch_size=64,
+            replay_batch_size=64,
+            generator=torch.Generator().manual_seed(123),
+        )
+    )
+
+    assert len(mixed) == 1
+
+    images, labels, task_ids = mixed[0]
+
+    assert images.shape == (
+        128,
+        3,
+        32,
+        32,
+    )
+
+    assert labels.shape == (
+        128,
+    )
+
+    assert task_ids.shape == (
+        128,
+    )
+
+    assert torch.equal(
+        task_ids[:64],
+        torch.ones(
+            64,
+            dtype=torch.long,
+        ),
+    )
+
+    assert torch.equal(
+        task_ids[64:],
+        torch.zeros(
+            64,
+            dtype=torch.long,
+        ),
+    )
+
+
+def test_replay_mix_loader_is_deterministic() -> None:
+    replay_buffer = ReplayBuffer(
+        capacity=128,
+    )
+
+    replay_buffer.add_task_examples(
+        make_large_loader(
+            task_id=0,
+            num_samples=128,
+            batch_size=128,
+        ),
+        task_id=0,
+    )
+
+    current_loader = make_large_loader(
+        task_id=1,
+        num_samples=128,
+        batch_size=128,
+    )
+
+    first = list(
+        ReplayMixLoader(
+            current_loader,
+            replay_buffer,
+            generator=torch.Generator().manual_seed(456),
+        )
+    )[0]
+
+    second = list(
+        ReplayMixLoader(
+            current_loader,
+            replay_buffer,
+            generator=torch.Generator().manual_seed(456),
+        )
+    )[0]
+
+    assert torch.equal(
+        first[0],
+        second[0],
+    )
+
+    assert torch.equal(
+        first[1],
+        second[1],
+    )
+
+    assert torch.equal(
+        first[2],
+        second[2],
+    )
+
+
+def test_replay_mix_loader_skips_incomplete_current_batch() -> None:
+    replay_buffer = ReplayBuffer(
+        capacity=128,
+    )
+
+    replay_buffer.add_task_examples(
+        make_large_loader(
+            task_id=0,
+            num_samples=128,
+            batch_size=128,
+        ),
+        task_id=0,
+    )
+
+    current_loader = make_large_loader(
+        task_id=1,
+        num_samples=32,
+        batch_size=32,
+    )
+
+    mixed = list(
+        ReplayMixLoader(
+            current_loader,
+            replay_buffer,
+            current_batch_size=64,
+            replay_batch_size=64,
+        )
+    )
+
+    assert mixed == []

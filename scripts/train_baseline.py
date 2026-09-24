@@ -8,6 +8,10 @@ import torch
 import yaml
 
 from openmoe.continual.drift import DriftState
+from openmoe.data.replay import (
+    ReplayBuffer,
+    ReplayMixLoader,
+)
 
 from openmoe.data.streams import (
     build_split_cifar100_stream,
@@ -34,6 +38,15 @@ from openmoe.training.freezing import (
     clear_optimizer_state_rows,
 )
 from openmoe.utils.repro import seed_everything
+
+
+REPLAY_CURRENT_BATCH_SIZE = 64
+REPLAY_BATCH_SIZE = 64
+
+REPLAY_CAPACITIES = {
+    "sample_matched": 256,
+    "byte_matched": 724,
+}
 
 
 def make_router_factory(kind: str, cfg: dict):
@@ -419,6 +432,29 @@ def main() -> None:
     )
 
     parser.add_argument(
+        "--replay",
+        action="store_true",
+        help=(
+            "Run the standalone rehearsal baseline. "
+            "Task 1+ batches use 64 current + 64 replay "
+            "examples. Stability-state losses are disabled."
+        ),
+    )
+
+    parser.add_argument(
+        "--replay-match",
+        choices=[
+            "sample_matched",
+            "byte_matched",
+        ],
+        default="sample_matched",
+        help=(
+            "Replay memory budget used by the preregistered "
+            "continual-learning baseline."
+        ),
+    )
+
+    parser.add_argument(
         "--output",
         default=(
             "experiments/results/"
@@ -427,6 +463,20 @@ def main() -> None:
     )
 
     args = parser.parse_args()
+
+    if args.replay and args.decomposition != "none":
+        raise ValueError(
+            "--replay cannot be combined with a forgetting decomposition"
+        )
+
+    if args.replay and args.data != "cifar100":
+        raise ValueError(
+            "--replay baseline requires --data cifar100"
+        )
+
+    replay_capacity = REPLAY_CAPACITIES[
+        args.replay_match
+    ]
 
     cfg = yaml.safe_load(
         Path(
@@ -544,6 +594,7 @@ def main() -> None:
 
     use_stability = (
         args.router == "continual"
+        and not args.replay
     )
 
     stability_state = None
@@ -620,6 +671,24 @@ def main() -> None:
 
     accuracies: list[list[float]] = []
     history: list[dict[str, float]] = []
+
+    replay_buffer = (
+        ReplayBuffer(
+            capacity=replay_capacity,
+        )
+        if args.replay
+        else None
+    )
+
+    replay_generator = (
+        torch.Generator().manual_seed(
+            args.seed + 100_000
+        )
+        if args.replay
+        else None
+    )
+
+    replay_history: list[dict[str, float]] = []
 
     started = time.perf_counter()
 
@@ -706,9 +775,24 @@ def main() -> None:
             10,
         )
 
+        training_loader = loader
+
+        if (
+            args.replay
+            and task_id >= 1
+            and replay_buffer is not None
+        ):
+            training_loader = ReplayMixLoader(
+                current_loader=loader,
+                replay_buffer=replay_buffer,
+                current_batch_size=REPLAY_CURRENT_BATCH_SIZE,
+                replay_batch_size=REPLAY_BATCH_SIZE,
+                generator=replay_generator,
+            )
+
         warmup_history = train_steps(
             model,
-            loader,
+            training_loader,
             optimizer,
             device,
             warmup,
@@ -771,7 +855,7 @@ def main() -> None:
 
         step_history = train_steps(
             model,
-            loader,
+            training_loader,
             optimizer,
             device,
             remaining,
@@ -896,6 +980,36 @@ def main() -> None:
             f"accuracies={row}"
         )
 
+        if (
+            args.replay
+            and replay_buffer is not None
+        ):
+            replay_buffer.add_task_examples(
+                loader,
+                task_id=task_id,
+            )
+
+            replay_history.append(
+                {
+                    "task_id": float(task_id),
+                    "stored_examples": float(
+                        replay_buffer.num_samples
+                    ),
+                    "image_bytes": float(
+                        replay_buffer.image_bytes
+                    ),
+                    "label_bytes": float(
+                        replay_buffer.label_bytes
+                    ),
+                    "task_id_bytes": float(
+                        replay_buffer.task_id_bytes
+                    ),
+                    "total_bytes": float(
+                        replay_buffer.total_bytes
+                    ),
+                }
+            )
+
     elapsed = (
         time.perf_counter()
         - started
@@ -993,6 +1107,43 @@ def main() -> None:
         "elapsed_sec": elapsed,
         "accuracy_matrix": accuracies,
         "history": history,
+        "replay": {
+            "active": bool(
+                args.replay
+            ),
+            "memory_match": (
+                args.replay_match
+                if args.replay
+                else "none"
+            ),
+            "capacity": (
+                replay_capacity
+                if args.replay
+                else 0
+            ),
+            "current_batch_size": (
+                REPLAY_CURRENT_BATCH_SIZE
+                if args.replay
+                else 0
+            ),
+            "replay_batch_size": (
+                REPLAY_BATCH_SIZE
+                if args.replay
+                else 0
+            ),
+            "total_batch_size": (
+                REPLAY_CURRENT_BATCH_SIZE
+                + REPLAY_BATCH_SIZE
+                if args.replay
+                else 0
+            ),
+            "router_state_rehearsal": (
+                "replay_examples_are_seen_by_the_full_model_and_router"
+                if args.replay
+                else "none"
+            ),
+            "memory_history": replay_history,
+        },
         "stability": {
             "active": bool(
                 use_stability
