@@ -13,6 +13,7 @@ from openmoe.continual.probe import (
     evaluate_linear_probe,
     evaluate_ncm_frozen,
     evaluate_ncm_refit,
+    evaluate_probe_suite,
     fit_linear_probe,
 )
 
@@ -995,3 +996,69 @@ def test_evaluate_linear_probe_classifies_seen_classes() -> None:
     )
 
     assert accuracy == pytest.approx(1.0)
+
+
+def test_evaluate_probe_suite_returns_all_probe_metrics() -> None:
+    model = ToyProbeModel()
+
+    prototype_images = torch.tensor(
+        [
+            [2.0, 0.0],
+            [3.0, 0.0],
+            [0.0, 2.0],
+            [0.0, 3.0],
+            [-2.0, -2.0],
+            [-3.0, -3.0],
+        ],
+        dtype=torch.float32,
+    )
+
+    prototype_labels = torch.tensor(
+        [0, 0, 1, 1, 2, 2],
+        dtype=torch.long,
+    )
+
+    evaluation_images = prototype_images.clone()
+    evaluation_labels = prototype_labels.clone()
+
+    prototype_loader = make_loader(
+        prototype_images,
+        prototype_labels,
+        batch_size=2,
+    )
+
+    evaluation_loader = make_loader(
+        evaluation_images,
+        evaluation_labels,
+        batch_size=2,
+    )
+
+    result = evaluate_probe_suite(
+        model=model,
+        prototype_loaders=[prototype_loader],
+        evaluation_loaders=[evaluation_loader],
+        device=torch.device("cpu"),
+        ridge_lambda=1e-2,
+    )
+
+    assert "learned_head" in result
+    assert "ncm_refit" in result
+    assert "linear_probe" in result
+
+    assert len(result["learned_head"]) == 1
+    assert len(result["ncm_refit"]) == 1
+    assert len(result["linear_probe"]) == 1
+
+    assert result["ridge_lambda"] == pytest.approx(
+        1e-2
+    )
+    assert (
+        result["ridge_normalization"]
+        == "trace_gram_over_feature_dim"
+    )
+
+    assert result["class_ids"] == [0, 1, 2]
+
+    assert result["learned_head"][0] >= 0.0
+    assert result["ncm_refit"][0] >= 0.0
+    assert result["linear_probe"][0] >= 0.0
