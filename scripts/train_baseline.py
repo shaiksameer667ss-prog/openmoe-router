@@ -528,6 +528,21 @@ def main() -> None:
         )
     )
 
+    print(
+        "probe="
+        + str(
+            {
+                "active": use_probe,
+                "ridge_lambda": float(
+                    probe_cfg.get(
+                        "ridge_lambda",
+                        1.0e-2,
+                    )
+                ),
+            }
+        )
+    )
+
     tasks = int(
         experiment_cfg["tasks"]
     )
@@ -697,6 +712,7 @@ def main() -> None:
     history: list[dict[str, float]] = []
 
     probe_results: list[dict[str, object]] = []
+    boundary_checkpoints: dict[str, str] = {}
 
     replay_buffer = (
         ReplayBuffer(
@@ -1049,6 +1065,7 @@ def main() -> None:
             print(
                 f"saved boundary checkpoint: {checkpoint_path}"
             )
+            boundary_checkpoints[str(task_id)] = str(checkpoint_path)
 
         if (
             args.replay
@@ -1475,6 +1492,7 @@ def main() -> None:
                 else {}
             ),
         },
+        "boundary_checkpoints": boundary_checkpoints,
         "probe": {
             "active": bool(use_probe),
             "ridge_lambda": float(
@@ -1501,4 +1519,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

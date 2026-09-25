@@ -32,6 +32,10 @@ continual:
   task_replay_samples: 256
   stability_batch_size: 32
 
+  probe:
+    enabled: true
+    ridge_lambda: 1.0e-2
+
   drift:
     enabled: true
     samples_per_class: 32

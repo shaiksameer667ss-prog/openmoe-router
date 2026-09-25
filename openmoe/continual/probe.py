@@ -525,6 +525,96 @@ def evaluate_linear_probe(
     )
 
 
+def evaluate_linear_probe_task_restricted(
+    model: nn.Module,
+    probe: LinearProbe,
+    evaluation_loader,
+    task_class_ids: list[int],
+    device: torch.device,
+) -> float:
+    """Evaluate a fitted all-seen-class probe with task-only logits."""
+    if not task_class_ids:
+        raise ValueError(
+            "task_class_ids must not be empty"
+        )
+
+    features, labels = collect_features(
+        model=model,
+        loader=evaluation_loader,
+        device=device,
+    )
+
+    if features.shape[1] != probe.weights.shape[0]:
+        raise ValueError(
+            "feature dimension does not match "
+            "linear probe dimension"
+        )
+
+    task_class_tensor = torch.tensor(
+        sorted(set(int(value) for value in task_class_ids)),
+        dtype=torch.long,
+        device=features.device,
+    )
+
+    probe_class_ids = probe.class_ids.to(
+        features.device,
+        non_blocking=True,
+    ).long()
+
+    class_positions: list[int] = []
+    for class_id in task_class_tensor.tolist():
+        matches = (
+            probe_class_ids == int(class_id)
+        ).nonzero(
+            as_tuple=False
+        ).flatten()
+
+        if matches.numel() != 1:
+            raise ValueError(
+                "task class is missing or duplicated in the "
+                "linear probe class space"
+            )
+
+        class_positions.append(
+            int(matches.item())
+        )
+
+    positions = torch.tensor(
+        class_positions,
+        dtype=torch.long,
+        device=features.device,
+    )
+
+    weights = probe.weights.to(
+        features.device,
+        non_blocking=True,
+    ).float()[..., positions]
+
+    bias = probe.bias.to(
+        features.device,
+        non_blocking=True,
+    ).float()[positions]
+
+    logits = (
+        features.float() @ weights
+        + bias
+    )
+
+    nearest = logits.argmax(
+        dim=-1
+    )
+
+    predictions = task_class_tensor[
+        nearest
+    ]
+
+    return float(
+        (
+            predictions == labels
+        ).float().mean().item()
+    )
+
+
 def evaluate_probe_suite(
     model: nn.Module,
     prototype_loaders,
@@ -548,8 +638,17 @@ def evaluate_probe_suite(
             "evaluation_loaders must not be empty"
         )
 
+    if len(prototype_loaders) != len(evaluation_loaders):
+        raise ValueError(
+            "prototype_loaders and evaluation_loaders must have the same length"
+        )
+
+
+
     feature_chunks: list[Tensor] = []
     label_chunks: list[Tensor] = []
+    task_class_ids: list[list[int]] = []
+
 
     for loader in prototype_loaders:
         features, labels = collect_features(
@@ -560,6 +659,16 @@ def evaluate_probe_suite(
 
         feature_chunks.append(features)
         label_chunks.append(labels)
+        task_class_ids.append(
+            [
+                int(value)
+                for value in torch.unique(
+                    labels,
+                    sorted=True,
+                ).tolist()
+            ]
+        )
+
 
     all_features = torch.cat(
         feature_chunks,
@@ -578,7 +687,7 @@ def evaluate_probe_suite(
 
     boundary_results: list[dict[str, float]] = []
 
-    for evaluation_loader in evaluation_loaders:
+    for task_index, evaluation_loader in enumerate(evaluation_loaders):
         learned_head_accuracy = evaluate_learned_head(
             model=model,
             loader=evaluation_loader,
@@ -599,6 +708,18 @@ def evaluate_probe_suite(
             device=device,
         )
 
+        task_restricted_linear_probe_accuracy = (
+            evaluate_linear_probe_task_restricted(
+                model=model,
+                probe=linear_probe,
+                evaluation_loader=evaluation_loader,
+                task_class_ids=task_class_ids[task_index],
+                device=device,
+            )
+        )
+
+
+
         boundary_results.append(
             {
                 "learned_head": float(
@@ -610,6 +731,10 @@ def evaluate_probe_suite(
                 "linear_probe": float(
                     linear_probe_accuracy
                 ),
+                "linear_probe_task_restricted": float(
+                    task_restricted_linear_probe_accuracy
+                ),
+
             }
         )
 
@@ -626,6 +751,12 @@ def evaluate_probe_suite(
             item["linear_probe"]
             for item in boundary_results
         ],
+        "linear_probe_task_restricted": [
+            item["linear_probe_task_restricted"]
+            for item in boundary_results
+        ],
+
+        "chance_baseline": float(1.0 / len(linear_probe.class_ids)),
         "ridge_lambda": float(
             linear_probe.ridge_lambda
         ),

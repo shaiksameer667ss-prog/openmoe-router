@@ -1044,11 +1044,12 @@ def test_evaluate_probe_suite_returns_all_probe_metrics() -> None:
     assert "learned_head" in result
     assert "ncm_refit" in result
     assert "linear_probe" in result
-
+    assert "linear_probe_task_restricted" in result
+    assert "chance_baseline" in result
     assert len(result["learned_head"]) == 1
     assert len(result["ncm_refit"]) == 1
     assert len(result["linear_probe"]) == 1
-
+    assert len(result["linear_probe_task_restricted"]) == 1
     assert result["ridge_lambda"] == pytest.approx(
         1e-2
     )
@@ -1058,7 +1059,9 @@ def test_evaluate_probe_suite_returns_all_probe_metrics() -> None:
     )
 
     assert result["class_ids"] == [0, 1, 2]
-
+    assert result["chance_baseline"] == pytest.approx(1.0 / 3.0)
     assert result["learned_head"][0] >= 0.0
     assert result["ncm_refit"][0] >= 0.0
     assert result["linear_probe"][0] >= 0.0
+    assert result["linear_probe_task_restricted"][0] >= 0.0
+    assert result["linear_probe_task_restricted"][0] <= 1.0
