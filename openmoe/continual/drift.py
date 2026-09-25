@@ -58,6 +58,13 @@ class DriftState:
         was_training = model.training
         model.eval()
 
+        cpu_rng_state = torch.get_rng_state()
+        cuda_rng_states = (
+            torch.cuda.get_rng_state_all()
+            if torch.cuda.is_available()
+            else None
+        )
+
         try:
             for batch in loader:
                 if len(batch) != 3:
@@ -173,6 +180,10 @@ class DriftState:
             )
 
         finally:
+            torch.set_rng_state(cpu_rng_state)
+            if cuda_rng_states is not None:
+                torch.cuda.set_rng_state_all(cuda_rng_states)
+
             if was_training:
                 model.train()
 

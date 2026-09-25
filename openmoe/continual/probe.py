@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import random
+
 from dataclasses import dataclass
 
+import numpy as np
 import torch
 from torch import Tensor, nn
 
@@ -627,6 +630,9 @@ def evaluate_probe_suite(
     The linear probe is fitted once using all samples from all seen
     prototype loaders, so every evaluation loader is scored in the
     same all-seen-class probe space.
+
+    All RNG state is restored before returning so probe evaluation cannot
+    alter the subsequent training trajectory.
     """
     if not prototype_loaders:
         raise ValueError(
@@ -643,131 +649,145 @@ def evaluate_probe_suite(
             "prototype_loaders and evaluation_loaders must have the same length"
         )
 
-
-
-    feature_chunks: list[Tensor] = []
-    label_chunks: list[Tensor] = []
-    task_class_ids: list[list[int]] = []
-
-
-    for loader in prototype_loaders:
-        features, labels = collect_features(
-            model=model,
-            loader=loader,
-            device=device,
-        )
-
-        feature_chunks.append(features)
-        label_chunks.append(labels)
-        task_class_ids.append(
-            [
-                int(value)
-                for value in torch.unique(
-                    labels,
-                    sorted=True,
-                ).tolist()
-            ]
-        )
-
-
-    all_features = torch.cat(
-        feature_chunks,
-        dim=0,
-    )
-    all_labels = torch.cat(
-        label_chunks,
-        dim=0,
+    python_rng_state = random.getstate()
+    numpy_rng_state = np.random.get_state()
+    cpu_rng_state = torch.get_rng_state()
+    cuda_rng_states = (
+        torch.cuda.get_rng_state_all()
+        if torch.cuda.is_available()
+        else None
     )
 
-    linear_probe = fit_linear_probe(
-        features=all_features,
-        labels=all_labels,
-        ridge_lambda=ridge_lambda,
-    )
+    try:
+        feature_chunks: list[Tensor] = []
+        label_chunks: list[Tensor] = []
+        task_class_ids: list[list[int]] = []
 
-    boundary_results: list[dict[str, float]] = []
+        for loader in prototype_loaders:
+            features, labels = collect_features(
+                model=model,
+                loader=loader,
+                device=device,
+            )
 
-    for task_index, evaluation_loader in enumerate(evaluation_loaders):
-        learned_head_accuracy = evaluate_learned_head(
-            model=model,
-            loader=evaluation_loader,
-            device=device,
+            feature_chunks.append(features)
+            label_chunks.append(labels)
+            task_class_ids.append(
+                [
+                    int(value)
+                    for value in torch.unique(
+                        labels,
+                        sorted=True,
+                    ).tolist()
+                ]
+            )
+
+        all_features = torch.cat(
+            feature_chunks,
+            dim=0,
+        )
+        all_labels = torch.cat(
+            label_chunks,
+            dim=0,
         )
 
-        ncm_refit_accuracy = evaluate_ncm_refit(
-            model=model,
-            prototype_loaders=prototype_loaders,
-            evaluation_loader=evaluation_loader,
-            device=device,
+        linear_probe = fit_linear_probe(
+            features=all_features,
+            labels=all_labels,
+            ridge_lambda=ridge_lambda,
         )
 
-        linear_probe_accuracy = evaluate_linear_probe(
-            model=model,
-            probe=linear_probe,
-            evaluation_loader=evaluation_loader,
-            device=device,
-        )
+        boundary_results: list[dict[str, float]] = []
 
-        task_restricted_linear_probe_accuracy = (
-            evaluate_linear_probe_task_restricted(
+        for task_index, evaluation_loader in enumerate(
+            evaluation_loaders
+        ):
+            learned_head_accuracy = evaluate_learned_head(
+                model=model,
+                loader=evaluation_loader,
+                device=device,
+            )
+
+            ncm_refit_accuracy = evaluate_ncm_refit(
+                model=model,
+                prototype_loaders=prototype_loaders,
+                evaluation_loader=evaluation_loader,
+                device=device,
+            )
+
+            linear_probe_accuracy = evaluate_linear_probe(
                 model=model,
                 probe=linear_probe,
                 evaluation_loader=evaluation_loader,
-                task_class_ids=task_class_ids[task_index],
                 device=device,
             )
-        )
 
+            task_restricted_linear_probe_accuracy = (
+                evaluate_linear_probe_task_restricted(
+                    model=model,
+                    probe=linear_probe,
+                    evaluation_loader=evaluation_loader,
+                    task_class_ids=task_class_ids[task_index],
+                    device=device,
+                )
+            )
 
+            boundary_results.append(
+                {
+                    "learned_head": float(
+                        learned_head_accuracy
+                    ),
+                    "ncm_refit": float(
+                        ncm_refit_accuracy
+                    ),
+                    "linear_probe": float(
+                        linear_probe_accuracy
+                    ),
+                    "linear_probe_task_restricted": float(
+                        task_restricted_linear_probe_accuracy
+                    ),
+                }
+            )
 
-        boundary_results.append(
-            {
-                "learned_head": float(
-                    learned_head_accuracy
-                ),
-                "ncm_refit": float(
-                    ncm_refit_accuracy
-                ),
-                "linear_probe": float(
-                    linear_probe_accuracy
-                ),
-                "linear_probe_task_restricted": float(
-                    task_restricted_linear_probe_accuracy
-                ),
+        return {
+            "learned_head": [
+                item["learned_head"]
+                for item in boundary_results
+            ],
+            "ncm_refit": [
+                item["ncm_refit"]
+                for item in boundary_results
+            ],
+            "linear_probe": [
+                item["linear_probe"]
+                for item in boundary_results
+            ],
+            "linear_probe_task_restricted": [
+                item["linear_probe_task_restricted"]
+                for item in boundary_results
+            ],
+            "chance_baseline": float(
+                1.0 / len(linear_probe.class_ids)
+            ),
+            "ridge_lambda": float(
+                linear_probe.ridge_lambda
+            ),
+            "ridge_normalization": (
+                linear_probe.ridge_normalization
+            ),
+            "ridge_effective_lambda": float(
+                linear_probe.effective_lambda
+            ),
+            "class_ids": [
+                int(value)
+                for value in linear_probe.class_ids.tolist()
+            ],
+        }
 
-            }
-        )
+    finally:
+        random.setstate(python_rng_state)
+        np.random.set_state(numpy_rng_state)
+        torch.set_rng_state(cpu_rng_state)
 
-    return {
-        "learned_head": [
-            item["learned_head"]
-            for item in boundary_results
-        ],
-        "ncm_refit": [
-            item["ncm_refit"]
-            for item in boundary_results
-        ],
-        "linear_probe": [
-            item["linear_probe"]
-            for item in boundary_results
-        ],
-        "linear_probe_task_restricted": [
-            item["linear_probe_task_restricted"]
-            for item in boundary_results
-        ],
-
-        "chance_baseline": float(1.0 / len(linear_probe.class_ids)),
-        "ridge_lambda": float(
-            linear_probe.ridge_lambda
-        ),
-        "ridge_normalization": (
-            linear_probe.ridge_normalization
-        ),
-        "ridge_effective_lambda": float(
-            linear_probe.effective_lambda
-        ),
-        "class_ids": [
-            int(value)
-            for value in linear_probe.class_ids.tolist()
-        ],
-    }
+        if cuda_rng_states is not None:
+            torch.cuda.set_rng_state_all(cuda_rng_states)

@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+from torch.utils.data import DataLoader, TensorDataset
 
 from openmoe.continual.drift import DriftState
 
@@ -152,3 +153,50 @@ def test_feature_drift_changes_after_representation_update():
     for metrics in state.history[1].values():
         assert metrics["l2"] > 0.0
         assert metrics["cosine"] < 1.0
+
+def test_capture_task_reference_preserves_torch_rng_state():
+    model = FeatureModel()
+    state = DriftState()
+
+    images = torch.tensor(
+        [
+            [1.0, 0.0, 0.0, 9.0],
+            [1.2, 0.0, 0.0, 9.0],
+            [0.0, 1.0, 0.0, 8.0],
+            [0.0, 1.2, 0.0, 8.0],
+        ],
+        dtype=torch.float32,
+    )
+    labels = torch.tensor(
+        [0, 0, 1, 1],
+        dtype=torch.long,
+    )
+    task_ids = torch.zeros(
+        4,
+        dtype=torch.long,
+    )
+
+    loader = DataLoader(
+        TensorDataset(
+            images,
+            labels,
+            task_ids,
+        ),
+        batch_size=2,
+        shuffle=True,
+    )
+
+    torch.manual_seed(12345)
+    before = torch.get_rng_state().clone()
+
+    state.capture_task_reference(
+        model=model,
+        loader=loader,
+        task_id=0,
+        device=torch.device("cpu"),
+        samples_per_class=2,
+    )
+
+    after = torch.get_rng_state()
+
+    assert torch.equal(before, after)
