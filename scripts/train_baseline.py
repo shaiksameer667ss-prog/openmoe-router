@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 import time
@@ -8,6 +8,7 @@ import torch
 import yaml
 
 from openmoe.continual.drift import DriftState
+from openmoe.continual.probe import evaluate_probe_suite
 from openmoe.data.replay import (
     ReplayBuffer,
     ReplayMixLoader,
@@ -515,6 +516,18 @@ def main() -> None:
         "continual"
     ]
 
+    probe_cfg = continual_cfg.get(
+        "probe",
+        {}
+    )
+
+    use_probe = bool(
+        probe_cfg.get(
+            "enabled",
+            False,
+        )
+    )
+
     tasks = int(
         experiment_cfg["tasks"]
     )
@@ -682,6 +695,8 @@ def main() -> None:
 
     accuracies: list[list[float]] = []
     history: list[dict[str, float]] = []
+
+    probe_results: list[dict[str, object]] = []
 
     replay_buffer = (
         ReplayBuffer(
@@ -986,6 +1001,33 @@ def main() -> None:
             row
         )
 
+        if use_probe:
+            probe_row = evaluate_probe_suite(
+                model=model,
+                prototype_loaders=seen_loaders,
+                evaluation_loaders=seen_evaluation_loaders,
+                device=device,
+                ridge_lambda=float(
+                    probe_cfg.get(
+                        "ridge_lambda",
+                        1.0e-2,
+                    )
+                ),
+            )
+            probe_results.append(
+                {
+                    "task_id": int(task_id),
+                    **probe_row,
+                    "ncm_linear_gap": [
+                        float(ncm - linear)
+                        for ncm, linear in zip(
+                            probe_row["ncm_refit"],
+                            probe_row["linear_probe"],
+                        )
+                    ],
+                }
+            )
+
         print(
             f"task={task_id} "
             f"accuracies={row}"
@@ -1061,6 +1103,130 @@ def main() -> None:
         time.perf_counter()
         - started
     )
+
+    if probe_results:
+        probe_condition_summary = {
+            "condition": args.decomposition,
+            "boundary_count": len(probe_results),
+            "mean_by_boundary": {
+                "learned_head": [
+                    float(
+                        sum(
+                            float(value)
+                            for value in item["learned_head"]
+                        )
+                        / len(item["learned_head"])
+                    )
+                    for item in probe_results
+                ],
+                "ncm_refit": [
+                    float(
+                        sum(
+                            float(value)
+                            for value in item["ncm_refit"]
+                        )
+                        / len(item["ncm_refit"])
+                    )
+                    for item in probe_results
+                ],
+                "linear_probe": [
+                    float(
+                        sum(
+                            float(value)
+                            for value in item["linear_probe"]
+                        )
+                        / len(item["linear_probe"])
+                    )
+                    for item in probe_results
+                ],
+                "ncm_linear_gap": [
+                    float(
+                        sum(
+                            float(value)
+                            for value in item["ncm_linear_gap"]
+                        )
+                        / len(item["ncm_linear_gap"])
+                    )
+                    for item in probe_results
+                ],
+            },
+            "final_boundary": {
+                "all_seen_task_mean": {
+                    "learned_head": float(
+                        sum(
+                            float(value)
+                            for value in probe_results[-1]["learned_head"]
+                        )
+                        / len(probe_results[-1]["learned_head"])
+                    ),
+                    "ncm_refit": float(
+                        sum(
+                            float(value)
+                            for value in probe_results[-1]["ncm_refit"]
+                        )
+                        / len(probe_results[-1]["ncm_refit"])
+                    ),
+                    "linear_probe": float(
+                        sum(
+                            float(value)
+                            for value in probe_results[-1]["linear_probe"]
+                        )
+                        / len(probe_results[-1]["linear_probe"])
+                    ),
+                },
+                "old_task_mean": {
+                    "learned_head": (
+                        float(
+                            sum(
+                                float(value)
+                                for value in probe_results[-1]["learned_head"][:-1]
+                            )
+                            / len(probe_results[-1]["learned_head"][:-1])
+                        )
+                        if len(probe_results[-1]["learned_head"]) > 1
+                        else None
+                    ),
+                    "ncm_refit": (
+                        float(
+                            sum(
+                                float(value)
+                                for value in probe_results[-1]["ncm_refit"][:-1]
+                            )
+                            / len(probe_results[-1]["ncm_refit"][:-1])
+                        )
+                        if len(probe_results[-1]["ncm_refit"]) > 1
+                        else None
+                    ),
+                    "linear_probe": (
+                        float(
+                            sum(
+                                float(value)
+                                for value in probe_results[-1]["linear_probe"][:-1]
+                            )
+                            / len(probe_results[-1]["linear_probe"][:-1])
+                        )
+                        if len(probe_results[-1]["linear_probe"]) > 1
+                        else None
+                    ),
+                },
+                "old_task_count": max(
+                    len(probe_results[-1]["linear_probe"]) - 1,
+                    0,
+                ),
+            },
+        }
+    else:
+        probe_condition_summary = {
+            "condition": args.decomposition,
+            "boundary_count": 0,
+            "mean_by_boundary": {
+                "learned_head": [],
+                "ncm_refit": [],
+                "linear_probe": [],
+                "ncm_linear_gap": [],
+            },
+            "final_boundary": None,
+        }
 
     payload = {
         "router": args.router,
@@ -1309,6 +1475,17 @@ def main() -> None:
                 else {}
             ),
         },
+        "probe": {
+            "active": bool(use_probe),
+            "ridge_lambda": float(
+                probe_cfg.get(
+                    "ridge_lambda",
+                    1.0e-2,
+                )
+            ),
+            "results": probe_results,
+            "per_condition_summary": probe_condition_summary,
+        },
         "config": cfg,
     }
 
@@ -1324,5 +1501,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
 
