@@ -111,13 +111,6 @@ class RCRState:
                     distribution.mean(dim=1)
                 )
 
-                if layer_id not in {
-                    key
-                    for refs in sums.values()
-                    for key in refs
-                }:
-                    pass
-
                 for sample_id, class_id in enumerate(
                     labels.tolist()
                 ):
@@ -174,18 +167,20 @@ class RCRState:
             for reference in references
         )
 
-    def routing_consistency_loss(
+    def routing_consistency_loss_from_output(
         self,
-        model,
-        images: Tensor,
+        output,
         labels: Tensor,
         device: torch.device,
     ) -> Tensor:
         """
-        Compute mean KL(current routing || frozen class reference).
+        Compute mean KL(current class-mean routing || frozen reference).
 
-        The current routing path remains attached to autograd.
-        Historical references are detached constants.
+        The supplied output is from the training forward pass, so the
+        current routing path remains attached to autograd. Historical
+        references are detached constants.
+
+        Loss is averaged over represented replay classes and routing layers.
         """
         if not self.class_references:
             return torch.zeros(
@@ -193,16 +188,17 @@ class RCRState:
                 device=device,
             )
 
-        images = images.to(
-            device,
-            non_blocking=True,
-        )
         labels = labels.to(
             device,
             non_blocking=True,
         )
 
-        output = model(images)
+        if labels.numel() == 0:
+            return torch.zeros(
+                (),
+                device=device,
+            )
+
         current_distributions = (
             self._routing_distributions(output)
         )
@@ -218,7 +214,13 @@ class RCRState:
         for layer_id, current in enumerate(
             current_distributions
         ):
-            if current.shape[0] % images.shape[0] != 0:
+            if layer_id >= self.num_layers:
+                raise RuntimeError(
+                    "current routing layer count exceeds "
+                    "configured RCR layers"
+                )
+
+            if current.shape[0] % labels.shape[0] != 0:
                 raise RuntimeError(
                     "current routing distribution token count "
                     "is not divisible by batch size"
@@ -226,33 +228,68 @@ class RCRState:
 
             num_tokens = (
                 current.shape[0]
-                // images.shape[0]
+                // labels.shape[0]
             )
 
             current = current.reshape(
-                images.shape[0],
+                labels.shape[0],
                 num_tokens,
                 current.shape[-1],
             )
 
-            for sample_id, class_id in enumerate(
-                labels.tolist()
-            ):
-                class_id = int(class_id)
+            sample_distributions = current.mean(
+                dim=1
+            )
 
-                if class_id not in self.class_references:
+            represented_classes = torch.unique(
+                labels
+            )
+
+            for class_tensor in represented_classes:
+                class_id = int(
+                    class_tensor.item()
+                )
+
+                references = (
+                    self.class_references.get(
+                        class_id
+                    )
+                )
+
+                if references is None:
                     continue
 
-                reference = self.class_references[
-                    class_id
-                ][layer_id].to(
+                if layer_id >= len(references):
+                    raise RuntimeError(
+                        "RCR reference layer count mismatch: "
+                        f"class={class_id}, "
+                        f"layer={layer_id}, "
+                        f"references={len(references)}"
+                    )
+
+                class_mask = labels == class_tensor
+
+                current_mean = sample_distributions[
+                    class_mask
+                ].mean(
+                    dim=0
+                )
+
+                reference = references[
+                    layer_id
+                ].to(
                     device,
                     non_blocking=True,
                 )
 
-                current_mean = current[
-                    sample_id
-                ].mean(dim=0)
+                if reference.shape != current_mean.shape:
+                    raise RuntimeError(
+                        "RCR routing reference shape mismatch: "
+                        f"class={class_id}, "
+                        f"layer={layer_id}, "
+                        f"current={tuple(current_mean.shape)}, "
+                        f"reference={tuple(reference.shape)}"
+                    )
 
                 current_mean = (
                     current_mean
@@ -283,6 +320,29 @@ class RCRState:
         return torch.stack(
             losses
         ).mean()
+
+    def routing_consistency_loss(
+        self,
+        model,
+        images: Tensor,
+        labels: Tensor,
+        device: torch.device,
+    ) -> Tensor:
+        """
+        Backward-compatible wrapper that performs one forward pass.
+        """
+        images = images.to(
+            device,
+            non_blocking=True,
+        )
+
+        output = model(images)
+
+        return self.routing_consistency_loss_from_output(
+            output=output,
+            labels=labels,
+            device=device,
+        )
 
     def memory_manifest(self) -> dict[str, int]:
         return {
