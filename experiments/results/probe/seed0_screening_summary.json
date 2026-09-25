@@ -1,0 +1,179 @@
+{
+  "seed": 0,
+  "conditions": {
+    "none": {
+      "probe_active": true,
+      "ridge_lambda": 0.01,
+      "final_old_task_mean": {
+        "learned_head": 0.0,
+        "linear_probe": 0.1893749963492155,
+        "ncm_refit": 0.12987500000000002
+      },
+      "decoder_magnitude_1_5x_pass": true,
+      "decoder_retention_10pp_pass": false,
+      "retention_by_task": [
+        {
+          "task_id": 0,
+          "introduction_probe": 0.3869999945163727,
+          "final_probe": 0.12349999696016312,
+          "drop_percentage_points": 26.349999755620956,
+          "within_10pp": false
+        },
+        {
+          "task_id": 1,
+          "introduction_probe": 0.2930000126361847,
+          "final_probe": 0.16899999976158142,
+          "drop_percentage_points": 12.400001287460327,
+          "within_10pp": false
+        },
+        {
+          "task_id": 2,
+          "introduction_probe": 0.2915000021457672,
+          "final_probe": 0.2094999998807907,
+          "drop_percentage_points": 8.20000022649765,
+          "within_10pp": true
+        },
+        {
+          "task_id": 3,
+          "introduction_probe": 0.28049999475479126,
+          "final_probe": 0.2554999887943268,
+          "drop_percentage_points": 2.5000005960464478,
+          "within_10pp": true
+        }
+      ],
+      "final_task_restricted_probe": [
+        0.37299999594688416,
+        0.382999986410141,
+        0.4259999990463257,
+        0.42100000381469727,
+        0.4659999907016754
+      ],
+      "final_chance_baseline": 0.01,
+      "boundary_checkpoints": {
+        "0": "/kaggle/working/openmoe-router/experiments/results/probe/none_seed0_checkpoints/task_0.pt",
+        "1": "/kaggle/working/openmoe-router/experiments/results/probe/none_seed0_checkpoints/task_1.pt",
+        "2": "/kaggle/working/openmoe-router/experiments/results/probe/none_seed0_checkpoints/task_2.pt",
+        "3": "/kaggle/working/openmoe-router/experiments/results/probe/none_seed0_checkpoints/task_3.pt",
+        "4": "/kaggle/working/openmoe-router/experiments/results/probe/none_seed0_checkpoints/task_4.pt"
+      }
+    },
+    "head_masked": {
+      "probe_active": true,
+      "ridge_lambda": 0.01,
+      "final_old_task_mean": {
+        "learned_head": 0.12000000000000001,
+        "linear_probe": 0.21687500178813934,
+        "ncm_refit": 0.17225
+      },
+      "decoder_magnitude_1_5x_pass": true,
+      "decoder_retention_10pp_pass": false,
+      "retention_by_task": [
+        {
+          "task_id": 0,
+          "introduction_probe": 0.3869999945163727,
+          "final_probe": 0.16050000488758087,
+          "drop_percentage_points": 22.64999896287918,
+          "within_10pp": false
+        },
+        {
+          "task_id": 1,
+          "introduction_probe": 0.3269999921321869,
+          "final_probe": 0.1914999932050705,
+          "drop_percentage_points": 13.54999989271164,
+          "within_10pp": false
+        },
+        {
+          "task_id": 2,
+          "introduction_probe": 0.328000009059906,
+          "final_probe": 0.24050000309944153,
+          "drop_percentage_points": 8.750000596046448,
+          "within_10pp": true
+        },
+        {
+          "task_id": 3,
+          "introduction_probe": 0.3149999976158142,
+          "final_probe": 0.2750000059604645,
+          "drop_percentage_points": 3.999999165534973,
+          "within_10pp": true
+        }
+      ],
+      "final_task_restricted_probe": [
+        0.4255000054836273,
+        0.421999990940094,
+        0.46650001406669617,
+        0.4514999985694885,
+        0.5090000033378601
+      ],
+      "final_chance_baseline": 0.01,
+      "boundary_checkpoints": {
+        "0": "/kaggle/working/openmoe-router/experiments/results/probe/head_masked_seed0_checkpoints/task_0.pt",
+        "1": "/kaggle/working/openmoe-router/experiments/results/probe/head_masked_seed0_checkpoints/task_1.pt",
+        "2": "/kaggle/working/openmoe-router/experiments/results/probe/head_masked_seed0_checkpoints/task_2.pt",
+        "3": "/kaggle/working/openmoe-router/experiments/results/probe/head_masked_seed0_checkpoints/task_3.pt",
+        "4": "/kaggle/working/openmoe-router/experiments/results/probe/head_masked_seed0_checkpoints/task_4.pt"
+      }
+    },
+    "head_masked_frozen_old": {
+      "probe_active": true,
+      "ridge_lambda": 0.01,
+      "final_old_task_mean": {
+        "learned_head": 0.12075000000000001,
+        "linear_probe": 0.21549999713897705,
+        "ncm_refit": 0.17174999999999999
+      },
+      "decoder_magnitude_1_5x_pass": true,
+      "decoder_retention_10pp_pass": false,
+      "retention_by_task": [
+        {
+          "task_id": 0,
+          "introduction_probe": 0.3869999945163727,
+          "final_probe": 0.16099999845027924,
+          "drop_percentage_points": 22.599999606609344,
+          "within_10pp": false
+        },
+        {
+          "task_id": 1,
+          "introduction_probe": 0.3269999921321869,
+          "final_probe": 0.18850000202655792,
+          "drop_percentage_points": 13.849999010562897,
+          "within_10pp": false
+        },
+        {
+          "task_id": 2,
+          "introduction_probe": 0.32749998569488525,
+          "final_probe": 0.2409999966621399,
+          "drop_percentage_points": 8.649998903274536,
+          "within_10pp": true
+        },
+        {
+          "task_id": 3,
+          "introduction_probe": 0.31700000166893005,
+          "final_probe": 0.27149999141693115,
+          "drop_percentage_points": 4.55000102519989,
+          "within_10pp": true
+        }
+      ],
+      "final_task_restricted_probe": [
+        0.4269999861717224,
+        0.4205000102519989,
+        0.46549999713897705,
+        0.44999998807907104,
+        0.5059999823570251
+      ],
+      "final_chance_baseline": 0.01,
+      "boundary_checkpoints": {
+        "0": "/kaggle/working/openmoe-router/experiments/results/probe/head_masked_frozen_old_seed0_checkpoints/task_0.pt",
+        "1": "/kaggle/working/openmoe-router/experiments/results/probe/head_masked_frozen_old_seed0_checkpoints/task_1.pt",
+        "2": "/kaggle/working/openmoe-router/experiments/results/probe/head_masked_frozen_old_seed0_checkpoints/task_2.pt",
+        "3": "/kaggle/working/openmoe-router/experiments/results/probe/head_masked_frozen_old_seed0_checkpoints/task_3.pt",
+        "4": "/kaggle/working/openmoe-router/experiments/results/probe/head_masked_frozen_old_seed0_checkpoints/task_4.pt"
+      }
+    }
+  },
+  "decision": {
+    "decoder_dominant": false,
+    "trunk_dominant": false,
+    "router_expert_decomposition_run": false,
+    "outcome": "No dominant MoE-specific mechanism at this scale"
+  }
+}
