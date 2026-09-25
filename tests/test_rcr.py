@@ -209,3 +209,50 @@ def test_historical_references_are_detached() -> None:
     ):
         for reference in references:
             assert reference.requires_grad is False
+
+def test_routing_consistency_loss_from_output_uses_mask() -> None:
+    model = ToyRoutingModel()
+    loader = make_loader()
+    state = RCRState(
+        num_classes=2,
+        num_layers=1,
+        num_experts=3,
+    )
+
+    state.capture_class_references(
+        model=model,
+        loader=loader,
+        device=torch.device("cpu"),
+    )
+
+    images, labels, _ = next(
+        iter(loader)
+    )
+
+    with torch.no_grad():
+        model.scale.fill_(0.5)
+
+    output = model(images)
+
+    mask = torch.tensor(
+        [True, False],
+        dtype=torch.bool,
+    )
+
+    loss = state.routing_consistency_loss_from_output(
+        output=output,
+        labels=labels,
+        device=torch.device("cpu"),
+        sample_mask=mask,
+    )
+
+    assert torch.isfinite(loss)
+    assert loss.item() > 0.0
+
+    loss.backward()
+
+    assert model.scale.grad is not None
+    assert (
+        model.scale.grad.abs().item()
+        > 1e-8
+    )

@@ -10,6 +10,7 @@ import torch.nn.functional as F
 from torch import Tensor, nn
 
 from openmoe.continual.metrics import average_accuracy, forgetting
+from openmoe.continual.rcr import RCRState
 from openmoe.losses.stability import fisher_ewc_loss, routing_kl
 
 PostStep = Callable[[Tensor, object], None]
@@ -651,6 +652,9 @@ def train_steps(
     routing_kl_weight: float = 0.0,
     dense_ewc_weight: float = 0.0,
     stability_batch_size: int = 32,
+    rcr_state: RCRState | None = None,
+    rcr_beta: float = 0.0,
+    rcr_replay_batch_size: int = 0,
 ) -> list[dict[str, float]]:
     """Run a fixed number of optimizer steps."""
     model.train()
@@ -739,6 +743,40 @@ def train_steps(
             loss
             + z_loss_total
         )
+
+        rcr_value = torch.zeros(
+            (),
+            device=device,
+        )
+
+        if (
+            rcr_state is not None
+            and rcr_beta > 0.0
+            and rcr_replay_batch_size > 0
+            and images.shape[0] >= rcr_replay_batch_size
+        ):
+            replay_mask = torch.zeros(
+                labels.shape,
+                dtype=torch.bool,
+                device=device,
+            )
+            replay_mask[
+                -rcr_replay_batch_size:
+            ] = True
+
+            rcr_value = (
+                rcr_state.routing_consistency_loss_from_output(
+                    output=output,
+                    labels=labels,
+                    device=device,
+                    sample_mask=replay_mask,
+                )
+            )
+
+            loss = (
+                loss
+                + rcr_beta * rcr_value
+            )
 
         routing_kl_value = torch.zeros(
             (),
@@ -829,6 +867,10 @@ def train_steps(
                 ),
                 "dense_ewc": float(
                     dense_ewc_value.detach()
+                    .cpu()
+                ),
+                "rcr": float(
+                    rcr_value.detach()
                     .cpu()
                 ),
             }

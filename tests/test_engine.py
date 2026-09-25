@@ -163,3 +163,66 @@ def test_evaluate_ncm_uses_class_means():
     )
 
     assert accuracy == 1.0
+
+def test_train_steps_rcr_path_runs():
+    from openmoe.continual.rcr import RCRState
+
+    model = make_model(num_classes=10)
+
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=1e-3,
+    )
+
+    images = torch.randn(
+        2,
+        3,
+        32,
+        32,
+    )
+
+    labels = torch.tensor(
+        [7, 8],
+    )
+
+    task_ids = torch.zeros(
+        2,
+        dtype=torch.long,
+    )
+
+    loader = [
+        (
+            images,
+            labels,
+            task_ids,
+        )
+    ]
+
+    state = RCRState(
+        num_classes=10,
+        num_layers=1,
+        num_experts=4,
+    )
+
+    state.capture_class_references(
+        model=model,
+        loader=loader,
+        device=torch.device("cpu"),
+    )
+
+    history = train_steps(
+        model=model,
+        loader=loader,
+        optimizer=optimizer,
+        device=torch.device("cpu"),
+        steps=1,
+        rcr_state=state,
+        rcr_beta=1.0,
+        rcr_replay_batch_size=1,
+    )
+
+    assert len(history) == 1
+    assert "rcr" in history[0]
+    assert torch.isfinite(
+        torch.tensor(history[0]["rcr"])
+    )

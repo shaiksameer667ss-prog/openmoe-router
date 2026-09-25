@@ -9,6 +9,7 @@ import yaml
 
 from openmoe.continual.drift import DriftState
 from openmoe.continual.probe import evaluate_probe_suite
+from openmoe.continual.rcr import RCRState
 from openmoe.data.replay import (
     ReplayBuffer,
     ReplayMixLoader,
@@ -469,6 +470,34 @@ def main() -> None:
     )
 
     parser.add_argument(
+        "--replay-capacity",
+        type=int,
+        default=None,
+        help=(
+            "Explicit replay capacity override. Required for "
+            "preregistered capacities that are not named by "
+            "--replay-match."
+        ),
+    )
+
+    parser.add_argument(
+        "--rcr",
+        action="store_true",
+        help=(
+            "Enable Routing-Consistent Replay on replay examples."
+        ),
+    )
+
+    parser.add_argument(
+        "--rcr-beta",
+        type=float,
+        default=1.0,
+        help=(
+            "Weight for the RCR routing-consistency loss."
+        ),
+    )
+
+    parser.add_argument(
         "--output",
         default=(
             "experiments/results/"
@@ -496,9 +525,38 @@ def main() -> None:
             "--replay baseline requires --data cifar100"
         )
 
-    replay_capacity = REPLAY_CAPACITIES[
-        args.replay_match
-    ]
+    if args.replay_capacity is not None and not args.replay:
+        raise ValueError(
+            "--replay-capacity requires --replay"
+        )
+
+    if args.rcr and not args.replay:
+        raise ValueError(
+            "--rcr requires --replay"
+        )
+
+    if args.rcr and args.router != "continual":
+        raise ValueError(
+            "--rcr requires --router continual"
+        )
+
+    if args.rcr and args.rcr_beta <= 0.0:
+        raise ValueError(
+            "--rcr-beta must be positive"
+        )
+
+    replay_capacity = (
+        args.replay_capacity
+        if args.replay_capacity is not None
+        else REPLAY_CAPACITIES[
+            args.replay_match
+        ]
+    )
+
+    if replay_capacity <= 0:
+        raise ValueError(
+            "--replay-capacity must be positive"
+        )
 
     cfg = yaml.safe_load(
         Path(
@@ -742,6 +800,32 @@ def main() -> None:
 
     replay_history: list[dict[str, object]] = []
 
+    rcr_state = (
+        RCRState(
+            num_classes=num_classes,
+            num_layers=2,
+            num_experts=int(
+                model_cfg["num_experts"]
+            ),
+        )
+        if args.rcr
+        else None
+    )
+
+    rcr_router_buffer_bytes = (
+        sum(
+            buffer.numel()
+            * buffer.element_size()
+            for name, buffer in model.named_buffers()
+            if (
+                "routing_bias" in name
+                or ".memory." in name
+            )
+        )
+        if args.rcr
+        else 0
+    )
+
     started = time.perf_counter()
 
     for task_id, loader in enumerate(
@@ -852,6 +936,17 @@ def main() -> None:
             head_mask_old_classes=(
                 head_mask_old_classes
             ),
+            rcr_state=rcr_state,
+            rcr_beta=(
+                args.rcr_beta
+                if args.rcr
+                else 0.0
+            ),
+            rcr_replay_batch_size=(
+                REPLAY_BATCH_SIZE
+                if args.rcr
+                else 0
+            ),
         )
 
         history.extend(
@@ -932,6 +1027,17 @@ def main() -> None:
                     "stability_batch_size",
                     32,
                 )
+            ),
+            rcr_state=rcr_state,
+            rcr_beta=(
+                args.rcr_beta
+                if args.rcr
+                else 0.0
+            ),
+            rcr_replay_batch_size=(
+                REPLAY_BATCH_SIZE
+                if args.rcr
+                else 0
             ),
         )
 
@@ -1060,6 +1166,13 @@ def main() -> None:
             f"accuracies={row}"
         )
 
+        if args.rcr and rcr_state is not None:
+            rcr_state.capture_class_references(
+                model=model,
+                loader=loader,
+                device=device,
+            )
+
         if args.checkpoint_dir is not None:
             checkpoint_dir = Path(args.checkpoint_dir)
             checkpoint_dir.mkdir(parents=True, exist_ok=True)
@@ -1117,6 +1230,27 @@ def main() -> None:
                     ),
                     "total_bytes": float(
                         replay_buffer.total_bytes
+                    ),
+                    "rcr_reference_bytes": float(
+                        rcr_state.reference_bytes
+                        if rcr_state is not None
+                        else 0
+                    ),
+                    "rcr_router_buffer_bytes": float(
+                        rcr_router_buffer_bytes
+                    ),
+                    "rcr_method_state_bytes": float(
+                        (
+                            replay_buffer.total_bytes
+                            + (
+                                rcr_state.reference_bytes
+                                if rcr_state is not None
+                                else 0
+                            )
+                            + rcr_router_buffer_bytes
+                        )
+                        if args.rcr
+                        else 0
                     ),
                     "per_task_stored": accounting[
                         "per_task_stored"
@@ -1256,6 +1390,20 @@ def main() -> None:
             "final_boundary": None,
         }
 
+    rcr_method_state_bytes = (
+        (
+            replay_buffer.total_bytes
+            + (
+                rcr_state.reference_bytes
+                if rcr_state is not None
+                else 0
+            )
+            + rcr_router_buffer_bytes
+        )
+        if args.rcr and replay_buffer is not None
+        else 0
+    )
+
     payload = {
         "router": args.router,
         "decomposition": args.decomposition,
@@ -1355,7 +1503,11 @@ def main() -> None:
                 args.replay
             ),
             "memory_match": (
-                args.replay_match
+                (
+                    f"explicit_capacity_{replay_capacity}"
+                    if args.replay_capacity is not None
+                    else args.replay_match
+                )
                 if args.replay
                 else "none"
             ),
@@ -1431,6 +1583,70 @@ def main() -> None:
                 for item in replay_history
             ],
             "memory_history": replay_history,
+        },
+        "rcr": {
+            "active": bool(args.rcr),
+            "beta": (
+                float(args.rcr_beta)
+                if args.rcr
+                else 0.0
+            ),
+            "definition": (
+                "replay_plus_mean_per_class_routing_consistency"
+                if args.rcr
+                else "none"
+            ),
+            "replay_capacity": (
+                int(replay_capacity)
+                if args.rcr
+                else 0
+            ),
+            "reference_bytes": (
+                int(
+                    rcr_state.reference_bytes
+                    if rcr_state is not None
+                    else 0
+                )
+                if args.rcr
+                else 0
+            ),
+            "router_buffer_bytes": (
+                int(rcr_router_buffer_bytes)
+                if args.rcr
+                else 0
+            ),
+            "method_state_target_bytes": (
+                STABILITY_METHOD_STATE_BYTES
+                if args.rcr
+                else 0
+            ),
+            "method_state_actual_bytes": (
+                int(rcr_method_state_bytes)
+                if args.rcr
+                else 0
+            ),
+            "relation_to_target": (
+                (
+                    "under"
+                    if rcr_method_state_bytes
+                    < STABILITY_METHOD_STATE_BYTES
+                    else (
+                        "equal"
+                        if rcr_method_state_bytes
+                        == STABILITY_METHOD_STATE_BYTES
+                        else "over"
+                    )
+                )
+                if args.rcr
+                else "none"
+            ),
+            "num_reference_classes": (
+                len(
+                    rcr_state.class_references
+                )
+                if rcr_state is not None
+                else 0
+            ),
         },
         "stability": {
             "active": bool(
