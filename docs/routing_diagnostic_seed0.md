@@ -91,31 +91,54 @@ Top-2 route-frequency retrieval:
 
 The true-vs-best-other similarity margin is negative throughout.
 
-## HARM gate
+## HARM / routing causal gate
 
-### Passed
+### Observed
 
-A router-specific intervention is scientifically motivated for the canonical
-`none` condition because:
+The canonical `none` condition has large fixed-input routing drift, while
+`head_masked` and `head_masked_frozen_old` have much smaller drift. The drift
+is primarily associated with learned router-projection change and is
+class-dependent and temporally structured.
 
-1. fixed-input routing drift is large;
-2. the drift is primarily associated with learned router-projection change;
-3. the drift is class-dependent and temporally structured.
+### Causal interpretation
 
-### Not passed
+These observations do not establish router drift as an independent cause of
+forgetting. The large difference between `none` and the head-masked
+conditions is produced by a change in the training objective.
 
-The proposed class-conditioned HARM mechanism based on nearest historical
-route-signature retrieval is not yet justified because query-side retrieval
-is weak despite high temporal stability of the stored signatures.
+The earlier `router_frozen` decomposition also showed essentially unchanged
+forgetting relative to `none`. Therefore, the existing evidence is
+consistent with router drift being downstream of the training objective
+rather than a load-bearing cause of forgetting. A post-fix causal test is
+required before treating router stabilization as a mechanism target.
+
+### HARM retrieval gate
+
+Historical class-conditioned routing signatures are temporally stable, but
+current inputs have weak retrieval of their corresponding historical
+signatures. Therefore the proposed alpha-gated historical route-signature
+HARM is not justified by the current evidence.
+
+The feature-based similarity gate proposed for HARM was not tested by this
+diagnostic, so that specific retrieval mechanism is not ruled out
+independently.
 
 ## Decision
 
-Do not implement the proposed alpha-gated historical class-signature HARM
-yet.
+Do not implement HARM or another router stabilizer yet.
 
-The next router investigation should target stabilization of learned
-router-projection drift rather than adding the existing prototype-memory
-mechanism as HARM.
+Run the causal test `head_masked_router_frozen`: freeze the router at the
+Task-1 transition while retaining the existing head-logit masking objective.
+Use seed 0, the canonical 200 steps/task protocol, and compare against the
+archived `head_masked` and `none` results.
+
+If `head_masked_router_frozen` retains the `head_masked` benefit, router drift
+is not required for that benefit and the routing thread closes. If the benefit
+disappears, router drift is a candidate causal intermediate and a
+projection-level intervention becomes justified.
+
+This diagnostic does not modify the canonical training protocol or archived
+checkpoints.
 
 This diagnostic does not modify the canonical training protocol or archived
 checkpoints.

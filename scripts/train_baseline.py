@@ -232,6 +232,15 @@ def apply_forgetting_decomposition(
         )
         return
 
+    if decomposition == "head_masked_router_frozen":
+        # Combine old-class CE masking with router projection freezing.
+        model.set_router_trainable(False)
+        clear_optimizer_state_for_frozen_parameters(
+            optimizer,
+            model,
+        )
+        return
+
     if decomposition == "shared_frozen":
         model.set_shared_trainable(False)
         clear_optimizer_state_for_frozen_parameters(
@@ -403,6 +412,7 @@ def main() -> None:
             "head_only",
             "head_frozen_old",
             "head_masked",
+            "head_masked_router_frozen",
             "head_masked_ncm",
             "head_masked_frozen_old",
             "head_ncm",
@@ -798,6 +808,7 @@ def main() -> None:
         if (
             args.decomposition in {
                 "head_masked",
+                "head_masked_router_frozen",
                 "head_masked_ncm",
                 "head_masked_frozen_old",
             }
@@ -1265,6 +1276,7 @@ def main() -> None:
         "head_logit_masking": {
             "active": args.decomposition in {
                 "head_masked",
+                "head_masked_router_frozen",
                 "head_masked_ncm",
                 "head_masked_frozen_old",
             },
@@ -1272,6 +1284,7 @@ def main() -> None:
                 "old_classes_masked_in_training_ce"
                 if args.decomposition in {
                     "head_masked",
+                    "head_masked_router_frozen",
                     "head_masked_ncm",
                     "head_masked_frozen_old",
                 }
