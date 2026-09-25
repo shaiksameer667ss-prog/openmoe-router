@@ -1,0 +1,28 @@
+{
+  "protocol": "RCR seed-0 beta sweep",
+  "primary_condition": "RCR_722_beta1.0",
+  "baseline_old_task_mean": 0.040625,
+  "results": [
+    {
+      "beta": 0.1,
+      "old_task_mean": 0.03825,
+      "delta_vs_A": -0.002375,
+      "task4_diagonal": 0.3885,
+      "rcr_mean": 0.10833752108365298
+    },
+    {
+      "beta": 1.0,
+      "old_task_mean": 0.045,
+      "delta_vs_A": 0.004375,
+      "task4_diagonal": 0.3735,
+      "rcr_mean": 0.030048158844932914
+    },
+    {
+      "beta": 10.0,
+      "old_task_mean": 0.048,
+      "delta_vs_A": 0.007375,
+      "task4_diagonal": 0.344,
+      "rcr_mean": 0.014760728122666478
+    }
+  ]
+}
