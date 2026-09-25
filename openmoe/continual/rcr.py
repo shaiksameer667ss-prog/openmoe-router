@@ -136,7 +136,7 @@ class RCRState:
             for class_id in labels.tolist():
                 counts[int(class_id)] += 1
 
-        self.class_references = {}
+        new_references: dict[int, list[Tensor]] = {}
 
         for class_id in sorted(sums):
             count = counts[class_id]
@@ -144,7 +144,7 @@ class RCRState:
             if count <= 0:
                 continue
 
-            self.class_references[class_id] = [
+            new_references[class_id] = [
                 (
                     value
                     / float(count)
@@ -153,6 +153,10 @@ class RCRState:
                 .cpu()
                 for value in sums[class_id]
             ]
+
+        self.class_references.update(
+            new_references
+        )
 
         if was_training:
             model.train()
@@ -172,6 +176,7 @@ class RCRState:
         output,
         labels: Tensor,
         device: torch.device,
+        sample_mask: Tensor | None = None,
     ) -> Tensor:
         """
         Compute mean KL(current class-mean routing || frozen reference).
@@ -194,6 +199,29 @@ class RCRState:
         )
 
         if labels.numel() == 0:
+            return torch.zeros(
+                (),
+                device=device,
+            )
+
+        if sample_mask is None:
+            sample_mask = torch.ones(
+                labels.shape,
+                dtype=torch.bool,
+                device=device,
+            )
+        else:
+            sample_mask = sample_mask.to(
+                device=device,
+                dtype=torch.bool,
+            )
+
+            if sample_mask.shape != labels.shape:
+                raise ValueError(
+                    "RCR sample_mask must match labels shape"
+                )
+
+        if not sample_mask.any():
             return torch.zeros(
                 (),
                 device=device,
@@ -241,8 +269,13 @@ class RCRState:
                 dim=1
             )
 
+            selected_distributions = (
+                sample_distributions[sample_mask]
+            )
+            selected_labels = labels[sample_mask]
+
             represented_classes = torch.unique(
-                labels
+                selected_labels
             )
 
             for class_tensor in represented_classes:
@@ -267,9 +300,11 @@ class RCRState:
                         f"references={len(references)}"
                     )
 
-                class_mask = labels == class_tensor
+                class_mask = (
+                    selected_labels == class_tensor
+                )
 
-                current_mean = sample_distributions[
+                current_mean = selected_distributions[
                     class_mask
                 ].mean(
                     dim=0
