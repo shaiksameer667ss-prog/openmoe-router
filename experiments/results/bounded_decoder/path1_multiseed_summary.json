@@ -1,0 +1,42 @@
+﻿{
+  "experiment": "Path-1 matched-memory decoder",
+  "boundary": 4,
+  "decoder_capacity": 715,
+  "seeds": [0, 1, 2],
+  "preregistered": true,
+  "old_task_ncm": {
+    "replay": [0.092875, 0.091125, 0.097250],
+    "plain_ce_A": [0.101250, 0.081750, 0.091500],
+    "diff_plain_minus_replay": [0.008375, -0.009375, -0.005750],
+    "mean_diff": -0.002250,
+    "absolute_mean_diff": 0.002250,
+    "preregistered_threshold": 0.005,
+    "claim_1_status": "confirmed"
+  },
+  "task4_ncm": {
+    "replay": [0.1885, 0.1775, 0.1965],
+    "plain_ce_A": [0.1210, 0.1310, 0.1320],
+    "diff_replay_minus_plain": [0.0675, 0.0465, 0.0645],
+    "mean_diff": 0.0595,
+    "min_diff": 0.0465,
+    "preregistered_threshold": 0.030,
+    "claim_2_status": "confirmed"
+  },
+  "plain_ce_C": {
+    "old_task_ncm": [0.093250, 0.084125, 0.087250],
+    "task4_ncm": [0.1175, 0.1180, 0.1295]
+  },
+  "learned_head_task4": {
+    "replay": [0.3910, 0.3920, 0.3895],
+    "plain_ce": [0.4020, 0.3725, 0.3960]
+  },
+  "scope": {
+    "boundary": 4,
+    "dataset": "CIFAR-100",
+    "decoder": "post-hoc NCM refit",
+    "decoder_buffer_examples": 715,
+    "decoder_buffer_bytes": 8797360,
+    "evaluation": "held-out CIFAR-100 test split",
+    "training_memory_matched": false
+  }
+}
