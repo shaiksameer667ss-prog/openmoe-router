@@ -540,6 +540,15 @@ def main() -> None:
             "at each task boundary."
         ),
     )
+
+    parser.add_argument(
+        "--replay-dump",
+        default=None,
+        help=(
+            "After training, serialize the final retained replay buffer "
+            "to this path."
+        ),
+    )
     args = parser.parse_args()
 
     if args.replay and args.decomposition != "none":
@@ -555,6 +564,11 @@ def main() -> None:
     if args.replay_capacity is not None and not args.replay:
         raise ValueError(
             "--replay-capacity requires --replay"
+        )
+
+    if args.replay_dump is not None and not args.replay:
+        raise ValueError(
+            "--replay-dump requires --replay"
         )
 
     if args.bounded_probe and not args.replay:
@@ -1576,6 +1590,52 @@ def main() -> None:
         print(
             "bounded_probe="
             f"{bounded_probe_result}"
+        )
+
+    if args.replay_dump is not None:
+        if replay_buffer is None:
+            raise RuntimeError(
+                "replay dump requires an initialized replay buffer."
+            )
+
+        dump_path = Path(args.replay_dump)
+        dump_path.parent.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        torch.save(
+            {
+                "images": replay_buffer.images.clone(),
+                "labels": replay_buffer.labels.clone(),
+                "task_ids": replay_buffer.task_ids.clone(),
+                "capacity": int(
+                    replay_buffer.capacity
+                ),
+                "num_samples": int(
+                    replay_buffer.num_samples
+                ),
+                "image_bytes": int(
+                    replay_buffer.image_bytes
+                ),
+                "label_bytes": int(
+                    replay_buffer.label_bytes
+                ),
+                "task_id_bytes": int(
+                    replay_buffer.task_id_bytes
+                ),
+                "total_bytes": int(
+                    replay_buffer.total_bytes
+                ),
+                "seed": int(args.seed),
+                "data": args.data,
+            },
+            dump_path,
+        )
+
+        print(
+            "saved replay buffer dump: "
+            f"{dump_path}"
         )
 
     elapsed = (
