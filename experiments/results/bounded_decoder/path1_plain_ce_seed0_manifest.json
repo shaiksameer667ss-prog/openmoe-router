@@ -1,0 +1,114 @@
+{
+  "experiment": "path1_matched_memory_decoder_seed0",
+  "git_commit": "0961a64f2301681940a18db9f81014b921ce9ba5",
+  "seed": 0,
+  "boundary": 4,
+  "decoder_capacity": 715,
+  "decoder_buffer_bytes": 8797360,
+  "plain_ce_training": {
+    "run": "experiments/results/bounded_decoder/plain_ce_seed0_for_match.json",
+    "accuracy_matrix": [
+      [
+        0.326
+      ],
+      [
+        0.0,
+        0.3455
+      ],
+      [
+        0.0,
+        0.0,
+        0.383
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.39
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.001,
+        0.402
+      ]
+    ],
+    "task0_diagonal": 0.326,
+    "stability_active": false,
+    "routing_kl_enabled": false,
+    "dense_ewc_enabled": false,
+    "boundary4_checkpoint": "experiments/results/bounded_decoder/plain_ce_seed0_for_match_checkpoints/task_4.pt",
+    "boundary4_checkpoint_sha256": "a2ffeb9fb96db71f6ed189bbaf354697d69294a5b774fb197570a25c5c5a6f5a"
+  },
+  "conditions": {
+    "replay_A": {
+      "result": "experiments/results/bounded_decoder/replay_715_bounded_probe_seed0.json",
+      "old_task_ncm": {
+        "linear_probe": 0.09112500213086605,
+        "ncm_refit": 0.092875
+      },
+      "per_task_ncm": [
+        0.062,
+        0.08,
+        0.0925,
+        0.137,
+        0.1885
+      ]
+    },
+    "none_stability_B": {
+      "result": "experiments/results/bounded_decoder/abc_B_none_exact_A_buffer_seed0.json",
+      "buffer": "replay_715_seed0_buffer.pt (exact A buffer)",
+      "old_task_ncm": 0.09975,
+      "per_task_ncm": [
+        0.077,
+        0.0715,
+        0.122,
+        0.1285,
+        0.1155
+      ]
+    },
+    "none_stability_C": {
+      "result": "experiments/results/bounded_decoder/abc_C_none_fresh_buffer_seed0.json",
+      "buffer": "abc_C_fresh_random_buffer_seed12345.pt",
+      "old_task_ncm": 0.092,
+      "per_task_ncm": [
+        0.0585,
+        0.0715,
+        0.103,
+        0.135,
+        0.113
+      ]
+    },
+    "plain_ce_A": {
+      "result": "experiments/results/bounded_decoder/plain_ce_seed0_A_buffer.json",
+      "buffer": "replay_715_seed0_buffer.pt (exact A buffer)",
+      "old_task_ncm": 0.10125,
+      "per_task_ncm": [
+        0.0865,
+        0.063,
+        0.1255,
+        0.13,
+        0.121
+      ]
+    },
+    "plain_ce_C": {
+      "result": "experiments/results/bounded_decoder/plain_ce_seed0_C_buffer.json",
+      "buffer": "abc_C_fresh_random_buffer_seed12345.pt",
+      "old_task_ncm": 0.09325,
+      "per_task_ncm": [
+        0.049,
+        0.078,
+        0.0995,
+        0.1465,
+        0.1175
+      ]
+    }
+  },
+  "c_buffer": {
+    "path": "experiments/results/bounded_decoder/abc_C_fresh_random_buffer_seed12345.pt",
+    "sha256": "5fcc450ff45af51d39dc6504c81a9cfe11c76bba34fde4ad630b52057cbf8086",
+    "size_bytes": 8800157,
+    "sampling_seed": 12345
+  }
+}

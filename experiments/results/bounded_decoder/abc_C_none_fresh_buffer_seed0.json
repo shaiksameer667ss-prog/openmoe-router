@@ -1,0 +1,45 @@
+{
+  "protocol": {
+    "condition": "none",
+    "training_time_replay": false,
+    "decoder_fit": "post_hoc_replay_buffer_only",
+    "replay_capacity": 715,
+    "evaluation": "held_out_cifar100_test",
+    "boundary": 4,
+    "classes_represented": 100
+  },
+  "checkpoint": {
+    "path": "experiments/results/bounded_decoder/none_seed0_for_abc_checkpoints/task_4.pt",
+    "task_id": 4,
+    "seed": 0,
+    "decomposition": "none"
+  },
+  "replay_buffer": {
+    "samples": 715,
+    "bytes": 8797360
+  },
+  "results": {
+    "per_task_ncm_refit": [
+      0.0585,
+      0.0715,
+      0.103,
+      0.135,
+      0.113
+    ],
+    "per_task_linear_probe": [
+      0.06750000268220901,
+      0.07050000131130219,
+      0.10450000315904617,
+      0.11999999731779099,
+      0.11999999731779099
+    ],
+    "old_task_mean": {
+      "ncm_refit": 0.092,
+      "linear_probe": 0.09062500111758709
+    },
+    "all_seen_mean": {
+      "ncm_refit": 0.0962,
+      "linear_probe": 0.09650000035762787
+    }
+  }
+}
