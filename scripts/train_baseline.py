@@ -5,10 +5,17 @@ import time
 from pathlib import Path
 
 import torch
+from torch.utils.data import DataLoader, TensorDataset
 import yaml
 
 from openmoe.continual.drift import DriftState
-from openmoe.continual.probe import evaluate_probe_suite
+from openmoe.continual.probe import (
+    collect_features,
+    evaluate_linear_probe,
+    evaluate_ncm_refit,
+    evaluate_probe_suite,
+    fit_linear_probe,
+)
 from openmoe.continual.rcr import RCRState
 from openmoe.data.replay import (
     ReplayBuffer,
@@ -47,6 +54,7 @@ REPLAY_BATCH_SIZE = 64
 
 STABILITY_METHOD_STATE_BYTES = 8_911_776
 REPLAY_EXAMPLE_BYTES = 12_304
+BOUNDED_DECODER_REPLAY_CAPACITY = 715
 
 REPLAY_CAPACITIES = {
     "sample_matched": 256,
@@ -481,6 +489,15 @@ def main() -> None:
     )
 
     parser.add_argument(
+        "--bounded-probe",
+        action="store_true",
+        help=(
+            "At the final boundary, evaluate NCM and ridge "
+            "using only the retained replay buffer."
+        ),
+    )
+
+    parser.add_argument(
         "--rcr",
         action="store_true",
         help=(
@@ -528,6 +545,34 @@ def main() -> None:
     if args.replay_capacity is not None and not args.replay:
         raise ValueError(
             "--replay-capacity requires --replay"
+        )
+
+    if args.bounded_probe and not args.replay:
+        raise ValueError(
+            "--bounded-probe requires --replay"
+        )
+
+    if args.bounded_probe and args.data != "cifar100":
+        raise ValueError(
+            "--bounded-probe requires --data cifar100"
+        )
+
+    if args.bounded_probe and args.decomposition != "none":
+        raise ValueError(
+            "--bounded-probe requires --decomposition none"
+        )
+
+    if args.bounded_probe and (
+        (
+            args.replay_capacity
+            if args.replay_capacity is not None
+            else REPLAY_CAPACITIES[args.replay_match]
+        )
+        != BOUNDED_DECODER_REPLAY_CAPACITY
+    ):
+        raise ValueError(
+            "--bounded-probe requires "
+            f"--replay-capacity {BOUNDED_DECODER_REPLAY_CAPACITY}"
         )
 
     if args.rcr and not args.replay:
@@ -780,6 +825,7 @@ def main() -> None:
     history: list[dict[str, float]] = []
 
     probe_results: list[dict[str, object]] = []
+    bounded_probe_result: dict[str, object] | None = None
     boundary_checkpoints: dict[str, str] = {}
 
     replay_buffer = (
@@ -1261,6 +1307,198 @@ def main() -> None:
                 }
             )
 
+    if args.bounded_probe:
+        if replay_buffer is None:
+            raise RuntimeError(
+                "bounded probe requires an initialized replay buffer."
+            )
+
+        if replay_buffer.num_samples != BOUNDED_DECODER_REPLAY_CAPACITY:
+            raise RuntimeError(
+                "bounded probe replay size mismatch: "
+                f"expected {BOUNDED_DECODER_REPLAY_CAPACITY}, "
+                f"got {replay_buffer.num_samples}"
+            )
+
+        unique_labels = torch.unique(
+            replay_buffer.labels,
+            sorted=True,
+        )
+
+        if unique_labels.numel() != 100:
+            raise RuntimeError(
+                "bounded probe requires all 100 CIFAR-100 classes "
+                "to be represented in the retained replay buffer; "
+                f"got {unique_labels.numel()}"
+            )
+
+        bounded_loader = DataLoader(
+            TensorDataset(
+                replay_buffer.images,
+                replay_buffer.labels,
+                replay_buffer.task_ids,
+            ),
+            batch_size=64,
+            shuffle=False,
+            num_workers=0,
+        )
+
+        bounded_ncm = [
+            float(
+                evaluate_ncm_refit(
+                    model=model,
+                    prototype_loaders=[bounded_loader],
+                    evaluation_loader=evaluation_loader,
+                    device=device,
+                )
+            )
+            for evaluation_loader in evaluation_stream
+        ]
+
+        bounded_features, bounded_labels = collect_features(
+            model=model,
+            loader=bounded_loader,
+            device=device,
+        )
+
+        bounded_linear_probe = fit_linear_probe(
+            features=bounded_features,
+            labels=bounded_labels,
+            ridge_lambda=float(
+                probe_cfg.get(
+                    "ridge_lambda",
+                    1.0e-2,
+                )
+            ),
+        )
+
+        bounded_linear = [
+            float(
+                evaluate_linear_probe(
+                    model=model,
+                    probe=bounded_linear_probe,
+                    evaluation_loader=evaluation_loader,
+                    device=device,
+                )
+            )
+            for evaluation_loader in evaluation_stream
+        ]
+
+        bounded_ncm_state_bytes = (
+            100 * 256 * 4
+        )
+        bounded_ridge_state_bytes = (
+            256 * 100 * 4
+            + 100 * 4
+            + 100 * 8
+        )
+
+        def bounded_mean(
+            values: list[float],
+        ) -> float:
+            if not values:
+                raise ValueError(
+                    "cannot compute a mean from an empty list"
+                )
+            return float(
+                sum(values) / len(values)
+            )
+
+        bounded_probe_result = {
+            "active": True,
+            "boundary": int(len(evaluation_stream) - 1),
+            "replay_capacity": int(
+                BOUNDED_DECODER_REPLAY_CAPACITY
+            ),
+            "replay_samples": int(
+                replay_buffer.num_samples
+            ),
+            "replay_bytes": int(
+                replay_buffer.total_bytes
+            ),
+            "memory_target_bytes": int(
+                STABILITY_METHOD_STATE_BYTES
+            ),
+            "classes_represented": int(
+                unique_labels.numel()
+            ),
+            "per_task_ncm_refit": bounded_ncm,
+            "per_task_linear_probe": bounded_linear,
+            "per_task_ncm_linear_gap": [
+                float(ncm - linear)
+                for ncm, linear in zip(
+                    bounded_ncm,
+                    bounded_linear,
+                )
+            ],
+            "old_task_mean": {
+                "ncm_refit": bounded_mean(
+                    bounded_ncm[:-1]
+                ),
+                "linear_probe": bounded_mean(
+                    bounded_linear[:-1]
+                ),
+            },
+            "all_seen_mean": {
+                "ncm_refit": bounded_mean(
+                    bounded_ncm
+                ),
+                "linear_probe": bounded_mean(
+                    bounded_linear
+                ),
+            },
+            "final_task_diagonal": {
+                "ncm_refit": float(
+                    bounded_ncm[-1]
+                ),
+                "linear_probe": float(
+                    bounded_linear[-1]
+                ),
+            },
+            "decoder_state_bytes": {
+                "ncm_refit": int(
+                    bounded_ncm_state_bytes
+                ),
+                "linear_probe": int(
+                    bounded_ridge_state_bytes
+                ),
+            },
+            "method_state_actual_bytes": {
+                "ncm_refit": int(
+                    replay_buffer.total_bytes
+                    + bounded_ncm_state_bytes
+                ),
+                "linear_probe": int(
+                    replay_buffer.total_bytes
+                    + bounded_ridge_state_bytes
+                ),
+            },
+            "method_state_target_bytes": int(
+                STABILITY_METHOD_STATE_BYTES
+            ),
+            "method_state_headroom_bytes": {
+                "ncm_refit": int(
+                    STABILITY_METHOD_STATE_BYTES
+                    - (
+                        replay_buffer.total_bytes
+                        + bounded_ncm_state_bytes
+                    )
+                ),
+                "linear_probe": int(
+                    STABILITY_METHOD_STATE_BYTES
+                    - (
+                        replay_buffer.total_bytes
+                        + bounded_ridge_state_bytes
+                    )
+                ),
+            },
+        }
+
+        print(
+            "bounded_probe="
+            f"{bounded_probe_result}"
+        )
+
     elapsed = (
         time.perf_counter()
         - started
@@ -1722,6 +1960,7 @@ def main() -> None:
             ),
         },
         "boundary_checkpoints": boundary_checkpoints,
+        "bounded_probe": bounded_probe_result,
         "probe": {
             "active": bool(use_probe),
             "ridge_lambda": float(
