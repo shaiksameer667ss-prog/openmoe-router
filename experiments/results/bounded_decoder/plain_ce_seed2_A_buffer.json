@@ -1,0 +1,45 @@
+{
+  "protocol": {
+    "condition": "none",
+    "training_time_replay": false,
+    "decoder_fit": "post_hoc_replay_buffer_only",
+    "replay_capacity": 715,
+    "evaluation": "held_out_cifar100_test",
+    "boundary": 4,
+    "classes_represented": 100
+  },
+  "checkpoint": {
+    "path": "experiments/results/bounded_decoder/plain_ce_seed2_for_match_checkpoints/task_4.pt",
+    "task_id": 4,
+    "seed": 2,
+    "decomposition": "none"
+  },
+  "replay_buffer": {
+    "samples": 715,
+    "bytes": 8797360
+  },
+  "results": {
+    "per_task_ncm_refit": [
+      0.083,
+      0.074,
+      0.1,
+      0.109,
+      0.132
+    ],
+    "per_task_linear_probe": [
+      0.0794999971985817,
+      0.09300000220537186,
+      0.10350000113248825,
+      0.13099999725818634,
+      0.08250000327825546
+    ],
+    "old_task_mean": {
+      "ncm_refit": 0.0915,
+      "linear_probe": 0.10174999944865704
+    },
+    "all_seen_mean": {
+      "ncm_refit": 0.0996,
+      "linear_probe": 0.09790000021457672
+    }
+  }
+}
