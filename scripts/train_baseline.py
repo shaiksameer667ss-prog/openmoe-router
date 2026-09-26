@@ -12,6 +12,7 @@ from openmoe.continual.drift import DriftState
 from openmoe.continual.probe import (
     collect_features,
     evaluate_linear_probe,
+    evaluate_ncm_frozen,
     evaluate_ncm_refit,
     evaluate_probe_suite,
     fit_linear_probe,
@@ -498,6 +499,15 @@ def main() -> None:
     )
 
     parser.add_argument(
+        "--bounded-probe-frozen",
+        action="store_true",
+        help=(
+            "Also evaluate introduction-time frozen NCM "
+            "prototypes at the final boundary."
+        ),
+    )
+
+    parser.add_argument(
         "--rcr",
         action="store_true",
         help=(
@@ -573,6 +583,11 @@ def main() -> None:
         raise ValueError(
             "--bounded-probe requires "
             f"--replay-capacity {BOUNDED_DECODER_REPLAY_CAPACITY}"
+        )
+
+    if args.bounded_probe_frozen and not args.bounded_probe:
+        raise ValueError(
+            "--bounded-probe-frozen requires --bounded-probe"
         )
 
     if args.rcr and not args.replay:
@@ -1355,6 +1370,37 @@ def main() -> None:
             for evaluation_loader in evaluation_stream
         ]
 
+        frozen_ncm = None
+
+        if args.bounded_probe_frozen:
+            if drift_state is None:
+                raise RuntimeError(
+                    "bounded frozen NCM requires DriftState."
+                )
+
+            frozen_reference_labels = sorted(
+                drift_state.reference_means
+            )
+
+            if frozen_reference_labels != list(range(100)):
+                raise RuntimeError(
+                    "bounded frozen NCM requires introduction-time "
+                    "references for all 100 CIFAR-100 classes; "
+                    f"got {len(frozen_reference_labels)} classes"
+                )
+
+            frozen_ncm = [
+                float(
+                    evaluate_ncm_frozen(
+                        model=model,
+                        prototypes=drift_state.reference_means,
+                        evaluation_loader=evaluation_loader,
+                        device=device,
+                    )
+                )
+                for evaluation_loader in evaluation_stream
+            ]
+
         bounded_features, bounded_labels = collect_features(
             model=model,
             loader=bounded_loader,
@@ -1423,6 +1469,7 @@ def main() -> None:
                 unique_labels.numel()
             ),
             "per_task_ncm_refit": bounded_ncm,
+            "per_task_ncm_frozen": frozen_ncm,
             "per_task_linear_probe": bounded_linear,
             "per_task_ncm_linear_gap": [
                 float(ncm - linear)
@@ -1431,7 +1478,23 @@ def main() -> None:
                     bounded_linear,
                 )
             ],
+            "per_task_frozen_refit_ncm_gap": (
+                [
+                    float(frozen - refit)
+                    for frozen, refit in zip(
+                        frozen_ncm,
+                        bounded_ncm,
+                    )
+                ]
+                if frozen_ncm is not None
+                else None
+            ),
             "old_task_mean": {
+                "ncm_frozen": (
+                    bounded_mean(frozen_ncm[:-1])
+                    if frozen_ncm is not None
+                    else None
+                ),
                 "ncm_refit": bounded_mean(
                     bounded_ncm[:-1]
                 ),
@@ -1440,6 +1503,11 @@ def main() -> None:
                 ),
             },
             "all_seen_mean": {
+                "ncm_frozen": (
+                    bounded_mean(frozen_ncm)
+                    if frozen_ncm is not None
+                    else None
+                ),
                 "ncm_refit": bounded_mean(
                     bounded_ncm
                 ),
@@ -1448,6 +1516,11 @@ def main() -> None:
                 ),
             },
             "final_task_diagonal": {
+                "ncm_frozen": (
+                    float(frozen_ncm[-1])
+                    if frozen_ncm is not None
+                    else None
+                ),
                 "ncm_refit": float(
                     bounded_ncm[-1]
                 ),
@@ -1475,6 +1548,12 @@ def main() -> None:
             },
             "method_state_target_bytes": int(
                 STABILITY_METHOD_STATE_BYTES
+            ),
+            "frozen_ncm_reference_note": (
+                "Introduction-time DriftState reference means; "
+                "diagnostic comparison, not memory-matched deployed state."
+                if frozen_ncm is not None
+                else None
             ),
             "method_state_headroom_bytes": {
                 "ncm_refit": int(
