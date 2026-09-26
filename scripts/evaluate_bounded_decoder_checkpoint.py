@@ -161,6 +161,15 @@ def main() -> None:
             "Expected number of unique classes in the decoder buffer."
         ),
     )
+    parser.add_argument(
+        "--restrict-to-task-classes",
+        action="store_true",
+        help=(
+            "Restrict the NCM prediction argmin to the classes present "
+            "in the selected evaluation task. Prototype fitting remains "
+            "unchanged and uses the full decoder buffer."
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -324,6 +333,32 @@ def main() -> None:
         ]
         selected_task_ids = [args.eval_task]
 
+    restricted_class_ids = None
+
+    if args.restrict_to_task_classes:
+        if args.eval_task is None:
+            raise ValueError(
+                "--restrict-to-task-classes requires --eval-task"
+            )
+
+        target_class_ids = set()
+
+        for batch in selected_evaluation[0]:
+            labels = batch[1]
+            target_class_ids.update(
+                int(class_id)
+                for class_id in labels.unique().tolist()
+            )
+
+        restricted_class_ids = sorted(target_class_ids)
+
+        if len(restricted_class_ids) != 20:
+            raise RuntimeError(
+                "expected exactly 20 classes for the selected task, "
+                f"got {len(restricted_class_ids)}: "
+                f"{restricted_class_ids}"
+            )
+
     ncm = [
         float(
             evaluate_ncm_refit(
@@ -331,6 +366,7 @@ def main() -> None:
                 prototype_loaders=[bounded_loader],
                 evaluation_loader=evaluation_loader,
                 device=device,
+                restrict_to_classes=restricted_class_ids,
             )
         )
         for evaluation_loader in selected_evaluation
@@ -396,6 +432,16 @@ def main() -> None:
             ),
             "expected_classes": int(
                 args.expected_classes
+            ),
+            "ncm_class_restriction": (
+                "selected_task_20_classes"
+                if args.restrict_to_task_classes
+                else "none"
+            ),
+            "ncm_restricted_class_ids": (
+                restricted_class_ids
+                if restricted_class_ids is not None
+                else None
             ),
         },
         "checkpoint": {
