@@ -5,6 +5,7 @@ from pathlib import Path
 
 import torch
 import yaml
+from types import SimpleNamespace
 from torch.utils.data import DataLoader, TensorDataset
 
 from openmoe.continual.probe import (
@@ -134,6 +135,15 @@ def main() -> None:
         type=int,
         default=DECODER_REPLAY_CAPACITY,
     )
+    parser.add_argument(
+        "--buffer",
+        default=None,
+        help=(
+            "Optional serialized replay buffer (.pt). "
+            "When supplied, use these exact samples instead of "
+            "reconstructing a buffer from the training stream."
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -181,12 +191,15 @@ def main() -> None:
     )
     model.eval()
 
-    stream = build_split_cifar100_stream(
-        root=args.data,
-        tasks=5,
-        batch_size=128,
-        train=True,
-    )
+    stream = None
+
+    if args.buffer is None:
+        stream = build_split_cifar100_stream(
+            root=args.data,
+            tasks=5,
+            batch_size=128,
+            train=True,
+        )
 
     evaluation_stream = build_split_cifar100_stream(
         root=args.data,
@@ -195,15 +208,61 @@ def main() -> None:
         train=False,
     )
 
-    buffer = ReplayBuffer(
-        capacity=args.capacity
-    )
-
-    for task_id, loader in enumerate(stream):
-        buffer.add_task_examples(
-            loader,
-            task_id=task_id,
+    if args.buffer is not None:
+        serialized_buffer = torch.load(
+            args.buffer,
+            map_location="cpu",
+            weights_only=False,
         )
+
+        if not isinstance(serialized_buffer, dict):
+            raise RuntimeError(
+                "serialized buffer must be a dictionary"
+            )
+
+        required_keys = {
+            "images",
+            "labels",
+            "task_ids",
+            "capacity",
+            "num_samples",
+            "total_bytes",
+        }
+        missing_keys = required_keys.difference(
+            serialized_buffer.keys()
+        )
+        if missing_keys:
+            raise RuntimeError(
+                "serialized buffer missing keys: "
+                f"{sorted(missing_keys)}"
+            )
+
+        if int(serialized_buffer["capacity"]) != args.capacity:
+            raise RuntimeError(
+                "serialized buffer capacity mismatch: "
+                f"{serialized_buffer['capacity']} "
+                f"!= {args.capacity}"
+            )
+
+        if int(serialized_buffer["num_samples"]) != args.capacity:
+            raise RuntimeError(
+                "serialized buffer size mismatch: "
+                f"{serialized_buffer['num_samples']} "
+                f"!= {args.capacity}"
+            )
+
+        buffer = SimpleNamespace(**serialized_buffer)
+
+    else:
+        buffer = ReplayBuffer(
+            capacity=args.capacity
+        )
+
+        for task_id, loader in enumerate(stream):
+            buffer.add_task_examples(
+                loader,
+                task_id=task_id,
+            )
 
     if buffer.num_samples != args.capacity:
         raise RuntimeError(
