@@ -1,0 +1,18 @@
+{
+  "buffer_file": "experiments/results/bounded_decoder/probe_b_boundary3_buffer.pt",
+  "seed": 33003,
+  "boundary": 3,
+  "tasks_seen": 4,
+  "classes_seen": 80,
+  "capacity": 715,
+  "task_counts": {
+    "0": 179,
+    "1": 179,
+    "2": 179,
+    "3": 178
+  },
+  "total_bytes": 8797360,
+  "selection": "deterministic_class_covered_task_balanced",
+  "source_dataset": "CIFAR-100 train split",
+  "future_task_examples_included": false
+}

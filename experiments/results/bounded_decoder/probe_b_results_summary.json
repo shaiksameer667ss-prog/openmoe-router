@@ -1,0 +1,89 @@
+{
+  "probe": "B",
+  "name": "Cross-Boundary Newest-Task NCM",
+  "preregistered": true,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "measurements": {
+    "M1": {
+      "description": "Task 3 at boundary 3",
+      "replay": [
+        0.1605,
+        0.164,
+        0.19
+      ],
+      "plain_ce": [
+        0.206,
+        0.2,
+        0.201
+      ],
+      "gap": [
+        -0.045499999999999985,
+        -0.036000000000000004,
+        -0.01100000000000001
+      ],
+      "mean_gap": -0.030833333333333334
+    },
+    "M2": {
+      "description": "Task 4 at boundary 4",
+      "replay": [
+        0.1885,
+        0.1775,
+        0.1965
+      ],
+      "plain_ce": [
+        0.121,
+        0.131,
+        0.132
+      ],
+      "gap": [
+        0.0675,
+        0.046499999999999986,
+        0.0645
+      ],
+      "mean_gap": 0.0595
+    },
+    "M3": {
+      "description": "Task 3 at boundary 4",
+      "replay": [
+        0.137,
+        0.136,
+        0.1715
+      ],
+      "plain_ce": [
+        0.13,
+        0.102,
+        0.109
+      ],
+      "gap": [
+        0.007000000000000006,
+        0.034000000000000016,
+        0.06250000000000001
+      ],
+      "mean_gap": 0.03450000000000001
+    }
+  },
+  "preregistered_outcome": {
+    "H1_generic_newest_task": "not supported",
+    "H2_boundary_4_specific": "supported",
+    "H3_persistent_recent": "not supported",
+    "H4_transient_recent": "not supported"
+  },
+  "notes": [
+    "M1 gap is negative in all three seeds; plain CE exceeds replay on the newest task at boundary 3.",
+    "M2 gap is positive and large in all three seeds.",
+    "M3 mean gap is 0.0345 and the seed-level gaps are 0.0070, 0.0340, and 0.0625; this is ambiguous under the preregistered thresholds."
+  ],
+  "protocol": {
+    "decoder_capacity": 715,
+    "M1_buffer": "probe_b_boundary3_buffer.pt",
+    "M1_classes": 80,
+    "M1_future_task_examples": 0,
+    "M2_buffer": "seed-specific Path-1 A buffer",
+    "M3_buffer": "seed-specific Path-1 A buffer",
+    "evaluation": "held-out CIFAR-100 test split"
+  }
+}
