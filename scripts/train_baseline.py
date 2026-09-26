@@ -464,6 +464,14 @@ def main() -> None:
             "examples. Stability-state losses are disabled."
         ),
     )
+    parser.add_argument(
+        "--disable-stability",
+        action="store_true",
+        help=(
+            "Disable continual stability state and stability losses. "
+            "With --replay, stability is already disabled."
+        ),
+    )
 
     parser.add_argument(
         "--replay-match",
@@ -776,6 +784,7 @@ def main() -> None:
     use_stability = (
         args.router == "continual"
         and not args.replay
+        and not args.disable_stability
     )
 
     stability_state = None
@@ -819,9 +828,12 @@ def main() -> None:
 
     routing_kl_weight = 0.0
 
-    if continual_cfg.get(
-        "stability_kl",
-        False,
+    if (
+        use_stability
+        and continual_cfg.get(
+            "stability_kl",
+            False,
+        )
     ):
         routing_kl_weight = float(
             continual_cfg.get(
@@ -832,9 +844,12 @@ def main() -> None:
 
     dense_ewc_weight = 0.0
 
-    if continual_cfg.get(
-        "dense_ewc",
-        False,
+    if (
+        use_stability
+        and continual_cfg.get(
+            "dense_ewc",
+            False,
+        )
     ):
         dense_ewc_weight = float(
             continual_cfg.get(
