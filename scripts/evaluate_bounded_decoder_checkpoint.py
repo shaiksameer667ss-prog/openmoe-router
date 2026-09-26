@@ -144,6 +144,23 @@ def main() -> None:
             "reconstructing a buffer from the training stream."
         ),
     )
+    parser.add_argument(
+        "--eval-task",
+        type=int,
+        default=None,
+        help=(
+            "Optional task ID to evaluate. When omitted, evaluate "
+            "all five task loaders as in the original protocol."
+        ),
+    )
+    parser.add_argument(
+        "--expected-classes",
+        type=int,
+        default=100,
+        help=(
+            "Expected number of unique classes in the decoder buffer."
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -275,10 +292,10 @@ def main() -> None:
         sorted=True,
     )
 
-    if unique_labels.numel() != 100:
+    if unique_labels.numel() != args.expected_classes:
         raise RuntimeError(
-            "post-hoc decoder buffer does not cover "
-            "all 100 CIFAR-100 classes; "
+            "post-hoc decoder buffer class count mismatch: "
+            f"expected {args.expected_classes}, "
             f"got {unique_labels.numel()}"
         )
 
@@ -293,6 +310,20 @@ def main() -> None:
         num_workers=0,
     )
 
+    if args.eval_task is None:
+        selected_evaluation = list(evaluation_stream)
+        selected_task_ids = list(range(len(evaluation_stream)))
+    else:
+        if not (0 <= args.eval_task < len(evaluation_stream)):
+            raise ValueError(
+                f"--eval-task must be in [0, {len(evaluation_stream) - 1}], "
+                f"got {args.eval_task}"
+            )
+        selected_evaluation = [
+            evaluation_stream[args.eval_task]
+        ]
+        selected_task_ids = [args.eval_task]
+
     ncm = [
         float(
             evaluate_ncm_refit(
@@ -302,7 +333,7 @@ def main() -> None:
                 device=device,
             )
         )
-        for evaluation_loader in evaluation_stream
+        for evaluation_loader in selected_evaluation
     ]
 
     features, labels = collect_features(
@@ -337,7 +368,7 @@ def main() -> None:
                 device=device,
             )
         )
-        for evaluation_loader in evaluation_stream
+        for evaluation_loader in selected_evaluation
     ]
 
     payload = {
@@ -347,9 +378,24 @@ def main() -> None:
             "decoder_fit": "post_hoc_replay_buffer_only",
             "replay_capacity": int(args.capacity),
             "evaluation": "held_out_cifar100_test",
-            "boundary": 4,
+            "boundary": int(
+                checkpoint["task_id"]
+            ),
+            "evaluation_task": (
+                None
+                if args.eval_task is None
+                else int(args.eval_task)
+            ),
+            "evaluation_scope": (
+                "all_seen_tasks"
+                if args.eval_task is None
+                else "single_task"
+            ),
             "classes_represented": int(
                 unique_labels.numel()
+            ),
+            "expected_classes": int(
+                args.expected_classes
             ),
         },
         "checkpoint": {
@@ -375,16 +421,23 @@ def main() -> None:
         "results": {
             "per_task_ncm_refit": ncm,
             "per_task_linear_probe": linear,
-            "old_task_mean": {
-                "ncm_refit": float(
-                    sum(ncm[:-1])
-                    / len(ncm[:-1])
-                ),
-                "linear_probe": float(
-                    sum(linear[:-1])
-                    / len(linear[:-1])
-                ),
-            },
+            "old_task_mean": (
+                {
+                    "ncm_refit": float(
+                        sum(ncm[:-1])
+                        / len(ncm[:-1])
+                    ),
+                    "linear_probe": float(
+                        sum(linear[:-1])
+                        / len(linear[:-1])
+                    ),
+                }
+                if args.eval_task is None
+                else {
+                    "ncm_refit": float(ncm[0]),
+                    "linear_probe": float(linear[0]),
+                }
+            ),
             "all_seen_mean": {
                 "ncm_refit": float(
                     sum(ncm)
