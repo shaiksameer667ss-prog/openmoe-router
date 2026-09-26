@@ -155,6 +155,7 @@ def evaluate_ncm_refit(
     prototype_loaders,
     evaluation_loader,
     device: torch.device,
+    restrict_to_classes=None,
 ) -> float:
     """Evaluate NCM with prototypes refit from current features."""
     from openmoe.training.engine import evaluate_ncm
@@ -164,6 +165,7 @@ def evaluate_ncm_refit(
         prototype_loaders=prototype_loaders,
         evaluation_loader=evaluation_loader,
         device=device,
+        restrict_to_classes=restrict_to_classes,
     )
 
 

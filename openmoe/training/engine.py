@@ -924,6 +924,7 @@ def evaluate_ncm(
     prototype_loaders: Iterable,
     evaluation_loader: Iterable,
     device: torch.device,
+    restrict_to_classes=None,
 ) -> float:
     """Evaluate one task with a nearest-class-mean classifier."""
     was_training = model.training
@@ -992,8 +993,41 @@ def evaluate_ncm(
         correct = 0
         total = 0
 
+        if restrict_to_classes is None:
+            eval_class_ids = class_ids
+            eval_prototypes = prototypes
+        else:
+            restricted_ids = {
+                int(class_id) for class_id in restrict_to_classes
+            }
+            missing_ids = restricted_ids.difference(class_ids)
+
+            if missing_ids:
+                raise ValueError(
+                    "restrict_to_classes contains class IDs without "
+                    f"fitted prototypes: {sorted(missing_ids)}"
+                )
+
+            eval_class_ids = [
+                class_id
+                for class_id in class_ids
+                if class_id in restricted_ids
+            ]
+
+            if not eval_class_ids:
+                raise ValueError(
+                    "restrict_to_classes must contain at least one "
+                    "class with a fitted prototype"
+                )
+
+            eval_indices = [
+                class_ids.index(class_id)
+                for class_id in eval_class_ids
+            ]
+            eval_prototypes = prototypes[eval_indices]
+
         class_id_tensor = torch.tensor(
-            class_ids,
+            eval_class_ids,
             device=device,
             dtype=torch.long,
         )
@@ -1011,7 +1045,7 @@ def evaluate_ncm(
             distances = (
                 (
                     features.unsqueeze(1)
-                    - prototypes.unsqueeze(0)
+                    - eval_prototypes.unsqueeze(0)
                 )
                 .square()
                 .sum(dim=-1)

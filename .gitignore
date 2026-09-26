@@ -28,3 +28,7 @@ wandb/
 
 # IDE noise
 .vscode/*.log
+
+# Kaggle local workspace artifacts
+checkpoints/
+cifar100/
