@@ -569,9 +569,9 @@ def main() -> None:
             "--replay baseline requires --data cifar100"
         )
 
-    if args.replay_capacity is not None and not args.replay:
+    if args.replay_capacity is not None and not (args.replay or args.bounded_probe):
         raise ValueError(
-            "--replay-capacity requires --replay"
+            "--replay-capacity requires --replay or --bounded-probe"
         )
 
     if args.replay_dump is not None and not args.replay:
@@ -579,19 +579,18 @@ def main() -> None:
             "--replay-dump requires --replay"
         )
 
-    if args.bounded_probe and not args.replay:
-        raise ValueError(
-            "--bounded-probe requires --replay"
-        )
-
     if args.bounded_probe and args.data != "cifar100":
         raise ValueError(
             "--bounded-probe requires --data cifar100"
         )
 
-    if args.bounded_probe and args.decomposition != "none":
+    if args.bounded_probe and args.decomposition not in {
+        "none",
+        "router_frozen",
+    }:
         raise ValueError(
-            "--bounded-probe requires --decomposition none"
+            "--bounded-probe supports only "
+            "decomposition none or router_frozen"
         )
 
     if args.bounded_probe and (
@@ -876,7 +875,7 @@ def main() -> None:
         ReplayBuffer(
             capacity=replay_capacity,
         )
-        if args.replay
+        if args.replay or args.bounded_probe
         else None
     )
 
@@ -1282,7 +1281,7 @@ def main() -> None:
             boundary_checkpoints[str(task_id)] = str(checkpoint_path)
 
         if (
-            args.replay
+            (args.replay or args.bounded_probe)
             and replay_buffer is not None
         ):
             replay_buffer.add_task_examples(
