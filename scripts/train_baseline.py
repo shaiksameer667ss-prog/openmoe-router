@@ -557,7 +557,16 @@ def main() -> None:
             "to this path."
         ),
     )
+    parser.add_argument(
+        "--er-ace",
+        action="store_true",
+        help="Use ER-ACE asymmetric CE; requires --replay.",
+    )
+
     args = parser.parse_args()
+
+    if args.er_ace and not args.replay:
+        raise ValueError("--er-ace requires --replay")
 
     if args.replay and args.decomposition != "none":
         raise ValueError(
@@ -1036,7 +1045,11 @@ def main() -> None:
                 if args.rcr
                 else 0
             ),
-        )
+
+            er_ace_enabled=args.er_ace,
+            er_ace_current_batch_size=REPLAY_BATCH_SIZE,
+            er_ace_current_class_start=(task_id * classes_per_task),
+            er_ace_classes_per_task=classes_per_task,)
 
         history.extend(
             {
@@ -1128,7 +1141,11 @@ def main() -> None:
                 if args.rcr
                 else 0
             ),
-        )
+
+            er_ace_enabled=args.er_ace,
+            er_ace_current_batch_size=REPLAY_BATCH_SIZE,
+            er_ace_current_class_start=(task_id * classes_per_task),
+            er_ace_classes_per_task=classes_per_task,)
 
         history.extend(
             {
@@ -1272,6 +1289,7 @@ def main() -> None:
                     "model_state_dict": model.state_dict(),
                     "seed": int(args.seed),
                     "decomposition": args.decomposition,
+        "er_ace": bool(args.er_ace),
                 },
                 checkpoint_path,
             )

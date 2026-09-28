@@ -638,6 +638,65 @@ class ContinualStabilityState:
         ).to(device)
 
 
+
+def er_ace_loss(
+    logits: torch.Tensor,
+    labels: torch.Tensor,
+    current_batch_size: int,
+    current_class_start: int,
+    classes_per_task: int,
+) -> torch.Tensor:
+    # ER-ACE asymmetric CE for current-task + replay samples.
+    total_batch = int(logits.shape[0])
+    current_batch_size = int(current_batch_size)
+
+    if current_batch_size <= 0 or current_batch_size > total_batch:
+        raise ValueError(
+            "current_batch_size must be in [1, batch_size]."
+        )
+
+    # Task 0 / no replay: exact ordinary CE.
+    if current_batch_size == total_batch:
+        return F.cross_entropy(logits, labels)
+
+    current_class_start = int(current_class_start)
+    classes_per_task = int(classes_per_task)
+    seen_classes = (
+        current_class_start
+        + classes_per_task
+    )
+
+    cur_logits = logits[
+        :current_batch_size,
+        current_class_start:seen_classes,
+    ]
+
+    cur_labels = (
+        labels[:current_batch_size]
+        - current_class_start
+    )
+
+    rep_logits = logits[
+        current_batch_size:,
+        :seen_classes,
+    ]
+
+    rep_labels = labels[
+        current_batch_size:
+    ]
+
+    return (
+        F.cross_entropy(
+            cur_logits,
+            cur_labels,
+        )
+        + F.cross_entropy(
+            rep_logits,
+            rep_labels,
+        )
+    )
+
+
 def train_steps(
     model: nn.Module,
     loader: Iterable,
@@ -655,6 +714,10 @@ def train_steps(
     rcr_state: RCRState | None = None,
     rcr_beta: float = 0.0,
     rcr_replay_batch_size: int = 0,
+    er_ace_enabled: bool = False,
+    er_ace_current_batch_size: int = 0,
+    er_ace_current_class_start: int = 0,
+    er_ace_classes_per_task: int = 0,
 ) -> list[dict[str, float]]:
     """Run a fixed number of optimizer steps."""
     model.train()
@@ -692,7 +755,15 @@ def train_steps(
 
         task_logits = output.logits
 
-        if head_mask_old_classes > 0:
+        if er_ace_enabled:
+            task_loss = er_ace_loss(
+                logits=output.logits,
+                labels=labels,
+                current_batch_size=er_ace_current_batch_size,
+                current_class_start=er_ace_current_class_start,
+                classes_per_task=er_ace_classes_per_task,
+            )
+        elif head_mask_old_classes > 0:
             if (
                 head_mask_old_classes
                 >= task_logits.shape[-1]
