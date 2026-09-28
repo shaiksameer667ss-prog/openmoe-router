@@ -563,6 +563,14 @@ def main() -> None:
         help="Use ER-ACE asymmetric CE; requires --replay.",
     )
 
+    parser.add_argument(
+        "--margin-loss",
+        action="store_true",
+        help=(
+            "Add the relative old-vs-correct margin penalty."
+        ),
+    )
+
     args = parser.parse_args()
 
     if args.er_ace and not args.replay:
@@ -1049,7 +1057,16 @@ def main() -> None:
             er_ace_enabled=(args.er_ace and task_id >= 1),
             er_ace_current_batch_size=REPLAY_BATCH_SIZE,
             er_ace_current_class_start=(task_id * classes_per_task),
-            er_ace_classes_per_task=classes_per_task,)
+            er_ace_classes_per_task=classes_per_task,
+            old_class_margin_weight=(
+                0.1 if args.margin_loss else 0.0
+            ),
+            margin_current_batch_size=(
+                REPLAY_CURRENT_BATCH_SIZE
+                if args.replay and task_id >= 1
+                else loader.batch_size
+            ),
+        )
 
         history.extend(
             {
@@ -1145,7 +1162,16 @@ def main() -> None:
             er_ace_enabled=(args.er_ace and task_id >= 1),
             er_ace_current_batch_size=REPLAY_BATCH_SIZE,
             er_ace_current_class_start=(task_id * classes_per_task),
-            er_ace_classes_per_task=classes_per_task,)
+            er_ace_classes_per_task=classes_per_task,
+            old_class_margin_weight=(
+                0.1 if args.margin_loss else 0.0
+            ),
+            margin_current_batch_size=(
+                REPLAY_CURRENT_BATCH_SIZE
+                if args.replay and task_id >= 1
+                else loader.batch_size
+            ),
+        )
 
         history.extend(
             {
@@ -1290,6 +1316,7 @@ def main() -> None:
                     "seed": int(args.seed),
                     "decomposition": args.decomposition,
         "er_ace": bool(args.er_ace),
+        "margin_loss": bool(args.margin_loss),
                 },
                 checkpoint_path,
             )

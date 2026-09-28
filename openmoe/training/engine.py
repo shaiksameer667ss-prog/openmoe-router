@@ -697,6 +697,53 @@ def er_ace_loss(
     )
 
 
+
+def relative_old_class_margin_loss(
+    logits: torch.Tensor,
+    labels: torch.Tensor,
+    current_batch_size: int,
+    current_class_start: int,
+) -> torch.Tensor:
+    """Penalize the max old-class logit exceeding the true current-class logit."""
+    total_batch = int(logits.shape[0])
+    current_batch_size = int(current_batch_size)
+    current_class_start = int(current_class_start)
+
+    if current_batch_size <= 0 or current_batch_size > total_batch:
+        raise ValueError(
+            "current_batch_size must be in [1, batch_size]."
+        )
+
+    if current_class_start <= 0:
+        return torch.zeros(
+            (),
+            device=logits.device,
+            dtype=logits.dtype,
+        )
+
+    if current_class_start > logits.shape[1]:
+        raise ValueError(
+            "current_class_start must not exceed number of classes."
+        )
+
+    current_logits = logits[:current_batch_size]
+    current_labels = labels[:current_batch_size]
+
+    old_logits = current_logits[:, :current_class_start]
+
+    true_logits = current_logits.gather(
+        1,
+        current_labels[:, None],
+    ).squeeze(1)
+
+    old_max = old_logits.max(
+        dim=1
+    ).values
+
+    return F.softplus(
+        old_max - true_logits
+    ).mean()
+
 def train_steps(
     model: nn.Module,
     loader: Iterable,
@@ -718,6 +765,8 @@ def train_steps(
     er_ace_current_batch_size: int = 0,
     er_ace_current_class_start: int = 0,
     er_ace_classes_per_task: int = 0,
+    old_class_margin_weight: float = 0.0,
+    margin_current_batch_size: int | None = None,
 ) -> list[dict[str, float]]:
     """Run a fixed number of optimizer steps."""
     model.train()
@@ -788,7 +837,35 @@ def train_steps(
                 labels,
             )
 
-        loss = task_loss
+        old_class_margin = torch.zeros(
+            (),
+            device=device,
+        )
+
+        margin_batch_size = (
+            er_ace_current_batch_size
+            if margin_current_batch_size is None
+            else int(margin_current_batch_size)
+        )
+
+        if (
+            old_class_margin_weight > 0.0
+            and er_ace_current_class_start > 0
+            and margin_batch_size > 0
+            and margin_batch_size <= output.logits.shape[0]
+        ):
+            old_class_margin = relative_old_class_margin_loss(
+                logits=output.logits,
+                labels=labels,
+                current_batch_size=margin_batch_size,
+                current_class_start=er_ace_current_class_start,
+            )
+
+        loss = (
+            task_loss
+            + old_class_margin_weight
+            * old_class_margin
+        )
 
         z_loss_total = torch.zeros(
             (),
