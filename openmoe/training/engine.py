@@ -782,12 +782,11 @@ def train_steps(
                 "-inf"
             )
 
-        task_loss = (
-            F.cross_entropy(
+        if not er_ace_enabled:
+            task_loss = F.cross_entropy(
                 task_logits,
                 labels,
             )
-        )
 
         loss = task_loss
 

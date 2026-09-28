@@ -1046,7 +1046,7 @@ def main() -> None:
                 else 0
             ),
 
-            er_ace_enabled=args.er_ace,
+            er_ace_enabled=(args.er_ace and task_id >= 1),
             er_ace_current_batch_size=REPLAY_BATCH_SIZE,
             er_ace_current_class_start=(task_id * classes_per_task),
             er_ace_classes_per_task=classes_per_task,)
@@ -1142,7 +1142,7 @@ def main() -> None:
                 else 0
             ),
 
-            er_ace_enabled=args.er_ace,
+            er_ace_enabled=(args.er_ace and task_id >= 1),
             er_ace_current_batch_size=REPLAY_BATCH_SIZE,
             er_ace_current_class_start=(task_id * classes_per_task),
             er_ace_classes_per_task=classes_per_task,)
