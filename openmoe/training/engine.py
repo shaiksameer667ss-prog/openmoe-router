@@ -824,8 +824,20 @@ def train_steps(
 
             task_logits = task_logits.clone()
 
+            # With replay, the loader emits current samples first and
+            # replay samples second. Mask old classes only for the
+            # current-task prefix; replay must retain full-class CE.
+            mask_batch_size = (
+                task_logits.shape[0]
+                if margin_current_batch_size is None
+                else min(
+                    int(margin_current_batch_size),
+                    task_logits.shape[0],
+                )
+            )
+
             task_logits[
-                :,
+                :mask_batch_size,
                 :head_mask_old_classes,
             ] = float(
                 "-inf"

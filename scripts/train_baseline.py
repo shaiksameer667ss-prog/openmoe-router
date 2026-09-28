@@ -32,6 +32,7 @@ from openmoe.models.transformer import (
     TinyMoETransformer,
 )
 from openmoe.routers.continual import ContinualRouter
+from openmoe.routers.margin_router import MarginRouter
 from openmoe.routers.topk import (
     BiasBalancedTopKRouter,
     TopKRouter,
@@ -124,6 +125,27 @@ def make_router_factory(kind: str, cfg: dict):
                 bias_lr=router_cfg.get(
                     "bias_lr",
                     1e-3,
+                ),
+            )
+
+        if kind == "margin":
+            return MarginRouter(
+                **kwargs,
+                memory_lambda=router_cfg.get(
+                    "memory_lambda",
+                    0.25,
+                ),
+                memory_momentum=router_cfg.get(
+                    "memory_momentum",
+                    0.99,
+                ),
+                bias_lr=router_cfg.get(
+                    "bias_lr",
+                    1e-3,
+                ),
+                relax_temperature=router_cfg.get(
+                    "margin_relax_temperature",
+                    router_cfg.get("temperature", 1.0),
                 ),
             )
 
@@ -408,6 +430,7 @@ def main() -> None:
             "top2",
             "bias",
             "continual",
+            "margin",
         ],
     )
 
@@ -570,15 +593,25 @@ def main() -> None:
             "Add the relative old-vs-correct margin penalty."
         ),
     )
+    parser.add_argument(
+        "--margin-weight",
+        type=float,
+        default=0.1,
+        help="Coefficient for the old-vs-true margin loss.",
+    )
 
     args = parser.parse_args()
 
     if args.er_ace and not args.replay:
         raise ValueError("--er-ace requires --replay")
 
-    if args.replay and args.decomposition != "none":
+    if (
+        args.replay
+        and args.decomposition != "none"
+        and args.decomposition != "head_masked"
+    ):
         raise ValueError(
-            "--replay cannot be combined with a forgetting decomposition"
+            "--replay can only be combined with --decomposition head_masked"
         )
 
     if args.replay and args.data != "cifar100":
@@ -1058,9 +1091,7 @@ def main() -> None:
             er_ace_current_batch_size=REPLAY_BATCH_SIZE,
             er_ace_current_class_start=(task_id * classes_per_task),
             er_ace_classes_per_task=classes_per_task,
-            old_class_margin_weight=(
-                0.1 if args.margin_loss else 0.0
-            ),
+            old_class_margin_weight=(args.margin_weight if args.margin_loss else 0.0),
             margin_current_batch_size=(
                 REPLAY_CURRENT_BATCH_SIZE
                 if args.replay and task_id >= 1
@@ -1163,9 +1194,7 @@ def main() -> None:
             er_ace_current_batch_size=REPLAY_BATCH_SIZE,
             er_ace_current_class_start=(task_id * classes_per_task),
             er_ace_classes_per_task=classes_per_task,
-            old_class_margin_weight=(
-                0.1 if args.margin_loss else 0.0
-            ),
+            old_class_margin_weight=(args.margin_weight if args.margin_loss else 0.0),
             margin_current_batch_size=(
                 REPLAY_CURRENT_BATCH_SIZE
                 if args.replay and task_id >= 1
@@ -1315,8 +1344,9 @@ def main() -> None:
                     "model_state_dict": model.state_dict(),
                     "seed": int(args.seed),
                     "decomposition": args.decomposition,
-        "er_ace": bool(args.er_ace),
-        "margin_loss": bool(args.margin_loss),
+                    "er_ace": bool(args.er_ace),
+                    "margin_loss": bool(args.margin_loss),
+                    "margin_weight": float(args.margin_weight),
                 },
                 checkpoint_path,
             )
@@ -1932,6 +1962,7 @@ def main() -> None:
         "seed": args.seed,
         "er_ace": bool(args.er_ace),
         "margin_loss": bool(args.margin_loss),
+        "margin_weight": float(args.margin_weight),
         "device": str(device),
         "elapsed_sec": elapsed,
         "accuracy_matrix": accuracies,

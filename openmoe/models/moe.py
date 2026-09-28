@@ -52,17 +52,39 @@ class SparseMoE(nn.Module):
         out = torch.zeros_like(flat)
         loads = torch.zeros(self.num_experts, device=flat.device, dtype=torch.long)
 
-        for expert_id, expert in enumerate(self.experts):
-            locations = (routing.indices == expert_id).nonzero(as_tuple=False)
-            if locations.numel() == 0:
-                continue
-            token_ids = locations[:, 0]
-            topk_pos = locations[:, 1]
-            selected = flat.index_select(0, token_ids)
-            transformed = expert(selected)
-            weights = routing.gates[token_ids, topk_pos].unsqueeze(-1)
-            out.index_add_(0, token_ids, transformed * weights)
-            loads[expert_id] = token_ids.numel()
+        # MarginRouter exposes a straight-through dense surrogate so the
+        # router receives gradient from losses computed on the routed
+        # representation, including competition against unselected experts.
+        use_dense_surrogate = (
+            self.training
+            and isinstance(routing.aux, dict)
+            and "st_dense_gates" in routing.aux
+        )
+
+        if use_dense_surrogate:
+            dense_gates = routing.aux["st_dense_gates"]
+
+            for expert_id, expert in enumerate(self.experts):
+                transformed = expert(flat)
+                weights = dense_gates[:, expert_id].unsqueeze(-1)
+                out = out + transformed * weights
+
+                # Keep load accounting hard/top-k for diagnostics.
+                locations = (routing.indices == expert_id).nonzero(as_tuple=False)
+                loads[expert_id] = locations.shape[0]
+
+        else:
+            for expert_id, expert in enumerate(self.experts):
+                locations = (routing.indices == expert_id).nonzero(as_tuple=False)
+                if locations.numel() == 0:
+                    continue
+                token_ids = locations[:, 0]
+                topk_pos = locations[:, 1]
+                selected = flat.index_select(0, token_ids)
+                transformed = expert(selected)
+                weights = routing.gates[token_ids, topk_pos].unsqueeze(-1)
+                out.index_add_(0, token_ids, transformed * weights)
+                loads[expert_id] = token_ids.numel()
 
         return MoEOutput(out.reshape(shape), routing, loads)
 
