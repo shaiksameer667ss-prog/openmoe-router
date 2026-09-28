@@ -1930,6 +1930,8 @@ def main() -> None:
             ),
         },
         "seed": args.seed,
+        "er_ace": bool(args.er_ace),
+        "margin_loss": bool(args.margin_loss),
         "device": str(device),
         "elapsed_sec": elapsed,
         "accuracy_matrix": accuracies,
