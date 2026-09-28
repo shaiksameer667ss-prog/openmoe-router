@@ -1,0 +1,33 @@
+{
+  "method": "er_ace",
+  "replay_capacity": 715,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "old_task_cil_mean": [
+    0.152125,
+    0.152875,
+    0.15275
+  ],
+  "old_task_realization": [
+    0.3863492063492063,
+    0.38813075214217707,
+    0.3846395971041863
+  ],
+  "task4_cil": [
+    0.019,
+    0.015,
+    0.017
+  ],
+  "task4_realization": [
+    0.042744656986666726,
+    0.03488372,
+    0.03790412
+  ],
+  "mean_old_task_cil": 0.15258333333333335,
+  "mean_old_task_realization": 0.3863731851985232,
+  "mean_task4_cil": 0.017,
+  "mean_task4_realization": 0.03851083423625481
+}
