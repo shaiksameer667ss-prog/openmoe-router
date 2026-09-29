@@ -70,6 +70,7 @@ def _make_race_router(
     hidden_dim: int,
     num_experts: int,
     cfg: dict,
+    beta: float,
 ):
     """
     Construct the finalized Path-A RACE router using the
@@ -137,7 +138,7 @@ def _make_race_router(
         ),
 
         # Finalized Path-A parameters.
-        beta=1.0,
+        beta=float(beta),
         p_init=1.0,
         tau=0.1,
         prototype_momentum=0.1,
@@ -150,10 +151,14 @@ def make_router_factory(kind: str, cfg: dict):
     router_cfg = cfg["router"]
     model_cfg = cfg["model"]
 
+    race_layer_index = 0
+
     def factory(
         hidden_dim: int,
         num_experts: int,
     ):
+        nonlocal race_layer_index
+
         kwargs = {
             "hidden_dim": hidden_dim,
             "num_experts": num_experts,
@@ -232,10 +237,41 @@ def make_router_factory(kind: str, cfg: dict):
             )
 
         if kind == "race":
+            beta_per_layer = router_cfg.get(
+                "beta_per_layer",
+                [1.0, 0.2],
+            )
+
+            if not isinstance(
+                beta_per_layer,
+                (list, tuple),
+            ):
+                raise TypeError(
+                    "router.beta_per_layer must be a list or tuple."
+                )
+
+            if race_layer_index >= len(
+                beta_per_layer
+            ):
+                raise ValueError(
+                    "router.beta_per_layer has "
+                    f"{len(beta_per_layer)} values, but "
+                    f"router construction requested layer "
+                    f"{race_layer_index}."
+                )
+
+            layer_index = race_layer_index
+            race_layer_index += 1
+
+            beta = float(
+                beta_per_layer[layer_index]
+            )
+
             return _make_race_router(
                 hidden_dim=hidden_dim,
                 num_experts=num_experts,
                 cfg=cfg,
+                beta=beta,
             )
 
         raise ValueError(

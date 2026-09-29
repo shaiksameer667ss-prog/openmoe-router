@@ -11,6 +11,7 @@ router:
   z_loss_weight: 5.0e-7
   bias_lr: 1.0e-3
   temperature: 1.0
+  beta_per_layer: [1.0, 0.2]
 
 continual:
   probe:
