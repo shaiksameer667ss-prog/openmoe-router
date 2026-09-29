@@ -600,6 +600,12 @@ def main() -> None:
         help="Coefficient for the old-vs-true margin loss.",
     )
 
+    parser.add_argument(
+        "--trainable-experts",
+        action="store_true",
+        help="Do not freeze expert parameters after Task 0 warmup.",
+    )
+
     args = parser.parse_args()
 
     if args.er_ace and not args.replay:
@@ -696,6 +702,16 @@ def main() -> None:
             encoding="utf-8"
         )
     )
+
+    if getattr(args, "trainable_experts", False):
+        if "continual" not in cfg or not isinstance(cfg["continual"], dict):
+            raise ValueError(
+                "--trainable-experts requires a continual config section"
+            )
+        cfg["continual"]["freeze_experts_after_warmup"] = False
+        print(
+            "--trainable-experts set: experts will NOT be frozen after Task 0"
+        )
 
     seed_everything(
         args.seed
