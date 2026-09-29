@@ -1,0 +1,46 @@
+{
+  "checkpoint": "/kaggle/working/margin_router_noloss_715_seed0_checkpoints/task_4.pt",
+  "natural_mean_margin": -2.820446252822876,
+  "layers": {
+    "0": {
+      "forced_expert_mean_margin": -3.2220409123518037,
+      "best_forced_expert_mean_margin": -1.965625690901652,
+      "range_p50": 2.1918994188308716,
+      "range_p90": 3.6931147594004874,
+      "range_p95": 4.155144011601806,
+      "fraction_range_gt_020": 1.0,
+      "fraction_range_gt_050": 1.0,
+      "best_expert_counts": [
+        13,
+        11,
+        15,
+        5,
+        11,
+        12,
+        8,
+        5
+      ]
+    },
+    "1": {
+      "forced_expert_mean_margin": -2.7383246240759034,
+      "best_forced_expert_mean_margin": -2.497222192562185,
+      "range_p50": 0.5093510150909424,
+      "range_p90": 0.6538668751716614,
+      "range_p95": 0.8055224895477295,
+      "fraction_range_gt_020": 0.9875,
+      "fraction_range_gt_050": 0.5125,
+      "best_expert_counts": [
+        25,
+        7,
+        10,
+        13,
+        10,
+        6,
+        8,
+        1
+      ]
+    }
+  },
+  "saved_race_argmax": {
+    "0": {
+      "counts":

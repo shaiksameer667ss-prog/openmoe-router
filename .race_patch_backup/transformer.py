@@ -1,0 +1,448 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+import torch
+from torch import Tensor, nn
+
+from .moe import SparseMoE
+from openmoe.routers.base import RouterBase
+
+
+class TransformerBlock(nn.Module):
+    def __init__(
+        self,
+        hidden_dim: int,
+        num_heads: int,
+        ff_dim: int,
+        num_experts: int,
+        router: RouterBase,
+    ) -> None:
+        super().__init__()
+
+        self.norm1 = nn.LayerNorm(hidden_dim)
+
+        self.attn = nn.MultiheadAttention(
+            hidden_dim,
+            num_heads,
+            batch_first=True,
+        )
+
+        self.norm2 = nn.LayerNorm(hidden_dim)
+
+        self.moe = SparseMoE(
+            hidden_dim,
+            ff_dim,
+            num_experts,
+            router,
+        )
+
+    def forward(
+        self,
+        x: Tensor,
+    ) -> tuple[Tensor, dict[str, Tensor]]:
+        h = self.norm1(x)
+
+        attn, _ = self.attn(
+            h,
+            h,
+            h,
+            need_weights=False,
+        )
+
+        x = x + attn
+
+        moe_out = self.moe(
+            self.norm2(x)
+        )
+
+        x = x + moe_out.hidden
+
+        return x, {
+            "expert_load": moe_out.expert_load,
+            "routing": moe_out.routing,
+        }
+
+
+@dataclass
+class ClassifierOutput:
+    logits: Tensor
+    telemetry: list[dict[str, Tensor]]
+
+
+class TinyMoETransformer(nn.Module):
+    """Small ViT-style backbone for controlled continual experiments."""
+
+    def __init__(
+        self,
+        num_classes: int,
+        hidden_dim: int,
+        num_heads: int,
+        ff_dim: int,
+        num_experts: int,
+        router_factory,
+        depth: int = 2,
+        image_size: int = 32,
+        patch_size: int = 4,
+    ) -> None:
+        super().__init__()
+
+        if image_size % patch_size != 0:
+            raise ValueError(
+                "image_size must be divisible by patch_size"
+            )
+
+        self.patch_embed = nn.Conv2d(
+            3,
+            hidden_dim,
+            kernel_size=patch_size,
+            stride=patch_size,
+        )
+
+        num_tokens = (image_size // patch_size) ** 2
+
+        self.pos_embed = nn.Parameter(
+            torch.zeros(
+                1,
+                num_tokens,
+                hidden_dim,
+            )
+        )
+
+        self.blocks = nn.ModuleList(
+            [
+                TransformerBlock(
+                    hidden_dim,
+                    num_heads,
+                    ff_dim,
+                    num_experts,
+                    router_factory(
+                        hidden_dim,
+                        num_experts,
+                    ),
+                )
+                for _ in range(depth)
+            ]
+        )
+
+        self.norm = nn.LayerNorm(hidden_dim)
+
+        self.head = nn.Linear(
+            hidden_dim,
+            num_classes,
+        )
+
+        nn.init.trunc_normal_(
+            self.pos_embed,
+            std=0.02,
+        )
+
+        # Classifier-row protection state.
+        #
+        # When set_head_old_rows_frozen(n) is called, rows [0:n]
+        # are restored after every optimizer step. This is necessary
+        # because AdamW weight decay can change parameters even when
+        # their gradients are zero.
+        self._head_frozen_upto = 0
+        self._head_frozen_weight: Tensor | None = None
+        self._head_frozen_bias: Tensor | None = None
+
+    def _extract_backbone_features(
+        self,
+        images: Tensor,
+    ) -> tuple[Tensor, list[dict[str, Tensor]]]:
+        """Run the transformer backbone and return pooled features."""
+        x = self.patch_embed(images)
+
+        x = x.flatten(2).transpose(1, 2)
+
+        x = x + self.pos_embed
+
+        telemetry: list[dict[str, Tensor]] = []
+
+        for block in self.blocks:
+            x, stats = block(x)
+            telemetry.append(stats)
+
+        x = self.norm(x).mean(dim=1)
+
+        return x, telemetry
+
+    def forward(
+        self,
+        images: Tensor,
+    ) -> ClassifierOutput:
+        x, telemetry = self._extract_backbone_features(
+            images
+        )
+
+        return ClassifierOutput(
+            self.head(x),
+            telemetry,
+        )
+
+    def extract_features(
+        self,
+        images: Tensor,
+    ) -> Tensor:
+        """Return pooled backbone features immediately before the classifier."""
+        x, _ = self._extract_backbone_features(
+            images
+        )
+
+        return x
+
+    def set_experts_trainable(
+        self,
+        trainable: bool,
+    ) -> None:
+        """Enable or disable learning of all routed expert parameters."""
+        for block in self.blocks:
+            block.moe.set_experts_trainable(
+                trainable
+            )
+
+    def set_router_trainable(
+        self,
+        trainable: bool,
+    ) -> None:
+        """Enable or disable router learning and continual routing-state updates."""
+        for block in self.blocks:
+            block.moe.router.set_trainable(
+                trainable
+            )
+
+    def set_shared_trainable(
+        self,
+        trainable: bool,
+    ) -> None:
+        """Enable or disable shared transformer parameters.
+
+        This excludes:
+        - MoE expert parameters
+        - router parameters/state
+        - classifier head
+        """
+        self.patch_embed.requires_grad_(trainable)
+        self.pos_embed.requires_grad_(trainable)
+
+        for block in self.blocks:
+            block.norm1.requires_grad_(trainable)
+            block.attn.requires_grad_(trainable)
+            block.norm2.requires_grad_(trainable)
+
+        self.norm.requires_grad_(trainable)
+
+    def set_head_trainable(
+        self,
+        trainable: bool,
+    ) -> None:
+        """Enable or disable classifier head parameters."""
+        self.head.requires_grad_(trainable)
+
+    def set_head_old_rows_frozen(
+        self,
+        num_old_classes: int,
+    ) -> None:
+        """Protect classifier rows belonging to previously learned classes.
+
+        The rows are restored after optimizer steps by
+        restore_frozen_head_rows(). Explicit restoration is used because
+        AdamW weight decay can modify parameters even when gradients are
+        zero.
+        """
+        if num_old_classes < 0:
+            raise ValueError(
+                "num_old_classes must be non-negative"
+            )
+
+        if num_old_classes > self.head.out_features:
+            raise ValueError(
+                "num_old_classes cannot exceed the number of classifier classes"
+            )
+
+        self._head_frozen_upto = num_old_classes
+
+        if num_old_classes == 0:
+            self._head_frozen_weight = None
+            self._head_frozen_bias = None
+            return
+
+        self._head_frozen_weight = (
+            self.head.weight[:num_old_classes]
+            .detach()
+            .clone()
+        )
+
+        if self.head.bias is not None:
+            self._head_frozen_bias = (
+                self.head.bias[:num_old_classes]
+                .detach()
+                .clone()
+            )
+        else:
+            self._head_frozen_bias = None
+
+    def mask_head_old_row_gradients(self) -> None:
+        """Zero gradients for classifier rows protected as old classes."""
+        if self._head_frozen_upto <= 0:
+            return
+
+        if self.head.weight.grad is not None:
+            self.head.weight.grad[
+                :self._head_frozen_upto
+            ].zero_()
+
+        if (
+            self.head.bias is not None
+            and self.head.bias.grad is not None
+        ):
+            self.head.bias.grad[
+                :self._head_frozen_upto
+            ].zero_()
+
+    def restore_frozen_head_rows(self) -> None:
+        """Restore classifier rows protected by set_head_old_rows_frozen()."""
+        if self._head_frozen_upto <= 0:
+            return
+
+        if self._head_frozen_weight is None:
+            return
+
+        num_old_classes = self._head_frozen_upto
+
+        with torch.no_grad():
+            self.head.weight[:num_old_classes].copy_(
+                self._head_frozen_weight.to(
+                    device=self.head.weight.device,
+                    dtype=self.head.weight.dtype,
+                )
+            )
+
+            if (
+                self.head.bias is not None
+                and self._head_frozen_bias is not None
+            ):
+                self.head.bias[:num_old_classes].copy_(
+                    self._head_frozen_bias.to(
+                        device=self.head.bias.device,
+                        dtype=self.head.bias.dtype,
+                    )
+                )
+
+
+class TinyDenseTransformer(nn.Module):
+    """Dense FFN control model with the same tokenization and attention stack."""
+
+    def __init__(
+        self,
+        num_classes: int,
+        hidden_dim: int = 256,
+        num_heads: int = 4,
+        ff_dim: int = 1024,
+        depth: int = 2,
+        image_size: int = 32,
+        patch_size: int = 4,
+    ) -> None:
+        super().__init__()
+
+        if image_size % patch_size != 0:
+            raise ValueError(
+                "image_size must be divisible by patch_size"
+            )
+
+        if hidden_dim % num_heads != 0:
+            raise ValueError(
+                "hidden_dim must be divisible by num_heads"
+            )
+
+        self.patch_embed = nn.Conv2d(
+            3,
+            hidden_dim,
+            kernel_size=patch_size,
+            stride=patch_size,
+        )
+
+        num_tokens = (image_size // patch_size) ** 2
+
+        self.pos_embed = nn.Parameter(
+            torch.zeros(
+                1,
+                num_tokens,
+                hidden_dim,
+            )
+        )
+
+        self.blocks = nn.ModuleList()
+
+        for _ in range(depth):
+            self.blocks.append(
+                nn.ModuleDict(
+                    {
+                        "norm1": nn.LayerNorm(hidden_dim),
+                        "attn": nn.MultiheadAttention(
+                            hidden_dim,
+                            num_heads,
+                            batch_first=True,
+                        ),
+                        "norm2": nn.LayerNorm(hidden_dim),
+                        "ff": nn.Sequential(
+                            nn.Linear(
+                                hidden_dim,
+                                ff_dim,
+                            ),
+                            nn.GELU(),
+                            nn.Linear(
+                                ff_dim,
+                                hidden_dim,
+                            ),
+                        ),
+                    }
+                )
+            )
+
+        self.norm = nn.LayerNorm(hidden_dim)
+
+        self.head = nn.Linear(
+            hidden_dim,
+            num_classes,
+        )
+
+        nn.init.trunc_normal_(
+            self.pos_embed,
+            std=0.02,
+        )
+
+    def forward(
+        self,
+        images: Tensor,
+    ) -> ClassifierOutput:
+        x = (
+            self.patch_embed(images)
+            .flatten(2)
+            .transpose(1, 2)
+            + self.pos_embed
+        )
+
+        for block in self.blocks:
+            h = block["norm1"](x)
+
+            attn, _ = block["attn"](
+                h,
+                h,
+                h,
+                need_weights=False,
+            )
+
+            x = x + attn
+
+            x = x + block["ff"](
+                block["norm2"](x)
+            )
+
+        x = self.norm(x).mean(dim=1)
+
+        return ClassifierOutput(
+            self.head(x),
+            [{} for _ in self.blocks],
+        )
