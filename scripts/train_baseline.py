@@ -2691,7 +2691,19 @@ def main() -> None:
             "enabled": bool(
                 args.router == "race"
             ),
-            "beta": 1.0,
+            "beta": float(
+                cfg["router"].get(
+                    "beta_per_layer",
+                    [1.0, 0.2],
+                )[0]
+            ),
+            "beta_per_layer": [
+                float(x)
+                for x in cfg["router"].get(
+                    "beta_per_layer",
+                    [1.0, 0.2],
+                )
+            ],
             "p_init": 1.0,
             "tau": 0.1,
             "prototype_momentum": 0.1,
