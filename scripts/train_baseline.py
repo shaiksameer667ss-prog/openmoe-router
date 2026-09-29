@@ -723,10 +723,16 @@ def initialize_race_affinity(
             )
         )
 
-        router.race_affinity[
-            observed
-        ].copy_(
-            normalized
+        observed_indices = (
+            observed.nonzero(
+                as_tuple=True
+            )[0]
+        )
+
+        router.race_affinity.index_copy_(
+            0,
+            observed_indices,
+            normalized,
         )
 
         row_sums = (
