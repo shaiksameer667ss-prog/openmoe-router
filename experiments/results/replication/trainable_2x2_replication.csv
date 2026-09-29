@@ -1,0 +1,3 @@
+seed,delta_old_pp,delta_t4_pp,T4_threshold_pass,old_threshold_pass,no_sign_flip
+1,-11.150459958236922,29.551496506110674,True,True,True
+2,-12.601295922665898,36.12886288628863,True,True,True

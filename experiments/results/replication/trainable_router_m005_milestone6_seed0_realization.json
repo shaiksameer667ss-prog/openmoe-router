@@ -1,0 +1,36 @@
+{
+  "condition": "trainable_experts_router_margin",
+  "router": "margin",
+  "decomposition": "head_masked",
+  "margin_loss": true,
+  "margin_weight": 0.05,
+  "trainable_experts": true,
+  "seed": 0,
+  "steps": 200,
+  "data": "cifar100",
+  "replay": true,
+  "replay_capacity": 715,
+  "replay_match": "sample_matched",
+  "config": "/kaggle/working/openmoe-router/configs/cifar100_milestone6.yaml",
+  "checkpoint": "/kaggle/working/trainable_router_m005_milestone6_seed0_checkpoints/task_4.pt",
+  "cil": [
+    0.067,
+    0.079,
+    0.115,
+    0.1575,
+    0.3225
+  ],
+  "wp_restricted": [
+    0.253,
+    0.2585,
+    0.348,
+    0.3805,
+    0.4435
+  ],
+  "old_task_mean_cil": 0.104625,
+  "old_task_mean_wp_restricted": 0.31,
+  "old_task_realization": 0.33749999999999997,
+  "task4_cil": 0.3225,
+  "task4_wp_restricted": 0.4435,
+  "task4_realization": 0.7271702367531003
+}
