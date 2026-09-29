@@ -198,6 +198,11 @@ class RACERouter(MarginRouter):
         self.current_class_start = 0
         self.seen_classes = 0
 
+        # Transient per-sample mask controlling whether the RACE
+        # retention cost participates in routing selection.
+        # None = RACE active for every sample.
+        self._race_sample_mask: Tensor | None = None
+
     def set_trainable(
         self,
         trainable: bool,
@@ -208,6 +213,30 @@ class RACERouter(MarginRouter):
 
         # Prototype bank is state, never optimizer-trained.
         self.class_prototypes.requires_grad_(False)
+
+    @torch.no_grad()
+    def set_race_sample_mask(
+        self,
+        sample_mask: Tensor | None,
+    ) -> None:
+        """Set the transient sample-level RACE intervention mask.
+
+        None:
+            RACE is active for the entire input batch.
+
+        Boolean [B]:
+            RACE is active only for samples whose mask is True.
+        """
+        if sample_mask is None:
+            self._race_sample_mask = None
+            return
+
+        if sample_mask.ndim != 1:
+            raise ValueError(
+                "race sample mask must have shape [batch]"
+            )
+
+        self._race_sample_mask = sample_mask.detach()
 
     # ============================================================
     # TASK STATE
@@ -672,11 +701,51 @@ class RACERouter(MarginRouter):
             x
         )
 
-        selection = (
-            base_selection
-            - self.beta
-            * retention
-        )
+        race_sample_mask = self._race_sample_mask
+
+        if race_sample_mask is None:
+            # Default behavior: RACE active for all samples.
+            selection = (
+                base_selection
+                - self.beta
+                * retention
+            )
+        else:
+            sample_mask = race_sample_mask.to(
+                device=x.device,
+                dtype=torch.bool,
+            )
+
+            if sample_mask.numel() == 0:
+                raise ValueError(
+                    "race sample mask cannot be empty"
+                )
+
+            if x.shape[0] % sample_mask.shape[0] != 0:
+                raise ValueError(
+                    "race sample mask batch size must divide token batch"
+                )
+
+            tokens_per_sample = (
+                x.shape[0]
+                // sample_mask.shape[0]
+            )
+
+            token_mask = (
+                sample_mask
+                .repeat_interleave(
+                    tokens_per_sample
+                )
+            )
+
+            # Current samples: base - beta * retention.
+            # Replay samples: base routing exactly.
+            selection = torch.where(
+                token_mask[:, None],
+                base_selection
+                - self.beta * retention,
+                base_selection,
+            )
 
         indices = torch.topk(
             selection,

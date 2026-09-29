@@ -745,6 +745,21 @@ def relative_old_class_margin_loss(
         old_max - true_logits
     ).mean()
 
+def _set_race_sample_mask(
+    model: nn.Module,
+    sample_mask: Tensor | None,
+) -> None:
+    """Set the transient RACE sample mask on every RACERouter."""
+    for block in getattr(model, "blocks", []):
+        moe = getattr(block, "moe", None)
+        router = getattr(moe, "router", None)
+
+        if isinstance(router, RACERouter):
+            router.set_race_sample_mask(
+                sample_mask
+            )
+
+
 def train_steps(
     model: nn.Module,
     loader: Iterable,
@@ -800,6 +815,56 @@ def train_steps(
         optimizer.zero_grad(
             set_to_none=True
         )
+
+        # --------------------------------------------------------
+        # Fix B:
+        #   current-task samples -> RACE ON
+        #   replay samples      -> RACE OFF
+        #
+        # The batch remains a single model forward. The mask acts
+        # only on the RACE retention term in router selection.
+        # --------------------------------------------------------
+        if race_enabled:
+            if (
+                margin_current_batch_size is not None
+                and int(margin_current_batch_size) < labels.shape[0]
+            ):
+                current_size = min(
+                    max(
+                        int(margin_current_batch_size),
+                        0,
+                    ),
+                    int(labels.shape[0]),
+                )
+
+                race_sample_mask = torch.zeros(
+                    labels.shape,
+                    dtype=torch.bool,
+                    device=device,
+                )
+
+                race_sample_mask[:current_size] = True
+
+                _set_race_sample_mask(
+                    model,
+                    race_sample_mask,
+                )
+            else:
+                # No replay suffix: RACE applies to all samples.
+                _set_race_sample_mask(
+                    model,
+                    None,
+                )
+        else:
+            # Explicitly disable any stale RACE state.
+            _set_race_sample_mask(
+                model,
+                torch.zeros(
+                    labels.shape,
+                    dtype=torch.bool,
+                    device=device,
+                ),
+            )
 
         if pass_labels_to_model:
             output = model(
@@ -1181,6 +1246,16 @@ def evaluate(
             images, labels, _ = move_batch(
                 batch,
                 device,
+            )
+
+            # Fix B: evaluation always uses base routing.
+            _set_race_sample_mask(
+                model,
+                torch.zeros(
+                    labels.shape,
+                    dtype=torch.bool,
+                    device=device,
+                ),
             )
 
             logits = model(
