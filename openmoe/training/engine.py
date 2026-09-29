@@ -12,6 +12,7 @@ from torch import Tensor, nn
 from openmoe.continual.metrics import average_accuracy, forgetting
 from openmoe.continual.rcr import RCRState
 from openmoe.losses.stability import fisher_ewc_loss, routing_kl
+from openmoe.routers.race_router import RACERouter
 
 PostStep = Callable[[Tensor, object], None]
 
@@ -767,6 +768,8 @@ def train_steps(
     er_ace_classes_per_task: int = 0,
     old_class_margin_weight: float = 0.0,
     margin_current_batch_size: int | None = None,
+    pass_labels_to_model: bool = False,
+    race_enabled: bool = False,
 ) -> list[dict[str, float]]:
     """Run a fixed number of optimizer steps."""
     model.train()
@@ -798,9 +801,15 @@ def train_steps(
             set_to_none=True
         )
 
-        output = model(
-            images
-        )
+        if pass_labels_to_model:
+            output = model(
+                images,
+                labels=labels,
+            )
+        else:
+            output = model(
+                images
+            )
 
         task_logits = output.logits
 
@@ -983,6 +992,124 @@ def train_steps(
                 + dense_ewc_weight
                 * dense_ewc_value
             )
+
+
+        # ------------------------------------------------------------
+        # RACE retention-pressure gradient update
+        #
+        # Replay occupies the suffix of the batch.
+        #
+        # H = relu(d L_replay / d g)
+        #
+        # The RACE router stores this class/expert signal and uses it
+        # for the dual retention-price update. H is NOT inserted
+        # directly into the routing score.
+        # ------------------------------------------------------------
+        if (
+            race_enabled
+            and margin_current_batch_size is not None
+            and int(margin_current_batch_size) < labels.shape[0]
+        ):
+            replay_start = min(
+                int(margin_current_batch_size),
+                int(labels.shape[0]),
+            )
+
+            replay_loss = F.cross_entropy(
+                output.logits[replay_start:],
+                labels[replay_start:],
+            )
+
+            race_routers = []
+            race_gates = []
+            race_soft_selection = []
+
+            for block in getattr(
+                model,
+                "blocks",
+                [],
+            ):
+                router = block.moe.router
+
+                if not isinstance(
+                    router,
+                    RACERouter,
+                ):
+                    continue
+
+                routing = getattr(
+                    block.moe,
+                    "_last_routing",
+                    None,
+                )
+
+                if routing is None:
+                    continue
+
+                aux = getattr(
+                    routing,
+                    "aux",
+                    None,
+                )
+
+                if not isinstance(
+                    aux,
+                    dict,
+                ):
+                    continue
+
+                st_dense = aux.get(
+                    "st_dense_gates"
+                )
+
+                soft_selection = aux.get(
+                    "soft_selection"
+                )
+
+                if (
+                    st_dense is None
+                    or soft_selection is None
+                ):
+                    continue
+
+                race_routers.append(
+                    router
+                )
+
+                race_gates.append(
+                    st_dense
+                )
+
+                race_soft_selection.append(
+                    soft_selection
+                )
+
+            if race_gates:
+                race_gradients = torch.autograd.grad(
+                    replay_loss,
+                    race_gates,
+                    retain_graph=True,
+                    allow_unused=True,
+                )
+
+                for (
+                    router,
+                    gradient,
+                    soft_selection,
+                ) in zip(
+                    race_routers,
+                    race_gradients,
+                    race_soft_selection,
+                ):
+                    if gradient is None:
+                        continue
+
+                    router.record_gate_gradients(
+                        labels=labels.detach(),
+                        gate_gradient=gradient.detach(),
+                        soft_selection=soft_selection.detach(),
+                        current_batch_size=replay_start,
+                    )
 
         loss.backward()
 

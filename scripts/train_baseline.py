@@ -33,6 +33,7 @@ from openmoe.models.transformer import (
 )
 from openmoe.routers.continual import ContinualRouter
 from openmoe.routers.margin_router import MarginRouter
+from openmoe.routers.race_router import RACERouter
 from openmoe.routers.topk import (
     BiasBalancedTopKRouter,
     TopKRouter,
@@ -63,6 +64,87 @@ REPLAY_CAPACITIES = {
     "byte_matched": 724,
 }
 
+
+def _make_race_router(
+    *,
+    hidden_dim: int,
+    num_experts: int,
+    cfg: dict,
+):
+    """
+    Construct the finalized Path-A RACE router using the
+    constructor exposed by the runtime RACERouter class.
+    """
+    router_cfg = cfg["router"]
+    model_cfg = cfg["model"]
+
+    return RACERouter(
+        hidden_dim=hidden_dim,
+        num_experts=num_experts,
+        top_k=int(
+            model_cfg.get(
+                "top_k",
+                2,
+            )
+        ),
+        memory_lambda=float(
+            router_cfg.get(
+                "memory_lambda",
+                0.0,
+            )
+        ),
+        memory_momentum=float(
+            router_cfg.get(
+                "memory_momentum",
+                0.99,
+            )
+        ),
+        z_loss_weight=float(
+            router_cfg.get(
+                "z_loss_weight",
+                0.0,
+            )
+        ),
+        bias_lr=float(
+            router_cfg.get(
+                "bias_lr",
+                1e-3,
+            )
+        ),
+        temperature=float(
+            router_cfg.get(
+                "temperature",
+                1.0,
+            )
+        ),
+        relax_temperature=(
+            None
+            if router_cfg.get(
+                "race_relax_temperature",
+                None,
+            ) is None
+            else float(
+                router_cfg.get(
+                    "race_relax_temperature"
+                )
+            )
+        ),
+        num_classes=int(
+            router_cfg.get(
+                "num_classes",
+                100,
+            )
+        ),
+
+        # Finalized Path-A parameters.
+        beta=1.0,
+        p_init=1.0,
+        tau=0.1,
+        prototype_momentum=0.1,
+        eta=0.1,
+        delta=1.0,
+        pressure_momentum=0.9,
+    )
 
 def make_router_factory(kind: str, cfg: dict):
     router_cfg = cfg["router"]
@@ -147,6 +229,13 @@ def make_router_factory(kind: str, cfg: dict):
                     "margin_relax_temperature",
                     router_cfg.get("temperature", 1.0),
                 ),
+            )
+
+        if kind == "race":
+            return _make_race_router(
+                hidden_dim=hidden_dim,
+                num_experts=num_experts,
+                cfg=cfg,
             )
 
         raise ValueError(
@@ -408,6 +497,229 @@ def merge_stability_state(
     return accumulated
 
 
+
+@torch.no_grad()
+def initialize_race_affinity(
+    model,
+    loader,
+    device,
+):
+    """
+    Build A[c,e] from the complete current-task loader.
+
+    During this pass the retention price is disabled:
+        beta = 0
+
+    The resulting A is the empirical hard Top-2 expert frequency
+    for each class.
+    """
+    routers = [
+        block.moe.router
+        for block in model.blocks
+        if isinstance(
+            block.moe.router,
+            RACERouter,
+        )
+    ]
+
+    if not routers:
+        raise RuntimeError(
+            "RACE selected but no RACERouter instances "
+            "were found in model.blocks."
+        )
+
+    was_training = model.training
+
+    saved_beta = {
+        id(router): float(router.beta)
+        for router in routers
+    }
+
+    counts = {
+        id(router): torch.zeros_like(
+            router.race_affinity
+        )
+        for router in routers
+    }
+
+    model.eval()
+
+    try:
+        for router in routers:
+            router.beta = 0.0
+
+        for batch in loader:
+            images, labels, _ = batch
+
+            images = images.to(
+                device,
+                non_blocking=True,
+            )
+
+            labels = labels.to(
+                device,
+                non_blocking=True,
+            )
+
+            output = model(
+                images,
+                labels=labels,
+            )
+
+            for block, stats in zip(
+                model.blocks,
+                output.telemetry,
+            ):
+                router = block.moe.router
+
+                if not isinstance(
+                    router,
+                    RACERouter,
+                ):
+                    continue
+
+                routing = stats.get(
+                    "routing"
+                )
+
+                if routing is None:
+                    raise RuntimeError(
+                        "RACE introduction pass did not "
+                        "receive routing telemetry."
+                    )
+
+                indices = routing.indices
+
+                if indices.ndim != 2:
+                    raise RuntimeError(
+                        "Expected Top-K routing indices "
+                        "with shape [tokens, k]."
+                    )
+
+                batch_size = int(
+                    labels.shape[0]
+                )
+
+                if (
+                    batch_size <= 0
+                    or indices.shape[0] % batch_size != 0
+                ):
+                    raise RuntimeError(
+                        "RACE introduction pass token/image "
+                        "shape mismatch."
+                    )
+
+                tokens_per_image = (
+                    indices.shape[0]
+                    // batch_size
+                )
+
+                token_labels = (
+                    labels
+                    .repeat_interleave(
+                        tokens_per_image
+                    )
+                )
+
+                target = counts[
+                    id(router)
+                ]
+
+                for slot in range(
+                    indices.shape[1]
+                ):
+                    expert_ids = (
+                        indices[:, slot]
+                        .long()
+                    )
+
+                    ones = torch.ones(
+                        expert_ids.shape[0],
+                        device=expert_ids.device,
+                        dtype=target.dtype,
+                    )
+
+                    target.index_put_(
+                        (
+                            token_labels,
+                            expert_ids,
+                        ),
+                        ones,
+                        accumulate=True,
+                    )
+
+    finally:
+        for router in routers:
+            router.beta = saved_beta[
+                id(router)
+            ]
+
+        if was_training:
+            model.train()
+
+    summaries = []
+
+    for router in routers:
+        target = counts[
+            id(router)
+        ]
+
+        row_sum = target.sum(
+            dim=-1,
+            keepdim=True,
+        )
+
+        observed = (
+            row_sum.squeeze(-1) > 0
+        )
+
+        if not bool(observed.any()):
+            raise RuntimeError(
+                "RACE introduction pass observed no "
+                "class/expert assignments."
+            )
+
+        normalized = (
+            target[observed]
+            /
+            row_sum[observed].clamp_min(
+                1.0
+            )
+        )
+
+        router.race_affinity[
+            observed
+        ].copy_(
+            normalized
+        )
+
+        row_sums = (
+            router.race_affinity[
+                observed
+            ].sum(
+                dim=-1
+            )
+        )
+
+        summaries.append(
+            {
+                "observed_classes": int(
+                    observed.sum().item()
+                ),
+                "row_sum_min": float(
+                    row_sums.min().item()
+                ),
+                "row_sum_max": float(
+                    row_sums.max().item()
+                ),
+            }
+        )
+
+    print(
+        "RACE introduction A initialization:",
+        summaries,
+    )
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
@@ -431,6 +743,7 @@ def main() -> None:
             "bias",
             "continual",
             "margin",
+            "race",
         ],
     )
 
@@ -1148,6 +1461,95 @@ def main() -> None:
             0,
         )
 
+        # --------------------------------------------------------
+        # RACE task-start state initialization
+        # --------------------------------------------------------
+        if args.router == "race":
+            race_current_class_start = (
+                task_id * classes_per_task
+            )
+
+            race_seen_classes = (
+                (task_id + 1)
+                * classes_per_task
+            )
+
+            for block in model.blocks:
+                router = block.moe.router
+
+                if isinstance(
+                    router,
+                    RACERouter,
+                ):
+                    router.begin_task(
+                        current_class_start=(
+                            race_current_class_start
+                        ),
+                        seen_classes=(
+                            race_seen_classes
+                        ),
+                    )
+
+            initialize_race_affinity(
+                model=model,
+                loader=loader,
+                device=device,
+            )
+
+            # RACE Path-A invariant:
+            # normalize each populated class affinity row so that
+            # A[c,:] is an empirical class-conditioned routing
+            # distribution rather than a raw assignment count.
+            #
+            # This is the representation used by the calibrated
+            # effective-scale sweep:
+            #     beta * p_init = 1.0
+            #
+            # A is initialized once at task introduction and remains
+            # fixed thereafter; this block performs no online update.
+
+            if args.router == "race":
+                for race_block in model.blocks:
+                    race_router = race_block.moe.router
+
+                    seen = min(
+                        max(
+                            int(
+                                (task_id + 1)
+                                * classes_per_task
+                            ),
+                            0,
+                        ),
+                        int(
+                            race_router.num_classes
+                        ),
+                    )
+
+                    if seen <= 0:
+                        continue
+
+                    affinity = (
+                        race_router.race_affinity[
+                            :seen
+                        ]
+                    )
+
+                    row_sums = affinity.sum(
+                        dim=-1,
+                        keepdim=True,
+                    )
+
+                    populated = (
+                        row_sums.squeeze(-1)
+                        > 0.0
+                    )
+
+                    if bool(populated.any()):
+                        affinity[populated].div_(
+                            row_sums[populated]
+                            .clamp_min(1.0e-12)
+                        )
+
         def after_step(
             images,
             output,
@@ -1215,6 +1617,12 @@ def main() -> None:
                 REPLAY_CURRENT_BATCH_SIZE
                 if args.replay and task_id >= 1
                 else loader.batch_size
+            ),
+            pass_labels_to_model=(
+                args.router == "race"
+            ),
+            race_enabled=(
+                args.router == "race"
             ),
         )
 
@@ -1350,6 +1758,29 @@ def main() -> None:
                 device=device,
             )
 
+        # --------------------------------------------------------
+        # RACE task-boundary retention update
+        #
+        # H updates the dual retention price.
+        # The updated price is used by the next task.
+        # --------------------------------------------------------
+        if args.router == "race":
+            for block in model.blocks:
+                router = block.moe.router
+
+                if isinstance(
+                    router,
+                    RACERouter,
+                ):
+                    router.update_retention_prices()
+
+                    router.consolidate_retention(
+                        seen_classes=(
+                            (task_id + 1)
+                            * classes_per_task
+                        )
+                    )
+
         if args.checkpoint_dir is not None:
             checkpoint_dir = Path(args.checkpoint_dir)
             checkpoint_dir.mkdir(parents=True, exist_ok=True)
@@ -1363,6 +1794,14 @@ def main() -> None:
                     "er_ace": bool(args.er_ace),
                     "margin_loss": bool(args.margin_loss),
                     "margin_weight": float(args.margin_weight),
+                    "race_beta": 1.0,
+                    "race_p_init": 1.0,
+                    "race_tau": 0.1,
+                    "race_prototype_momentum": 0.1,
+                    "race_eta": 0.1,
+                    "race_delta": 1.0,
+                    "race_pressure_momentum": 0.9,
+                    "race_prototype_bytes": 204800,
                 },
                 checkpoint_path,
             )
@@ -2205,6 +2644,19 @@ def main() -> None:
                 if drift_state is not None
                 else {}
             ),
+        },
+        "race_configuration": {
+            "enabled": bool(
+                args.router == "race"
+            ),
+            "beta": 1.0,
+            "p_init": 1.0,
+            "tau": 0.1,
+            "prototype_momentum": 0.1,
+            "eta": 0.1,
+            "delta": 1.0,
+            "pressure_momentum": 0.9,
+            "prototype_bytes": 204800,
         },
         "boundary_checkpoints": boundary_checkpoints,
         "bounded_probe": bounded_probe_result,

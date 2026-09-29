@@ -40,6 +40,7 @@ class TransformerBlock(nn.Module):
     def forward(
         self,
         x: Tensor,
+        labels: Tensor | None = None,
     ) -> tuple[Tensor, dict[str, Tensor]]:
         h = self.norm1(x)
 
@@ -53,7 +54,8 @@ class TransformerBlock(nn.Module):
         x = x + attn
 
         moe_out = self.moe(
-            self.norm2(x)
+            self.norm2(x),
+            labels=labels,
         )
 
         x = x + moe_out.hidden
@@ -150,6 +152,7 @@ class TinyMoETransformer(nn.Module):
     def _extract_backbone_features(
         self,
         images: Tensor,
+        labels: Tensor | None = None,
     ) -> tuple[Tensor, list[dict[str, Tensor]]]:
         """Run the transformer backbone and return pooled features."""
         x = self.patch_embed(images)
@@ -161,7 +164,10 @@ class TinyMoETransformer(nn.Module):
         telemetry: list[dict[str, Tensor]] = []
 
         for block in self.blocks:
-            x, stats = block(x)
+            x, stats = block(
+                x,
+                labels=labels,
+            )
             telemetry.append(stats)
 
         x = self.norm(x).mean(dim=1)
@@ -171,9 +177,11 @@ class TinyMoETransformer(nn.Module):
     def forward(
         self,
         images: Tensor,
+        labels: Tensor | None = None,
     ) -> ClassifierOutput:
         x, telemetry = self._extract_backbone_features(
-            images
+            images,
+            labels=labels,
         )
 
         return ClassifierOutput(

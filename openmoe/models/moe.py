@@ -45,10 +45,34 @@ class SparseMoE(nn.Module):
         self.router = router
         self.experts = nn.ModuleList([ExpertFFN(hidden_dim, ff_dim) for _ in range(num_experts)])
 
-    def forward(self, x: Tensor) -> MoEOutput:
+    def forward(
+        self,
+        x: Tensor,
+        labels: Tensor | None = None,
+    ) -> MoEOutput:
         shape = x.shape
         flat = x.reshape(-1, shape[-1])
         routing = self.router(flat)
+
+        # Keep the current routing object available to the
+        # RACE training-state update.
+        self._last_routing = routing
+
+        # RACE class prototypes are updated AFTER the routing
+        # decision so the current forward does not depend on
+        # its own freshly updated prototype.
+        if (
+            labels is not None
+            and hasattr(
+                self.router,
+                "observe_routing",
+            )
+        ):
+            self.router.observe_routing(
+                flat.detach(),
+                labels.detach(),
+            )
+
         out = torch.zeros_like(flat)
         loads = torch.zeros(self.num_experts, device=flat.device, dtype=torch.long)
 
