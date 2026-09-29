@@ -703,13 +703,21 @@ class RACERouter(MarginRouter):
 
         race_sample_mask = self._race_sample_mask
 
-        if race_sample_mask is None:
-            # Default behavior: RACE active for all samples.
+        if not self.training:
+            # Evaluation/probing must always use base routing.
+            # This also prevents a stale training mask from being
+            # applied when extract_features() is called without labels.
+            selection = base_selection
+
+        elif race_sample_mask is None:
+            # Training without an explicit replay split:
+            # RACE is active for the entire batch.
             selection = (
                 base_selection
                 - self.beta
                 * retention
             )
+
         else:
             sample_mask = race_sample_mask.to(
                 device=x.device,
