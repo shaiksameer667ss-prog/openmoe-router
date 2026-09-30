@@ -961,6 +961,19 @@ def main() -> None:
         help="Do not freeze expert parameters after Task 0 warmup.",
     )
 
+    parser.add_argument(
+        "--task-supcon-weight",
+        type=float,
+        default=0.0,
+        help="Weight for task-supervised contrastive representation loss.",
+    )
+    parser.add_argument(
+        "--task-supcon-temperature",
+        type=float,
+        default=0.07,
+        help="Temperature for task-supervised contrastive representation loss.",
+    )
+
     args = parser.parse_args()
 
     if args.er_ace and not args.replay:
@@ -1468,7 +1481,9 @@ def main() -> None:
                 if args.replay and task_id >= 1
                 else loader.batch_size
             ),
-        )
+        task_supcon_weight=args.task_supcon_weight,
+        task_supcon_temperature=args.task_supcon_temperature,
+)
 
         history.extend(
             {
@@ -1666,7 +1681,9 @@ def main() -> None:
             race_enabled=(
                 args.router == "race"
             ),
-        )
+        task_supcon_weight=args.task_supcon_weight,
+        task_supcon_temperature=args.task_supcon_temperature,
+)
 
         history.extend(
             {

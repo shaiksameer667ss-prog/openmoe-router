@@ -1,0 +1,62 @@
+[
+  {
+    "boundary": 0,
+    "checkpoint": "task_0.pt",
+    "num_samples": 2000,
+    "feature_dim": 512,
+    "num_tasks": 1,
+    "task_ids": [
+      0
+    ]
+  },
+  {
+    "boundary": 1,
+    "checkpoint": "task_1.pt",
+    "num_samples": 4000,
+    "feature_dim": 512,
+    "num_tasks": 2,
+    "task_ids": [
+      0,
+      1
+    ]
+  },
+  {
+    "boundary": 2,
+    "checkpoint": "task_2.pt",
+    "num_samples": 6000,
+    "feature_dim": 512,
+    "num_tasks": 3,
+    "task_ids": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "boundary": 3,
+    "checkpoint": "task_3.pt",
+    "num_samples": 8000,
+    "feature_dim": 512,
+    "num_tasks": 4,
+    "task_ids": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "boundary": 4,
+    "checkpoint": "task_4.pt",
+    "num_samples": 10000,
+    "feature_dim": 512,
+    "num_tasks": 5,
+    "task_ids": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  }
+]

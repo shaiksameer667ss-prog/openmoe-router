@@ -88,10 +88,17 @@ def compute_fisher(
             iterator = iter(loader)
             batch = next(iterator)
 
-        images, labels, _ = move_batch(
+        images, labels, task_ids = move_batch(
             batch,
             device,
         )
+
+        if task_ids is None:
+            if task_supcon_weight > 0.0:
+                raise ValueError(
+                    "task_supcon_weight > 0 requires task IDs in the "
+                    "training batch"
+                )
 
         model.zero_grad(
             set_to_none=True
@@ -760,6 +767,124 @@ def _set_race_sample_mask(
             )
 
 
+
+def task_supervised_contrastive_loss(
+    features: torch.Tensor,
+    task_ids: torch.Tensor,
+    temperature: float = 0.07,
+) -> torch.Tensor:
+    """
+    Numerically stable task-supervised contrastive loss.
+
+    Same-task samples are positives; different-task samples are negatives.
+    """
+    if features.ndim == 3:
+        features = features.mean(dim=1)
+
+    if features.ndim != 2:
+        raise ValueError(
+            "features must have shape [B, D] or [B, N, D], "
+            f"got {tuple(features.shape)}"
+        )
+
+    task_ids = task_ids.reshape(-1)
+
+    if features.shape[0] != task_ids.shape[0]:
+        raise ValueError(
+            "features/task_ids batch mismatch: "
+            f"{features.shape[0]} vs {task_ids.shape[0]}"
+        )
+
+    if features.shape[0] < 2:
+        return features.new_zeros(())
+
+    if temperature <= 0:
+        raise ValueError("temperature must be positive")
+
+    task_ids = task_ids.to(
+        device=features.device,
+        dtype=torch.long,
+    )
+
+    z = F.normalize(features, dim=-1)
+
+    logits = torch.matmul(
+        z,
+        z.transpose(0, 1),
+    ) / float(temperature)
+
+    batch_size = logits.shape[0]
+
+    eye = torch.eye(
+        batch_size,
+        device=features.device,
+        dtype=torch.bool,
+    )
+
+    task_equal = task_ids[:, None].eq(task_ids[None, :])
+
+    positive_mask = task_equal & ~eye
+
+    valid = positive_mask.any(dim=1)
+
+    if not bool(valid.any()):
+        return features.new_zeros(())
+
+    valid_logits = logits[valid]
+    valid_positive_mask = positive_mask[valid]
+
+    nonself_mask = ~eye[valid]
+
+    nonself_logits = valid_logits.masked_fill(
+        ~nonself_mask,
+        float("-inf"),
+    )
+
+    log_denominator = torch.logsumexp(
+        nonself_logits,
+        dim=1,
+    )
+
+    positive_indices = valid_positive_mask.nonzero(
+        as_tuple=False,
+    )
+
+    row_indices = positive_indices[:, 0]
+    col_indices = positive_indices[:, 1]
+
+    positive_logits = valid_logits[
+        row_indices,
+        col_indices,
+    ]
+
+    positive_log_prob = (
+        positive_logits
+        - log_denominator[row_indices]
+    )
+
+    positive_sum = torch.zeros(
+        valid_logits.shape[0],
+        device=features.device,
+        dtype=valid_logits.dtype,
+    )
+
+    positive_sum.scatter_add_(
+        0,
+        row_indices,
+        positive_log_prob,
+    )
+
+    positive_count = valid_positive_mask.sum(
+        dim=1,
+    ).to(valid_logits.dtype)
+
+    mean_positive_log_prob = (
+        positive_sum
+        / positive_count.clamp_min(1.0)
+    )
+
+    return -mean_positive_log_prob.mean()
+
 def train_steps(
     model: nn.Module,
     loader: Iterable,
@@ -785,6 +910,8 @@ def train_steps(
     margin_current_batch_size: int | None = None,
     pass_labels_to_model: bool = False,
     race_enabled: bool = False,
+    task_supcon_weight: float = 0.0,
+    task_supcon_temperature: float = 0.07,
 ) -> list[dict[str, float]]:
     """Run a fixed number of optimizer steps."""
     model.train()
@@ -807,7 +934,7 @@ def train_steps(
             iterator = iter(loader)
             batch = next(iterator)
 
-        images, labels, _ = move_batch(
+        images, labels, task_ids = move_batch(
             batch,
             device,
         )
@@ -952,6 +1079,62 @@ def train_steps(
             + old_class_margin_weight
             * old_class_margin
         )
+
+        # ------------------------------------------------------------------
+        # Test 5.3: task-supervised contrastive representation objective.
+        #
+        # This is deliberately optional. With weight=0.0 the existing
+        # training objective is unchanged.
+        #
+        # The model output is expected to expose the final representation
+        # used by the classifier. Prefer output.features / output.hidden
+        # when available; otherwise obtain it from the model's final
+        # normalized token representation.
+        # ------------------------------------------------------------------
+        task_supcon_value = torch.zeros(
+            (),
+            device=device,
+        )
+
+        if task_supcon_weight > 0.0:
+            if task_ids is None:
+                raise ValueError(
+                    "task_supcon_weight > 0 requires task IDs"
+                )
+
+            representation = None
+
+            for attr in (
+                "features",
+                "hidden",
+                "hidden_states",
+                "representation",
+                "last_hidden_state",
+            ):
+                candidate = getattr(output, attr, None)
+                if candidate is not None:
+                    representation = candidate
+                    break
+
+            if representation is None:
+                raise RuntimeError(
+                    "Task-SupCon enabled, but model output does not expose "
+                    "a representation. Expected one of: "
+                    "features, hidden, hidden_states, representation, "
+                    "last_hidden_state."
+                )
+
+            task_supcon_value = task_supervised_contrastive_loss(
+                representation,
+                task_ids,
+                temperature=task_supcon_temperature,
+            )
+
+            loss = (
+                loss
+                + task_supcon_weight
+                * task_supcon_value
+            )
 
         z_loss_total = torch.zeros(
             (),

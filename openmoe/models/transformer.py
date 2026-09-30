@@ -70,6 +70,7 @@ class TransformerBlock(nn.Module):
 class ClassifierOutput:
     logits: Tensor
     telemetry: list[dict[str, Tensor]]
+    features: Tensor | None = None
 
 
 class TinyMoETransformer(nn.Module):
@@ -187,6 +188,7 @@ class TinyMoETransformer(nn.Module):
         return ClassifierOutput(
             self.head(x),
             telemetry,
+            features=x,
         )
 
     def extract_features(

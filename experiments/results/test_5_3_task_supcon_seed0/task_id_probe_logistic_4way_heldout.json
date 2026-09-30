@@ -1,0 +1,56 @@
+{
+  "test": {
+    "tasks": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "samples": 8000,
+    "feature_dim": 512
+  },
+  "probe": {
+    "classifier": "LogisticRegression",
+    "classes": 4,
+    "chance_accuracy": 0.25,
+    "heldout_accuracy": 0.341375,
+    "heldout_percentage": 34.137499999999996,
+    "reference_5_2": 0.3414,
+    "difference_percentage_points": -0.0024999999999997247
+  },
+  "checkpoint": "/kaggle/working/openmoe-router/experiments/results/test_5_3_task_supcon_seed0/checkpoints/task_4.pt",
+  "architecture": {
+    "hidden_dim": 512,
+    "ff_dim": 1024,
+    "num_experts": 8,
+    "num_heads": 4,
+    "depth": 2,
+    "router": "continual"
+  },
+  "train": {
+    "tasks": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "samples": 50000,
+    "feature_dim": 512
+  },
+  "protocol": {
+    "fit_on": "CIFAR-100 train",
+    "evaluate_on": "CIFAR-100 test",
+    "fit_samples": 50000,
+    "evaluation_samples": 8000,
+    "evaluation_tasks": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "target": "task_id",
+    "representation": "output.features",
+    "seed": 0
+  }
+}

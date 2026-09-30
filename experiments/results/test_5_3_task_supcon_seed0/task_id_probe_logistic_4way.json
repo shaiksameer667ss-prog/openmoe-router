@@ -1,0 +1,18 @@
+{
+  "checkpoint": "/kaggle/working/openmoe-router/experiments/results/test_5_3_task_supcon_seed0/checkpoints/task_4.pt",
+  "boundary": 4,
+  "tasks_evaluated": 4,
+  "task_ids": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "feature_dim": 512,
+  "samples": 8000,
+  "probe": "LogisticRegression",
+  "probe_accuracy": 0.487125,
+  "chance_accuracy": 0.25,
+  "reference_5_2_accuracy": 0.3414,
+  "difference_vs_5_2": 0.145725
+}
