@@ -1,0 +1,51 @@
+{
+  "experiment": "test_5_1A_posthoc_attention_pool",
+  "seed": 0,
+  "checkpoint": "/kaggle/working/openmoe-router/experiments/results/supcon_gpm_seed0_corrected/checkpoints/task_4.pt",
+  "final_norm_name": "norm",
+  "final_norm_class": "LayerNorm",
+  "model": {
+    "hidden_dim": 256,
+    "tokens": 64,
+    "depth": 2,
+    "experts": 8
+  },
+  "probe_A": {
+    "accuracy": 0.341125,
+    "accuracy_percent": 34.112500000000004,
+    "fit_split": "train",
+    "eval_split": "old_test",
+    "fit_samples": 50000,
+    "eval_samples": 8000
+  },
+  "probe_B": {
+    "accuracy": 0.34675,
+    "accuracy_percent": 34.675,
+    "fit_split": "train",
+    "eval_split": "old_test",
+    "fit_samples": 50000,
+    "eval_samples": 8000,
+    "oracle_task_labels": true,
+    "pool_epochs": 20,
+    "pool_batch_size": 512,
+    "pool_lr": 0.001
+  },
+  "probe_C": {
+    "accuracy": 0.334875,
+    "accuracy_percent": 33.4875,
+    "fit_split": "train",
+    "eval_split": "old_test",
+    "fit_samples": 50000,
+    "eval_samples": 8000,
+    "feature_dim": 16384,
+    "classifier": "RidgeClassifier",
+    "solver": "lsqr",
+    "alpha": 100.0
+  },
+  "comparison": {
+    "B_minus_A_pp": 0.5624999999999991,
+    "C_minus_A_pp": -0.6250000000000033,
+    "C_minus_B_pp": -1.1875000000000024
+  },
+  "decision": "SKIP_5_1B"
+}
