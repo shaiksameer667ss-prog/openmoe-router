@@ -1,0 +1,250 @@
+{
+  "experiment": "TAIH corrected balanced q seed0",
+  "checkpoint": "/kaggle/working/openmoe-router/experiments/results/taih_seq_corrected_balanced_q_seed0/checkpoints/task_4.pt",
+  "seed": 0,
+  "steps_per_task": 200,
+  "rank": 1,
+  "replay_capacity": 710,
+  "replay_per_task": 142,
+  "q_batch_per_seen_task": 64,
+  "q_training_convention": "uniform-over-seen-tasks sampling; 64 samples per seen task; no training-time prior adjustment",
+  "q_posthoc_convention": "T4 exposure prior [1/8,1/8,1/8,1/8,1/2]",
+  "memory_bytes": 8880352,
+  "memory_budget_bytes": 8911776,
+  "memory_margin_bytes": 31424,
+  "evaluation": {
+    "accuracy_by_task": {
+      "shared": [
+        0.0055,
+        0.0075,
+        0.003,
+        0.007,
+        0.0285
+      ],
+      "hard": [
+        0.066,
+        0.084,
+        0.098,
+        0.127,
+        0.06
+      ],
+      "soft": [
+        0.2505,
+        0.0725,
+        0.079,
+        0.0785,
+        0.0575
+      ],
+      "oracle": [
+        0.3245,
+        0.301,
+        0.324,
+        0.3075,
+        0.322
+      ],
+      "oracle_soft": [
+        0.3245,
+        0.301,
+        0.324,
+        0.3075,
+        0.322
+      ]
+    },
+    "task_id_accuracy_by_task": [
+      0.1885,
+      0.301,
+      0.274,
+      0.401,
+      0.1935
+    ],
+    "task_id_accuracy_adjusted_by_task": [
+      0.001,
+      0.0045,
+      0.0005,
+      0.0615,
+      0.98
+    ],
+    "q_raw_accuracy": 0.2716,
+    "q_adjusted_accuracy": 0.2095,
+    "q_raw_accuracy_by_task": [
+      0.1885,
+      0.301,
+      0.274,
+      0.401,
+      0.1935
+    ],
+    "q_adjusted_accuracy_by_task": [
+      0.001,
+      0.0045,
+      0.0005,
+      0.0615,
+      0.98
+    ],
+    "hard_conditional_class_accuracy_by_task": [
+      0.35013262599469497,
+      0.27906976744186046,
+      0.35766423357664234,
+      0.3167082294264339,
+      0.31007751937984496
+    ],
+    "q_confusion_matrix": [
+      [
+        377,
+        480,
+        389,
+        440,
+        314
+      ],
+      [
+        261,
+        602,
+        345,
+        529,
+        263
+      ],
+      [
+        284,
+        396,
+        548,
+        401,
+        371
+      ],
+      [
+        313,
+        338,
+        290,
+        802,
+        257
+      ],
+      [
+        324,
+        458,
+        417,
+        414,
+        387
+      ]
+    ],
+    "q_confusion_matrix_adjusted": [
+      [
+        2,
+        2,
+        1,
+        21,
+        1974
+      ],
+      [
+        5,
+        9,
+        0,
+        62,
+        1924
+      ],
+      [
+        8,
+        2,
+        1,
+        27,
+        1962
+      ],
+      [
+        5,
+        1,
+        1,
+        123,
+        1870
+      ],
+      [
+        7,
+        0,
+        0,
+        33,
+        1960
+      ]
+    ],
+    "q_confusion_matrix_row_percent": [
+      [
+        18.85,
+        24.0,
+        19.45,
+        22.0,
+        15.7
+      ],
+      [
+        13.05,
+        30.1,
+        17.25,
+        26.45,
+        13.15
+      ],
+      [
+        14.2,
+        19.8,
+        27.4,
+        20.05,
+        18.55
+      ],
+      [
+        15.65,
+        16.9,
+        14.5,
+        40.1,
+        12.85
+      ],
+      [
+        16.2,
+        22.9,
+        20.85,
+        20.7,
+        19.35
+      ]
+    ],
+    "q_confusion_matrix_adjusted_row_percent": [
+      [
+        0.1,
+        0.1,
+        0.05,
+        1.05,
+        98.7
+      ],
+      [
+        0.25,
+        0.45,
+        0.0,
+        3.1,
+        96.2
+      ],
+      [
+        0.4,
+        0.1,
+        0.05,
+        1.35,
+        98.1
+      ],
+      [
+        0.25,
+        0.05,
+        0.05,
+        6.15,
+        93.5
+      ],
+      [
+        0.35,
+        0.0,
+        0.0,
+        1.65,
+        98.0
+      ]
+    ],
+    "q_primary_eval_convention": "raw q(t|h_shared), no evaluation adjustment",
+    "q_posthoc_exposure_adjustment": "q_logits + log([1/8,1/8,1/8,1/8,1/2]) at T4",
+    "q_training_convention": "uniform-over-seen-tasks sampling; no training-time prior adjustment",
+    "oracle_task_eval": [
+      0.3245,
+      0.301,
+      0.324,
+      0.3075,
+      0.322
+    ],
+    "oracle_assembly_max_error": 0.0
+  }
+}

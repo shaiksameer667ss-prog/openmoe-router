@@ -1,0 +1,162 @@
+{
+  "status": "COMPLETED",
+  "experiment": "matched_memory_slda_vs_euclidean_ncm_seed0",
+  "historical_binary_identity_proven": false,
+  "seed": 0,
+  "boundary": 4,
+  "checkpoint": "/kaggle/working/openmoe-router/experiments/results/replay_A_reconstruction/checkpoints/task_4.pt",
+  "readout_buffer": "/kaggle/working/openmoe-router/experiments/results/replay_A_reconstruction/matched_694/replay_694_seed0_matched_readout.pt",
+  "router": "ContinualRouter",
+  "decomposition": "none",
+  "retraining": false,
+  "replay": {
+    "examples": 694,
+    "task_counts": {
+      "0": 139,
+      "1": 139,
+      "2": 139,
+      "3": 139,
+      "4": 138
+    },
+    "bytes": 8538976,
+    "per_example_bytes": 12304
+  },
+  "slda_state": {
+    "bytes": 365344,
+    "class_means_shape": [
+      100,
+      256
+    ],
+    "covariance_shape": [
+      256,
+      256
+    ],
+    "class_counts": [
+      100
+    ],
+    "class_count_dtype": "float64",
+    "means_storage_dtype": "float32",
+    "covariance_storage_dtype": "float32",
+    "covariance_fit_dtype": "float64",
+    "covariance_denominator": "N-K",
+    "covariance_rank": 256,
+    "covariance_min_eigenvalue": 1.1956416357304416e-10,
+    "covariance_max_eigenvalue": 9.428358646198426,
+    "inverse": "torch.linalg.pinv",
+    "class_prior": "uniform"
+  },
+  "memory": {
+    "budget_bytes": 8911776,
+    "replay_bytes": 8538976,
+    "slda_state_bytes": 365344,
+    "total_bytes": 8904320,
+    "headroom_bytes": 7456
+  },
+  "feature_provenance": {
+    "dimension": 256,
+    "readout_examples": 694,
+    "sha256": "e6ebffb5a2427d34c4ebe066b9c16068d61fc011be91d7c78932e1b0dfbf3cc2"
+  },
+  "per_task": [
+    {
+      "task_id": 0,
+      "ncm_cil": 0.0625,
+      "slda_cil": 0.04500000178813934,
+      "ncm_conditional_true_task": 0.24199999868869781,
+      "slda_conditional_true_task": 0.16050000488758087,
+      "learned_head_restricted_ceiling": 0.2425,
+      "ncm_realization_vs_head": 0.2577319587628866,
+      "slda_realization_vs_head": 0.18556701768304884,
+      "ncm_global_over_conditional": 0.25826446420935023,
+      "slda_global_over_conditional": 0.28037383437875113,
+      "test_examples": 2000
+    },
+    {
+      "task_id": 1,
+      "ncm_cil": 0.07750000059604645,
+      "slda_cil": 0.05900000035762787,
+      "ncm_conditional_true_task": 0.2529999911785126,
+      "slda_conditional_true_task": 0.19850000739097595,
+      "learned_head_restricted_ceiling": 0.2555,
+      "ncm_realization_vs_head": 0.3033268125089881,
+      "slda_realization_vs_head": 0.2309197665660582,
+      "ncm_global_over_conditional": 0.30632412370862,
+      "slda_global_over_conditional": 0.2972292098781558,
+      "test_examples": 2000
+    },
+    {
+      "task_id": 2,
+      "ncm_cil": 0.09600000083446503,
+      "slda_cil": 0.07199999690055847,
+      "ncm_conditional_true_task": 0.29899999499320984,
+      "slda_conditional_true_task": 0.1979999989271164,
+      "learned_head_restricted_ceiling": 0.2945,
+      "ncm_realization_vs_head": 0.3259762337333278,
+      "slda_realization_vs_head": 0.24448216265045322,
+      "ncm_global_over_conditional": 0.3210702422809243,
+      "slda_global_over_conditional": 0.36363634995301997,
+      "test_examples": 2000
+    },
+    {
+      "task_id": 3,
+      "ncm_cil": 0.13699999451637268,
+      "slda_cil": 0.1080000028014183,
+      "ncm_conditional_true_task": 0.2919999957084656,
+      "slda_conditional_true_task": 0.22499999403953552,
+      "learned_head_restricted_ceiling": 0.342,
+      "ncm_realization_vs_head": 0.40058477928763936,
+      "slda_realization_vs_head": 0.3157894818754921,
+      "ncm_global_over_conditional": 0.46917807030776204,
+      "slda_global_over_conditional": 0.4800000251664062,
+      "test_examples": 2000
+    },
+    {
+      "task_id": 4,
+      "ncm_cil": 0.18799999356269836,
+      "slda_cil": 0.11699999868869781,
+      "ncm_conditional_true_task": 0.30799999833106995,
+      "slda_conditional_true_task": 0.19550000131130219,
+      "learned_head_restricted_ceiling": 0.4245,
+      "ncm_realization_vs_head": 0.4428739542113036,
+      "slda_realization_vs_head": 0.27561837146925283,
+      "ncm_global_over_conditional": 0.61038959279674,
+      "slda_global_over_conditional": 0.598465462424188,
+      "test_examples": 2000
+    }
+  ],
+  "summary": {
+    "ncm": {
+      "old_task_mean": 0.09324999898672104,
+      "t4": 0.18799999356269836,
+      "all_task_mean": 0.11219999790191651,
+      "old_realization_vs_head": 0.32190494607321046,
+      "t4_realization_vs_head": 0.4428739542113036
+    },
+    "slda": {
+      "old_task_mean": 0.071000000461936,
+      "t4": 0.11699999868869781,
+      "all_task_mean": 0.08020000010728837,
+      "old_realization_vs_head": 0.2441896071937631,
+      "t4_realization_vs_head": 0.27561837146925283
+    },
+    "delta_slda_minus_ncm": {
+      "old_task_mean_pp": -2.224999852478504,
+      "t4_pp": -7.099999487400055,
+      "all_task_mean_pp": -3.1999997794628143
+    },
+    "learned_head_restricted_ceiling": {
+      "old_task_mean": 0.283625,
+      "t4": 0.4245
+    },
+    "ncm_crosscheck": {
+      "max_abs_diff": 6.437301636186277e-09,
+      "repository_values": [
+        0.0625,
+        0.0775,
+        0.096,
+        0.137,
+        0.188
+      ]
+    }
+  }
+}
