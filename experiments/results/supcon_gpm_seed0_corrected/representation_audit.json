@@ -1,0 +1,188 @@
+{
+  "experiment": "supcon_gpm_seed0_corrected",
+  "protocol": {
+    "dataset": "Split-CIFAR-100",
+    "tasks": 5,
+    "classes_per_task": 20,
+    "seed": 0,
+    "steps_per_task": 200,
+    "replay_capacity": 715,
+    "replay_per_task": 143,
+    "current_batch_size": 64,
+    "replay_batch_size": 64,
+    "total_batch_size": 128,
+    "router": "continual",
+    "decomposition": "none",
+    "race": false,
+    "margin": false,
+    "supcon_weight": 0.1,
+    "supcon_temperature": 0.07,
+    "gpm_energy": 0.95,
+    "gpm_max_rank": 64
+  },
+  "memory": {
+    "replay_bytes": 8797360,
+    "gpm_max_rank_bytes": 65536,
+    "worst_case_total_bytes": 8862896,
+    "budget_bytes": 8911776,
+    "worst_case_headroom_bytes": 48880,
+    "final_active_gpm_bytes": 65536,
+    "final_method_total_bytes": 8862896,
+    "final_method_headroom_bytes": 48880
+  },
+  "final_replay": {
+    "samples": 715,
+    "task_counts": {
+      "0": 143,
+      "1": 143,
+      "2": 143,
+      "3": 143,
+      "4": 143
+    },
+    "image_shape": [
+      715,
+      3,
+      32,
+      32
+    ],
+    "image_dtype": "torch.float32",
+    "label_dtype": "torch.int64",
+    "task_id_dtype": "torch.int64",
+    "total_bytes": 8797360
+  },
+  "gpm_boundaries": {
+    "1": {
+      "task_id": 1,
+      "replay_task_counts": {
+        "0": 715
+      },
+      "num_replay_examples": 715,
+      "feature_dim": 256,
+      "energy_target": 0.95,
+      "rank": 9,
+      "achieved_energy": 0.9518914222717285,
+      "basis_bytes": 9216,
+      "replay_feature_sha256": "3bb0ae2e2e775958b5b01207476f0f59b926dfd1a671aa49f08830a4b2d6c56f",
+      "basis_sha256": "3293206d7ae9c8226d49a0eff9f8547dde7f814eed225d94d38b3e88cdf8c955"
+    },
+    "2": {
+      "task_id": 2,
+      "replay_task_counts": {
+        "0": 358,
+        "1": 357
+      },
+      "num_replay_examples": 715,
+      "feature_dim": 256,
+      "energy_target": 0.95,
+      "rank": 28,
+      "achieved_energy": 0.9517422318458557,
+      "basis_bytes": 28672,
+      "replay_feature_sha256": "77978a7102238d15b981b3969c7968c4752a1163654938ec30a7f610c163ac9d",
+      "basis_sha256": "b015bb8791a4cade99cbd08c680228ef416e96e3339f048aaff0e0712bec5693"
+    },
+    "3": {
+      "task_id": 3,
+      "replay_task_counts": {
+        "0": 239,
+        "1": 238,
+        "2": 238
+      },
+      "num_replay_examples": 715,
+      "feature_dim": 256,
+      "energy_target": 0.95,
+      "rank": 55,
+      "achieved_energy": 0.9511024951934814,
+      "basis_bytes": 56320,
+      "replay_feature_sha256": "52208cf317b9e9b48247e5d33e0499a917de802db6e6fcdaa66f7336b79b8cf5",
+      "basis_sha256": "e3827753fff0e0f22341df6d07b6d852d9b4410844b720d30fdc0f2c36464ac0"
+    },
+    "4": {
+      "task_id": 4,
+      "replay_task_counts": {
+        "0": 179,
+        "1": 179,
+        "2": 179,
+        "3": 178
+      },
+      "num_replay_examples": 715,
+      "feature_dim": 256,
+      "energy_target": 0.95,
+      "rank": 64,
+      "achieved_energy": 0.9458008408546448,
+      "basis_bytes": 65536,
+      "replay_feature_sha256": "0c7d03d5789b4a93010cfdaef3454d86f66bdccb4787ba0f78e307dd7f3e8d9a",
+      "basis_sha256": "0dd6c313cd5d9a7771dbe1ac2e4489eaffebae4faaaa1039a5ea0e7a89d14dcd"
+    }
+  },
+  "view_audit": {
+    "checked": true,
+    "raw_mean_abs_difference": 0.14939358830451965,
+    "raw_max_abs_difference": 1.0,
+    "feature_mean_abs_difference": 0.04598572477698326,
+    "feature_max_abs_difference": 0.5311187505722046
+  },
+  "task_id_probe": {
+    "protocol": {
+      "fit_samples": 50000,
+      "evaluation_samples": 8000,
+      "evaluation_population": "held-out test representations from T0-T3",
+      "classifier": "5-way multinomial LogisticRegression",
+      "solver": "lbfgs",
+      "max_iter": 2000,
+      "C": 1.0,
+      "random_state": 0,
+      "historical_tig_mr_fit_split_recovered": false,
+      "fit_split_note": "Exact historical TIG-MR fitting split was not preserved; this reconstruction fits on all 50,000 training representations and evaluates on 8,000 held-out old-task test representations."
+    },
+    "accuracy": 0.341375,
+    "accuracy_percent": 34.137499999999996,
+    "accuracy_by_task": {
+      "0": 0.308,
+      "1": 0.31,
+      "2": 0.3345,
+      "3": 0.413
+    },
+    "decision_band": "INTERMEDIATE_31_TO_55"
+  },
+  "final_realization": {
+    "per_task_cil": [
+      0.028,
+      0.026,
+      0.05,
+      0.0785,
+      0.399
+    ],
+    "per_task_head_ceiling": [
+      0.2625,
+      0.282,
+      0.3205,
+      0.333,
+      0.44
+    ],
+    "per_task_realization": [
+      0.10666666666666666,
+      0.0921985815602837,
+      0.15600624024961,
+      0.23573573573573572,
+      0.9068181818181819
+    ],
+    "old_cil": 0.045625,
+    "old_ceiling": 0.2995,
+    "old_realization": 0.1523372287145242,
+    "task4_cil": 0.399,
+    "task4_ceiling": 0.44,
+    "task4_realization": 0.9068181818181819,
+    "all_task_cil": 0.1163,
+    "all_task_ceiling": 0.3276,
+    "all_task_realization": 0.355006105006105,
+    "retention_plasticity_coordinate": {
+      "old_realization_percent": 15.233722871452422,
+      "task4_realization_percent": 90.68181818181819
+    }
+  },
+  "runtime": {
+    "elapsed_seconds": 358.3095891180001,
+    "checkpoint_dir": "/kaggle/working/openmoe-router/experiments/results/supcon_gpm_seed0_corrected/checkpoints",
+    "result_json": "/kaggle/working/openmoe-router/experiments/results/supcon_gpm_seed0_corrected/result.json"
+  }
+}
