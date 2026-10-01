@@ -1,0 +1,292 @@
+{
+  "experiment": "FARP pre-audit",
+  "repo": "/kaggle/working/openmoe-router",
+  "device": "cuda",
+  "checkpoint_dir": "/kaggle/working/openmoe-router/experiments/results/crr_seed0/arm_A/checkpoints",
+  "models": {
+    "historical_task": 0,
+    "final_task": 4
+  },
+  "architecture": {
+    "num_classes": 100,
+    "hidden_dim": 512,
+    "num_heads": 4,
+    "ff_dim": 1024,
+    "num_experts": 8,
+    "top_k": 2,
+    "depth": 2,
+    "image_size": 32,
+    "patch_size": 4
+  },
+  "probe": {
+    "task": 0,
+    "num_images": 500
+  },
+  "audit1": {
+    "S_per_layer": {
+      "0": [
+        -0.7234684615178462,
+        -1.8845023783765793,
+        -1.6778066760886108,
+        -24.971417672249675,
+        -3.3548869934378986,
+        -2.0759029375580647,
+        -13.938191834056104,
+        -0.47111261807425975
+      ],
+      "1": [
+        -5.830305861590412,
+        -1.648676731311728,
+        -5.671235382955754,
+        -3.132260301299632,
+        -4.706635517209624,
+        -2.1627745987522458,
+        -22.676364700042807,
+        -9.324851379332237
+      ]
+    },
+    "details": {
+      "0": [
+        {
+          "expert": 0,
+          "numerator": 335.9308166503906,
+          "denominator": 194.91555786132812,
+          "S": -0.7234684615178462
+        },
+        {
+          "expert": 1,
+          "numerator": 205.19088745117188,
+          "denominator": 71.13562774658203,
+          "S": -1.8845023783765793
+        },
+        {
+          "expert": 2,
+          "numerator": 325.9389953613281,
+          "denominator": 121.71864318847656,
+          "S": -1.6778066760886108
+        },
+        {
+          "expert": 3,
+          "numerator": 1515.7852783203125,
+          "denominator": 58.36359405517578,
+          "S": -24.971417672249675
+        },
+        {
+          "expert": 4,
+          "numerator": 261.5492858886719,
+          "denominator": 60.058799743652344,
+          "S": -3.3548869934378986
+        },
+        {
+          "expert": 5,
+          "numerator": 468.46044921875,
+          "denominator": 152.30014038085938,
+          "S": -2.0759029375580647
+        },
+        {
+          "expert": 6,
+          "numerator": 280.56640625,
+          "denominator": 18.781818389892578,
+          "S": -13.938191834056104
+        },
+        {
+          "expert": 7,
+          "numerator": 234.67698669433594,
+          "denominator": 159.52346801757812,
+          "S": -0.47111261807425975
+        }
+      ],
+      "1": [
+        {
+          "expert": 0,
+          "numerator": 841.6890258789062,
+          "denominator": 123.22859954833984,
+          "S": -5.830305861590412
+        },
+        {
+          "expert": 1,
+          "numerator": 289.5031433105469,
+          "denominator": 109.3010482788086,
+          "S": -1.648676731311728
+        },
+        {
+          "expert": 2,
+          "numerator": 596.8301391601562,
+          "denominator": 89.46321105957031,
+          "S": -5.671235382955754
+        },
+        {
+          "expert": 3,
+          "numerator": 451.5884704589844,
+          "denominator": 109.28364562988281,
+          "S": -3.132260301299632
+        },
+        {
+          "expert": 4,
+          "numerator": 633.7174072265625,
+          "denominator": 111.0492172241211,
+          "S": -4.706635517209624
+        },
+        {
+          "expert": 5,
+          "numerator": 281.2344665527344,
+          "denominator": 88.92017364501953,
+          "S": -2.1627745987522458
+        },
+        {
+          "expert": 6,
+          "numerator": 497.8667297363281,
+          "denominator": 21.028005599975586,
+          "S": -22.676364700042807
+        },
+        {
+          "expert": 7,
+          "numerator": 357.11676025390625,
+          "denominator": 34.588077545166016,
+          "S": -9.324851379332237
+        }
+      ]
+    },
+    "stats": {
+      "0": {
+        "mean": -6.13716119641988,
+        "std": 8.209775344621281,
+        "cv": -1.3377154488642833,
+        "min": -24.971417672249675,
+        "max": -0.47111261807425975,
+        "range": 24.500305054175417,
+        "rank_best_to_worst": [
+          7,
+          0,
+          2,
+          1,
+          5,
+          4,
+          6,
+          3
+        ],
+        "cv_verdict": "INERT \u2014 CV < 0.10",
+        "range_verdict": "NONFLAT \u2014 range >= 0.050"
+      },
+      "1": {
+        "mean": -6.894138059061804,
+        "std": 6.3879949051097435,
+        "cv": -0.92658354828175,
+        "min": -22.676364700042807,
+        "max": -1.648676731311728,
+        "range": 21.02768796873108,
+        "rank_best_to_worst": [
+          1,
+          5,
+          3,
+          4,
+          2,
+          0,
+          7,
+          6
+        ],
+        "cv_verdict": "INERT \u2014 CV < 0.10",
+        "range_verdict": "NONFLAT \u2014 range >= 0.050"
+      }
+    },
+    "thresholds": {
+      "cv_gate": 0.1,
+      "range_gate": 0.05
+    }
+  },
+  "audit2": {
+    "0": {
+      "mean_observed": -3.1776909828186035,
+      "mean_best": -0.5972901582717896,
+      "mean_gap": 2.5804004669189453,
+      "median_gap": 1.279564380645752,
+      "frac_gap_positive": 0.939927734375,
+      "frac_gap_gt_gate": 0.939927734375,
+      "selection_counts": [
+        134960,
+        117922,
+        153089,
+        20120,
+        129674,
+        149919,
+        94942,
+        223374
+      ],
+      "selection_frequency": [
+        0.131796875,
+        0.115158203125,
+        0.1495009765625,
+        0.0196484375,
+        0.126634765625,
+        0.1464052734375,
+        0.092716796875,
+        0.218138671875
+      ],
+      "spearman_S_vs_selection_frequency": 0.8333333333333335,
+      "best_pair": [
+        0,
+        7
+      ],
+      "best_pair_mean_S": -0.5972905158996582,
+      "n_tokens": 512000
+    },
+    "1": {
+      "mean_observed": -6.566268444061279,
+      "mean_best": -1.9057252407073975,
+      "mean_gap": 4.660543918609619,
+      "median_gap": 3.3627450466156006,
+      "frac_gap_positive": 0.951287109375,
+      "frac_gap_gt_gate": 0.951287109375,
+      "selection_counts": [
+        100752,
+        132869,
+        122406,
+        111566,
+        193586,
+        116624,
+        105952,
+        140245
+      ],
+      "selection_frequency": [
+        0.098390625,
+        0.1297548828125,
+        0.119537109375,
+        0.108951171875,
+        0.189048828125,
+        0.113890625,
+        0.10346875,
+        0.1369580078125
+      ],
+      "spearman_S_vs_selection_frequency": 0.261904761904762,
+      "best_pair": [
+        1,
+        5
+      ],
+      "best_pair_mean_S": -1.9057257175445557,
+      "n_tokens": 512000
+    }
+  },
+  "decision": {
+    "per_layer": {
+      "0": {
+        "cv_ok": false,
+        "range_ok": true,
+        "gap_ok": true,
+        "verdict": "CLOSE \u2014 CV too low"
+      },
+      "1": {
+        "cv_ok": false,
+        "range_ok": true,
+        "gap_ok": true,
+        "verdict": "CLOSE \u2014 CV too low"
+      }
+    },
+    "open_layers": [],
+    "closed_layers": [
+      0,
+      1
+    ],
+    "global_verdict": "CLOSE \u2014 no layer has a sufficiently heterogeneous and actionable FARP signal",
+    "gap_gate": 0.005
+  }
+}

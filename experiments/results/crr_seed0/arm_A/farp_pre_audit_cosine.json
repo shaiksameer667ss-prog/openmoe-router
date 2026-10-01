@@ -1,0 +1,335 @@
+{
+  "experiment": "FARP pre-audit \u2014 cosine functional stability",
+  "repo": "/kaggle/working/openmoe-router",
+  "device": "cuda",
+  "checkpoint_dir": "/kaggle/working/openmoe-router/experiments/results/crr_seed0/arm_A/checkpoints",
+  "models": {
+    "historical_task": 0,
+    "final_task": 4
+  },
+  "architecture": {
+    "num_classes": 100,
+    "hidden_dim": 512,
+    "num_heads": 4,
+    "ff_dim": 1024,
+    "num_experts": 8,
+    "top_k": 2,
+    "depth": 2,
+    "image_size": 32,
+    "patch_size": 4
+  },
+  "probe": {
+    "task": 0,
+    "num_images": 500
+  },
+  "functional_metric": {
+    "name": "cosine_similarity",
+    "definition": "mean cosine(z_e^4(h_i^0), z_e^0(h_i^0))",
+    "scale_invariant": true,
+    "range": [
+      -1.0,
+      1.0
+    ]
+  },
+  "audit1": {
+    "S_per_layer": {
+      "0": [
+        0.3986548352824102,
+        0.2607836390994562,
+        0.22488000174014813,
+        0.11700047268868366,
+        0.2129261194330902,
+        0.2235723892477472,
+        0.17405438354174477,
+        0.3028108864973401
+      ],
+      "1": [
+        0.3538762072687678,
+        -0.1992927297190072,
+        0.08283341467733407,
+        0.13561149235853737,
+        0.20025067971352836,
+        0.015325573887610517,
+        0.20877911021606996,
+        0.14133783358454094
+      ]
+    },
+    "details": {
+      "0": [
+        {
+          "expert": 0,
+          "mean_cosine": 0.3986548352824102,
+          "std_cosine_across_tokens": 0.1430342944140391,
+          "min_cosine": -0.21952936053276062,
+          "max_cosine": 0.7244513630867004
+        },
+        {
+          "expert": 1,
+          "mean_cosine": 0.2607836390994562,
+          "std_cosine_across_tokens": 0.11454167605660126,
+          "min_cosine": -0.21888388693332672,
+          "max_cosine": 0.5822573304176331
+        },
+        {
+          "expert": 2,
+          "mean_cosine": 0.22488000174014813,
+          "std_cosine_across_tokens": 0.20389839634600895,
+          "min_cosine": -0.44872158765792847,
+          "max_cosine": 0.6165142059326172
+        },
+        {
+          "expert": 3,
+          "mean_cosine": 0.11700047268868366,
+          "std_cosine_across_tokens": 0.0732559930205918,
+          "min_cosine": -0.09489136934280396,
+          "max_cosine": 0.3754589855670929
+        },
+        {
+          "expert": 4,
+          "mean_cosine": 0.2129261194330902,
+          "std_cosine_across_tokens": 0.07574346695275713,
+          "min_cosine": -0.041862063109874725,
+          "max_cosine": 0.4385027289390564
+        },
+        {
+          "expert": 5,
+          "mean_cosine": 0.2235723892477472,
+          "std_cosine_across_tokens": 0.11099260765200342,
+          "min_cosine": -0.22301247715950012,
+          "max_cosine": 0.5881854891777039
+        },
+        {
+          "expert": 6,
+          "mean_cosine": 0.17405438354174477,
+          "std_cosine_across_tokens": 0.04267169114633449,
+          "min_cosine": -0.05370660871267319,
+          "max_cosine": 0.3140672445297241
+        },
+        {
+          "expert": 7,
+          "mean_cosine": 0.3028108864973401,
+          "std_cosine_across_tokens": 0.12768053075139638,
+          "min_cosine": -0.26130083203315735,
+          "max_cosine": 0.67831951379776
+        }
+      ],
+      "1": [
+        {
+          "expert": 0,
+          "mean_cosine": 0.3538762072687678,
+          "std_cosine_across_tokens": 0.10068696824304223,
+          "min_cosine": -0.058620624244213104,
+          "max_cosine": 0.5646620988845825
+        },
+        {
+          "expert": 1,
+          "mean_cosine": -0.1992927297190072,
+          "std_cosine_across_tokens": 0.18439206068179434,
+          "min_cosine": -0.5277042984962463,
+          "max_cosine": 0.6946228742599487
+        },
+        {
+          "expert": 2,
+          "mean_cosine": 0.08283341467733407,
+          "std_cosine_across_tokens": 0.061829212710765746,
+          "min_cosine": -0.12764909863471985,
+          "max_cosine": 0.33619987964630127
+        },
+        {
+          "expert": 3,
+          "mean_cosine": 0.13561149235853737,
+          "std_cosine_across_tokens": 0.10832720860151586,
+          "min_cosine": -0.19551363587379456,
+          "max_cosine": 0.465834379196167
+        },
+        {
+          "expert": 4,
+          "mean_cosine": 0.20025067971352836,
+          "std_cosine_across_tokens": 0.06693304316789436,
+          "min_cosine": 0.0010918572079390287,
+          "max_cosine": 0.3919179439544678
+        },
+        {
+          "expert": 5,
+          "mean_cosine": 0.015325573887610517,
+          "std_cosine_across_tokens": 0.13216204246353197,
+          "min_cosine": -0.34353798627853394,
+          "max_cosine": 0.4396967887878418
+        },
+        {
+          "expert": 6,
+          "mean_cosine": 0.20877911021606996,
+          "std_cosine_across_tokens": 0.04455359069097229,
+          "min_cosine": 0.0668020248413086,
+          "max_cosine": 0.3271567225456238
+        },
+        {
+          "expert": 7,
+          "mean_cosine": 0.14133783358454094,
+          "std_cosine_across_tokens": 0.07358651523466715,
+          "min_cosine": -0.04946943372488022,
+          "max_cosine": 0.303217351436615
+        }
+      ]
+    },
+    "stats": {
+      "0": {
+        "mean": 0.23933534094132755,
+        "std": 0.0792576285777874,
+        "cv": 0.3311572301276526,
+        "min": 0.11700047268868366,
+        "max": 0.3986548352824102,
+        "range": 0.28165436259372656,
+        "rank_best_to_worst": [
+          0,
+          7,
+          1,
+          2,
+          5,
+          4,
+          6,
+          3
+        ],
+        "cv_verdict": "SUBSTANTIAL \u2014 CV >= 0.25",
+        "range_verdict": "NONFLAT \u2014 range >= 0.050"
+      },
+      "1": {
+        "mean": 0.11734019774842272,
+        "std": 0.1516362199398557,
+        "cv": 1.2922785443481495,
+        "min": -0.1992927297190072,
+        "max": 0.3538762072687678,
+        "range": 0.553168936987775,
+        "rank_best_to_worst": [
+          0,
+          6,
+          4,
+          7,
+          3,
+          2,
+          5,
+          1
+        ],
+        "cv_verdict": "SUBSTANTIAL \u2014 CV >= 0.25",
+        "range_verdict": "NONFLAT \u2014 range >= 0.050"
+      }
+    },
+    "thresholds": {
+      "cv_gate": 0.1,
+      "range_gate": 0.05,
+      "strong_cv_gate": 0.15
+    }
+  },
+  "audit2": {
+    "0": {
+      "mean_observed": 0.2603800892829895,
+      "mean_best": 0.35073286294937134,
+      "mean_gap": 0.09035279601812363,
+      "median_gap": 0.08754122257232666,
+      "frac_gap_positive": 0.939927734375,
+      "frac_gap_gt_0.005": 0.939927734375,
+      "frac_gap_gt_0.02": 0.939927734375,
+      "selection_counts": [
+        134960,
+        117922,
+        153089,
+        20120,
+        129674,
+        149919,
+        94942,
+        223374
+      ],
+      "selection_frequency": [
+        0.131796875,
+        0.115158203125,
+        0.1495009765625,
+        0.0196484375,
+        0.126634765625,
+        0.1464052734375,
+        0.092716796875,
+        0.218138671875
+      ],
+      "spearman_S_vs_selection_frequency": 0.6666666666666669,
+      "best_pair": [
+        0,
+        7
+      ],
+      "best_pair_mean_S": 0.35073286294937134,
+      "n_tokens": 512000
+    },
+    "1": {
+      "mean_observed": 0.11419765651226044,
+      "mean_best": 0.2813275456428528,
+      "mean_gap": 0.1671299785375595,
+      "median_gap": 0.13978561758995056,
+      "frac_gap_positive": 0.989859375,
+      "frac_gap_gt_0.005": 0.951328125,
+      "frac_gap_gt_0.02": 0.951328125,
+      "selection_counts": [
+        100752,
+        132869,
+        122406,
+        111566,
+        193586,
+        116624,
+        105952,
+        140245
+      ],
+      "selection_frequency": [
+        0.098390625,
+        0.1297548828125,
+        0.119537109375,
+        0.108951171875,
+        0.189048828125,
+        0.113890625,
+        0.10346875,
+        0.1369580078125
+      ],
+      "spearman_S_vs_selection_frequency": -0.38095238095238104,
+      "best_pair": [
+        0,
+        6
+      ],
+      "best_pair_mean_S": 0.28132766485214233,
+      "n_tokens": 512000
+    }
+  },
+  "decision": {
+    "per_layer": {
+      "0": {
+        "cv": 0.3311572301276526,
+        "range": 0.28165436259372656,
+        "routing_gap": 0.09035279601812363,
+        "cv_gate_pass": true,
+        "range_gate_pass": true,
+        "gap_gate_pass": true,
+        "strong_cv_gt_0.15": true,
+        "strong_gap_gt_0.02": true,
+        "verdict": "OPEN \u2014 FARP has a measurable target"
+      },
+      "1": {
+        "cv": 1.2922785443481495,
+        "range": 0.553168936987775,
+        "routing_gap": 0.1671299785375595,
+        "cv_gate_pass": true,
+        "range_gate_pass": true,
+        "gap_gate_pass": true,
+        "strong_cv_gt_0.15": true,
+        "strong_gap_gt_0.02": true,
+        "verdict": "OPEN \u2014 FARP has a measurable target"
+      }
+    },
+    "basic_open_layers": [
+      0,
+      1
+    ],
+    "closed_layers": [],
+    "strong_target_layers": [
+      0,
+      1
+    ],
+    "global_verdict": "OPEN \u2014 at least one layer passes the basic FARP gate",
+    "basic_gap_gate": 0.005,
+    "strong_gap_gate": 0.02
+  }
+}
