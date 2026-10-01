@@ -1,0 +1,31 @@
+{
+  "experiment": "test_6_2_patch8_seed0",
+  "status": "recovered_from_verified_session_record",
+  "architecture": {
+    "depth": 2,
+    "hidden_dim": 512,
+    "patch_size": 8,
+    "patch_stride": 8,
+    "tokens": 16,
+    "attention_pairs": 256,
+    "heads": 4,
+    "ff_dim": 1024,
+    "experts": 8,
+    "top_k": 2
+  },
+  "training": {
+    "router": "continual",
+    "decomposition": "none",
+    "replay_capacity": 715,
+    "replay_match": "sample_matched",
+    "steps_per_task": 200,
+    "seed": 0
+  },
+  "reference_probe_percent": 32.4875,
+  "strict4_probe_percent": 37.9,
+  "patch4_seed0_reference_baseline_percent": 34.0375,
+  "patch4_seed0_strict4_baseline_percent": 39.9625,
+  "delta_reference_pp": -1.55,
+  "delta_strict4_pp": -2.0625,
+  "conclusion": "PATCH8_HURTS_TASK_ID"
+}

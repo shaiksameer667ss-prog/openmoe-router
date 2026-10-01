@@ -1,0 +1,21 @@
+{
+  "RCR": {
+    "beta_0_1": "-0.2375 pp",
+    "beta_1": "+0.4375 pp",
+    "beta_10": "+0.7375 pp with Task4 cost 39.2->34.4"
+  },
+  "MarginRouter": {
+    "lambda_0": "old realization 47.03%, T4 1.74%",
+    "lambda_0_03": "old realization 44.50%, T4 31.26%",
+    "lambda_0_10": "old realization 34.01%, T4 65.94%"
+  },
+  "RACE": "old realization 15.8573%, T4 90.2582%; no frontier lift",
+  "TIG_MR": "directional task-ID probe 31.1125%; WA/BIC no frontier lift",
+  "TAIH": {
+    "total_bytes_with_715_replay": 8941872,
+    "budget_bytes": 8911776,
+    "over_budget_bytes": 30096,
+    "strict_replay_capacity": 712,
+    "status": "valid sequential implementation not completed"
+  }
+}

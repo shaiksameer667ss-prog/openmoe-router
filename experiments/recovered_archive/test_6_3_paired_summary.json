@@ -1,0 +1,31 @@
+{
+  "experiment": "test_6_3_overlap4_stride2_paired_summary",
+  "status": "recovered_from_verified_session_record",
+  "reference_percent": {
+    "patch4_stride4_seed0": 34.0375,
+    "patch4_stride4_seed1": 34.4125,
+    "patch4_stride4_two_seed_mean": 34.225,
+    "patch4_stride2_seed0": 36.4375,
+    "patch4_stride2_seed1": 35.525,
+    "patch4_stride2_two_seed_mean": 35.98125
+  },
+  "strict4_percent": {
+    "patch4_stride4_seed0": 39.9625,
+    "patch4_stride4_seed1": 39.825,
+    "patch4_stride4_two_seed_mean": 39.89375,
+    "patch4_stride2_seed0": 42.5625,
+    "patch4_stride2_seed1": 41.35,
+    "patch4_stride2_two_seed_mean": 41.95625
+  },
+  "seed_matched_effect_pp": {
+    "reference_seed0": 2.4,
+    "reference_seed1": 1.1125,
+    "strict4_seed0": 2.6,
+    "strict4_seed1": 1.525
+  },
+  "two_seed_mean_effect_pp": {
+    "reference": 1.75625,
+    "strict4": 2.0625
+  },
+  "interpretation": "Small, directionally replicated improvement in task-ID separability from increased token-interaction capacity. Stride 2 jointly changes overlap, spatial sampling, sequence length, positional encoding, and attention scale; attention pair count is implicated but not isolated as the sole causal factor."
+}

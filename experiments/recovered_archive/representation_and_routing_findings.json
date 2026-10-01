@@ -1,0 +1,29 @@
+{
+  "formal_relation": "CIL = TP * WP_conditional = WP_restricted * realization",
+  "replay715_seed0": {
+    "old_learned_head_CIL_mean_percent": 4.64,
+    "task_prediction_mean_percent": 8.76,
+    "within_task_conditional_mean_percent": 52.92,
+    "restricted_learned_head_ceiling_percent": 28.36,
+    "realization_percent": 16.36
+  },
+  "routing_drift": {
+    "none_gate_KL": 0.7656,
+    "none_selection_KL": 0.6518,
+    "none_top2_overlap": 0.3576,
+    "masked_gate_KL": 0.046,
+    "masked_selection_KL": 0.04,
+    "masked_top2_overlap": 0.809
+  },
+  "historical_routing_signatures": {
+    "selection_cosine_range": [
+      0.9775,
+      0.9963
+    ],
+    "top2_frequency_cosine_range": [
+      0.9299,
+      0.9926
+    ],
+    "retrieval": "weak at task boundaries"
+  }
+}

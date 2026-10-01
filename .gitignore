@@ -32,3 +32,13 @@ wandb/
 # Kaggle local workspace artifacts
 checkpoints/
 cifar100/
+
+# Large experiment binaries
+experiments/results/**/checkpoints/
+experiments/results/**/*.pt
+experiments/results/**/*.pth
+experiments/results/**/*.ckpt
+experiments/results/**/*.pkl
+experiments/results/**/*.pickle
+experiments/results/**/*.npz
+experiments/results/**/*.npy

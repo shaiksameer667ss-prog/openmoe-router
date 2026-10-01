@@ -1,0 +1,66 @@
+{
+  "experiment": "test_6_3_overlap4_stride2_seed0",
+  "status": "recovered_from_verified_session_record",
+  "architecture": {
+    "depth": 2,
+    "hidden_dim": 512,
+    "patch_size": 4,
+    "patch_stride": 2,
+    "tokens": 225,
+    "attention_pairs": 50625,
+    "heads": 4,
+    "ff_dim": 1024,
+    "experts": 8,
+    "top_k": 2
+  },
+  "training": {
+    "router": "continual",
+    "decomposition": "none",
+    "replay_capacity": 715,
+    "replay_match": "sample_matched",
+    "steps_per_task": 200,
+    "seed": 0
+  },
+  "training_accuracy_percent": {
+    "task0": [
+      34.2
+    ],
+    "task1": [
+      24.05,
+      27.35
+    ],
+    "task2": [
+      6.45,
+      11.65,
+      37.0
+    ],
+    "task3": [
+      4.55,
+      3.65,
+      10.25,
+      41.55
+    ],
+    "task4": [
+      2.45,
+      2.5,
+      2.3,
+      8.5,
+      45.35
+    ]
+  },
+  "reference_task_id_percent": 36.4375,
+  "strict4_task_id_percent": 42.5625,
+  "checkpoint_geometry": {
+    "patch_embed_weight": [
+      512,
+      3,
+      4,
+      4
+    ],
+    "pos_embed": [
+      1,
+      225,
+      512
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "experiment": "memory_matched_replay_715",
+  "status": "recovered_from_verified_session_record",
+  "capacity_examples": 715,
+  "bytes_per_example": 12304,
+  "replay_bytes": 8797360,
+  "final_examples_per_task": 143,
+  "class_coverage": "complete 100-class coverage"
+}

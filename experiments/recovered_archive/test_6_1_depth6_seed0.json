@@ -1,0 +1,40 @@
+{
+  "experiment": "test_6_1_depth6_seed0",
+  "status": "recovered_from_verified_session_record",
+  "architecture": {
+    "depth": 6,
+    "hidden_dim": 512,
+    "patch_size": 4,
+    "patch_stride": 4,
+    "tokens": 64,
+    "heads": 4,
+    "ff_dim": 1024,
+    "experts": 8,
+    "top_k": 2
+  },
+  "training": {
+    "router": "continual",
+    "decomposition": "none",
+    "replay_capacity": 715,
+    "replay_match": "sample_matched",
+    "steps_per_task": 200,
+    "seed": 0
+  },
+  "reference_probe_percent": {
+    "L1": 34.7375,
+    "L2": 35.2,
+    "L3": 34.5875,
+    "L4": 34.7625,
+    "L5": 34.1125,
+    "L6": 34.8875
+  },
+  "strict4_probe_percent": {
+    "L1": 39.95,
+    "L2": 40.575,
+    "L3": 40.1625,
+    "L4": 40.1875,
+    "L5": 39.5375,
+    "L6": 40.475
+  },
+  "conclusion": "NO_DEPTH_EFFECT"
+}

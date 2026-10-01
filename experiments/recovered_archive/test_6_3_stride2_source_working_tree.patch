@@ -1,0 +1,37 @@
+diff --git a/openmoe/models/transformer.py b/openmoe/models/transformer.py
+index c81efbd..1ac699e 100644
+--- a/openmoe/models/transformer.py
++++ b/openmoe/models/transformer.py
+@@ -87,9 +87,19 @@ class TinyMoETransformer(nn.Module):
+         depth: int = 2,
+         image_size: int = 32,
+         patch_size: int = 4,
++        patch_stride: int | None = None,
+     ) -> None:
+         super().__init__()
+ 
++        if patch_stride is None:
++            patch_stride = patch_size
++
++        if patch_stride <= 0:
++            raise ValueError("patch_stride must be positive")
++
++        if image_size < patch_size:
++            raise ValueError("patch_size cannot exceed image_size")
++
+         if image_size % patch_size != 0:
+             raise ValueError(
+                 "image_size must be divisible by patch_size"
+@@ -99,10 +109,10 @@ class TinyMoETransformer(nn.Module):
+             3,
+             hidden_dim,
+             kernel_size=patch_size,
+-            stride=patch_size,
++            stride=patch_stride,
+         )
+ 
+-        num_tokens = (image_size // patch_size) ** 2
++        num_tokens = ((image_size - patch_size) // patch_stride + 1) ** 2
+ 
+         self.pos_embed = nn.Parameter(
+             torch.zeros(

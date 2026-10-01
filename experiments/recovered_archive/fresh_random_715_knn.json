@@ -1,0 +1,14 @@
+{
+  "experiment": "fresh_random_715_example_knn_task_id_diagnostic",
+  "status": "recovered_from_verified_session_record",
+  "support_set": "abc_C_fresh_random_buffer_seed12345.pt",
+  "critical_provenance": "Random 715-sample subset of the training distribution, NOT the seed-0 replay buffer used during Test 5.3.",
+  "results_percent": {
+    "k1": 24.55,
+    "k3": 24.4875,
+    "k5": 24.4125,
+    "k10": 24.5375
+  },
+  "chance_percent": 25.0,
+  "interpretation": "Task information is linearly accessible but not strongly locally clustered in Euclidean feature space."
+}

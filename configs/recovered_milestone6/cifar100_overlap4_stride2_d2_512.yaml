@@ -1,0 +1,27 @@
+model:
+  hidden_dim: 512
+  ff_dim: 1024
+  num_experts: 8
+  top_k: 2
+  num_heads: 4
+  image_size: 32
+  patch_size: 4
+  patch_stride: 2
+  depth: 2
+router:
+  type: continual
+  memory_lambda: 0.25
+  memory_momentum: 0.99
+  z_loss_weight: 5.0e-07
+  bias_lr: 0.001
+  temperature: 1.0
+continual:
+  stability_kl: false
+  routing_kl_weight: 0.1
+  dense_ewc: false
+systems:
+  backend: reference
+  capacity_factor: 1.25
+experiment:
+  classes_per_task: 20
+  tasks: 5

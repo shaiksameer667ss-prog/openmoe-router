@@ -1,0 +1,67 @@
+{
+  "experiment": "test_6_3_patch4_stride4_seed1",
+  "status": "recovered_from_verified_session_record",
+  "purpose": "seed-matched baseline for stride2",
+  "architecture": {
+    "depth": 2,
+    "hidden_dim": 512,
+    "patch_size": 4,
+    "patch_stride": 4,
+    "tokens": 64,
+    "attention_pairs": 4096,
+    "heads": 4,
+    "ff_dim": 1024,
+    "experts": 8,
+    "top_k": 2
+  },
+  "training": {
+    "router": "continual",
+    "decomposition": "none",
+    "replay_capacity": 715,
+    "replay_match": "sample_matched",
+    "steps_per_task": 200,
+    "seed": 1
+  },
+  "training_accuracy_percent": {
+    "task0": [
+      29.0
+    ],
+    "task1": [
+      20.5,
+      20.75
+    ],
+    "task2": [
+      7.45,
+      10.0,
+      32.85
+    ],
+    "task3": [
+      2.85,
+      3.45,
+      8.45,
+      40.2
+    ],
+    "task4": [
+      0.85,
+      1.6,
+      2.35,
+      5.45,
+      42.65
+    ]
+  },
+  "reference_task_id_percent": 34.4125,
+  "strict4_task_id_percent": 39.825,
+  "checkpoint_geometry": {
+    "patch_embed_weight": [
+      512,
+      3,
+      4,
+      4
+    ],
+    "pos_embed": [
+      1,
+      64,
+      512
+    ]
+  }
+}

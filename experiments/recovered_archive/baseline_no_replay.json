@@ -1,0 +1,7 @@
+{
+  "experiment": "baseline_no_replay",
+  "status": "recovered_from_verified_session_record",
+  "final_accuracy_percent": 8.083,
+  "forgetting_pp": 36.588,
+  "method_state_bytes": 8911776
+}
