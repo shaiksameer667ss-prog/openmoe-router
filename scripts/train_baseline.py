@@ -50,6 +50,8 @@ from openmoe.training.freezing import (
     clear_optimizer_state_rows,
 )
 from openmoe.utils.repro import seed_everything
+from openmoe.continual.crr import capture_historical_membership
+from openmoe.training.crr_engine import train_steps_crr
 
 
 REPLAY_CURRENT_BATCH_SIZE = 64
@@ -974,6 +976,17 @@ def main() -> None:
         help="Temperature for task-supervised contrastive representation loss.",
     )
 
+    parser.add_argument(
+        "--crr",
+        action="store_true",
+        help="Enable the preregistered CRR experiment family.",
+    )
+    parser.add_argument(
+        "--crr-arm",
+        choices=("A", "B", "C"),
+        default="C",
+        help="CRR arm: A=ordinary replay, B=whole-model PCGrad, C=layer-expert-local PCGrad.",
+    )
     args = parser.parse_args()
 
     if args.er_ace and not args.replay:
@@ -1448,9 +1461,70 @@ def main() -> None:
                 current_batch_size=REPLAY_CURRENT_BATCH_SIZE,
                 replay_batch_size=REPLAY_BATCH_SIZE,
                 generator=replay_generator,
+                include_membership=(
+                    args.crr
+                    and args.crr_arm in {"B", "C"}
+                    and task_id >= 1
+                ),
             )
 
-        warmup_history = train_steps(
+        def _crr_train_steps_dispatch(
+            model,
+            loader,
+            optimizer,
+            device,
+            steps,
+            **kwargs,
+        ):
+            if (
+                args.crr
+                and args.crr_arm in {"B", "C"}
+                and task_id >= 1
+            ):
+                return train_steps_crr(
+                    model=model,
+                    loader=loader,
+                    optimizer=optimizer,
+                    device=device,
+                    steps=steps,
+                    arm=args.crr_arm,
+                    post_step=kwargs.get("post_step"),
+                    head_mask_old_classes=kwargs.get(
+                        "head_mask_old_classes",
+                        0,
+                    ),
+                    replay_batch_size=REPLAY_BATCH_SIZE,
+                )
+            return train_steps(
+                model,
+                loader,
+                optimizer,
+                device,
+                steps,
+                **kwargs,
+            )
+
+        def _crr_add_replay_task_examples():
+            if (
+                args.crr
+                and args.crr_arm in {"B", "C"}
+            ):
+                replay_buffer.add_task_examples_with_membership(
+                    loader,
+                    task_id,
+                    lambda images: capture_historical_membership(
+                        model,
+                        images,
+                        device,
+                    ),
+                )
+            else:
+                replay_buffer.add_task_examples(
+                    loader,
+                    task_id=task_id,
+                )
+
+        warmup_history = _crr_train_steps_dispatch(
             model,
             training_loader,
             optimizer,
@@ -1626,7 +1700,7 @@ def main() -> None:
                     images,
                 )
 
-        step_history = train_steps(
+        step_history = _crr_train_steps_dispatch(
             model,
             training_loader,
             optimizer,
@@ -1873,10 +1947,7 @@ def main() -> None:
             (args.replay or args.bounded_probe)
             and replay_buffer is not None
         ):
-            replay_buffer.add_task_examples(
-                loader,
-                task_id=task_id,
-            )
+            _crr_add_replay_task_examples()
 
             accounting = (
                 replay_buffer.last_add_task_accounting
