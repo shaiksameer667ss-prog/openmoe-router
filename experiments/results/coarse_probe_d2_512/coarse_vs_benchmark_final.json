@@ -1,0 +1,68 @@
+{
+  "experiment": "path_A_trained_coarse_probe_final",
+  "checkpoint": "/kaggle/working/openmoe-router/experiments/results/coarse_probe_d2_512/checkpoints/task_4.pt",
+  "architecture": {
+    "hidden_dim": 512,
+    "depth": 2,
+    "patch_size": 4,
+    "stride": 4,
+    "num_heads": 4,
+    "ff_dim": 1024,
+    "num_experts": 8,
+    "top_k": 2
+  },
+  "training_protocol": {
+    "router": "continual",
+    "decomposition": "none",
+    "replay_capacity": 715,
+    "replay_match": "sample_matched",
+    "steps_per_task": 200,
+    "seed": 0
+  },
+  "representation": {
+    "path": "patch_embed -> positional_embedding -> TransformerBlocks -> selected root LayerNorm -> mean token pool",
+    "selected_final_norm": "norm"
+  },
+  "probe_protocol": {
+    "preprocessing": "StandardScaler",
+    "solver": "LogisticRegression",
+    "solver_algorithm": "lbfgs",
+    "C": 1.0,
+    "max_iter": 2000,
+    "chance_normalization": "(accuracy-chance)/(1-chance)"
+  },
+  "reference": {
+    "coarse20": {
+      "accuracy": 0.3518,
+      "chance": 0.05,
+      "above_chance_fraction": 0.3176842105263158
+    },
+    "benchmark5": {
+      "accuracy": 0.3524,
+      "chance": 0.2,
+      "above_chance_fraction": 0.19049999999999997
+    },
+    "normalized_gap_pp": 12.718421052631582
+  },
+  "strict4": {
+    "coarse20": {
+      "accuracy": 0.365625,
+      "chance": 0.05,
+      "above_chance_fraction": 0.33223684210526316
+    },
+    "benchmark4": {
+      "accuracy": 0.420375,
+      "chance": 0.25,
+      "above_chance_fraction": 0.22716666666666666
+    },
+    "normalized_gap_pp": 10.50701754385965
+  },
+  "x0_reference": {
+    "coarse20_accuracy": 0.2662,
+    "coarse20_normalized": 0.22757894736842105,
+    "benchmark5_accuracy": 0.2961,
+    "benchmark5_normalized": 0.120125,
+    "normalized_gap_pp": 10.745394736842105
+  },
+  "gap_change_from_x0_pp": 1.9730263157894765
+}
