@@ -32,6 +32,11 @@ from openmoe.models.transformer import (
     TinyMoETransformer,
 )
 from openmoe.routers.continual import ContinualRouter
+from openmoe.routers.farp_router import (
+    FARPRouter,
+    ensure_farp_anchor,
+    refresh_farp_state,
+)
 from openmoe.routers.margin_router import MarginRouter
 from openmoe.routers.race_router import RACERouter
 from openmoe.routers.topk import (
@@ -149,17 +154,27 @@ def _make_race_router(
         pressure_momentum=0.9,
     )
 
-def make_router_factory(kind: str, cfg: dict):
+def make_router_factory(
+    kind: str,
+    cfg: dict,
+    *,
+    farp_rank: int = 16,
+    farp_lambda_c: float = 0.1,
+    farp_lambda_s: float = 0.1,
+    farp_anchor_path: str | None = None,
+):
     router_cfg = cfg["router"]
     model_cfg = cfg["model"]
 
     race_layer_index = 0
+    farp_layer_index = 0
 
     def factory(
         hidden_dim: int,
         num_experts: int,
     ):
         nonlocal race_layer_index
+        nonlocal farp_layer_index
 
         kwargs = {
             "hidden_dim": hidden_dim,
@@ -215,6 +230,31 @@ def make_router_factory(kind: str, cfg: dict):
                     "bias_lr",
                     1e-3,
                 ),
+            )
+
+        if kind == "farp":
+            layer_index = farp_layer_index
+            farp_layer_index += 1
+
+            return FARPRouter(
+                **kwargs,
+                memory_lambda=router_cfg.get(
+                    "memory_lambda",
+                    0.25,
+                ),
+                memory_momentum=router_cfg.get(
+                    "memory_momentum",
+                    0.99,
+                ),
+                bias_lr=router_cfg.get(
+                    "bias_lr",
+                    1e-3,
+                ),
+                rank=int(farp_rank),
+                lambda_c=float(farp_lambda_c),
+                lambda_s=float(farp_lambda_s),
+                anchor_path=farp_anchor_path,
+                layer_index=layer_index,
             )
 
         if kind == "margin":
@@ -977,6 +1017,35 @@ def main() -> None:
     )
 
     parser.add_argument(
+        "--farp",
+        action="store_true",
+        help="Enable Functional Anchor Routing Prior.",
+    )
+    parser.add_argument(
+        "--farp-lambda-c",
+        type=float,
+        default=0.1,
+        help="FARP compatibility z-score coefficient.",
+    )
+    parser.add_argument(
+        "--farp-lambda-s",
+        type=float,
+        default=0.1,
+        help="FARP stability z-score coefficient.",
+    )
+    parser.add_argument(
+        "--farp-anchor-checkpoint",
+        default="task_0.pt",
+        help="Task-0 checkpoint used to build the FARP anchor.",
+    )
+    parser.add_argument(
+        "--farp-rank",
+        type=int,
+        default=16,
+        help="Rank of each historical Task-0 PCA basis.",
+    )
+
+    parser.add_argument(
         "--crr",
         action="store_true",
         help="Enable the preregistered CRR experiment family.",
@@ -1011,9 +1080,42 @@ def main() -> None:
             "--replay-capacity requires --replay or --bounded-probe"
         )
 
+    if args.farp:
+        print(
+            "FARP active: "
+            f"rank={args.farp_rank}, "
+            f"lambda_C={args.farp_lambda_c}, "
+            f"lambda_S={args.farp_lambda_s}, "
+            f"anchor={args.farp_anchor_checkpoint}",
+            flush=True,
+        )
+
     if args.replay_dump is not None and not args.replay:
         raise ValueError(
             "--replay-dump requires --replay"
+        )
+
+    farp_anchor_state_path = None
+
+    if args.farp:
+        if args.router != "continual":
+            raise ValueError(
+                "--farp requires --router continual"
+            )
+
+        if args.checkpoint_dir is None:
+            raise ValueError(
+                "--farp requires --checkpoint-dir"
+            )
+
+        if args.farp_rank <= 0:
+            raise ValueError(
+                "--farp-rank must be positive"
+            )
+
+        farp_anchor_state_path = (
+            Path(args.checkpoint_dir)
+            / "farp_anchor.pt"
         )
 
     if args.bounded_probe and args.data != "cifar100":
@@ -1206,8 +1308,20 @@ def main() -> None:
                 "num_experts"
             ],
             router_factory=make_router_factory(
-                args.router,
+                "farp"
+                if args.farp
+                else args.router,
                 cfg,
+                farp_rank=args.farp_rank,
+                farp_lambda_c=args.farp_lambda_c,
+                farp_lambda_s=args.farp_lambda_s,
+                farp_anchor_path=(
+                    None
+                    if farp_anchor_state_path is None
+                    else str(
+                        farp_anchor_state_path
+                    )
+                ),
             ),
             depth=2,
         ).to(device)
@@ -1449,6 +1563,33 @@ def main() -> None:
         )
 
         training_loader = loader
+
+        if args.farp and task_id >= 1:
+            farp_anchor_checkpoint = Path(
+                args.farp_anchor_checkpoint
+            )
+
+            if not farp_anchor_checkpoint.is_absolute():
+                farp_anchor_checkpoint = (
+                    Path(args.checkpoint_dir)
+                    / farp_anchor_checkpoint
+                )
+
+            ensure_farp_anchor(
+                model=model,
+                anchor_checkpoint=farp_anchor_checkpoint,
+                anchor_state_path=farp_anchor_state_path,
+                root=".data",
+                device=device,
+                rank=args.farp_rank,
+                force=(task_id == 1),
+            )
+
+            refresh_farp_state(
+                model=model,
+                anchor_state_path=farp_anchor_state_path,
+                device=device,
+            )
 
         if (
             args.replay
