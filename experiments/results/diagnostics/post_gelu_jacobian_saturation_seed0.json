@@ -1,0 +1,16 @@
+{
+  "seed": 0,
+  "linear_fraction_B0": {
+    "L0": 0.67,
+    "L1": 0.708
+  },
+  "active_set_jaccard": {
+    "L0": 0.572,
+    "L1": 0.653
+  },
+  "top16_W1_row_overlap": {
+    "L0": 1.12,
+    "L1": 0.75
+  },
+  "status": "top16_row_persistence_not_supported_as_explanation"
+}
