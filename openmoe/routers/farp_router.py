@@ -206,23 +206,42 @@ class FARPRouter(ContinualRouter):
     @staticmethod
     def _zscore_across_experts(
         values: Tensor,
+        anchored: Tensor,
     ) -> Tensor:
-        mean = values.mean(
+        """
+        Z-score only anchored expert slots.
+
+        Unanchored slots receive exactly zero direct FARP signal.
+        """
+        result = torch.zeros_like(values)
+
+        if not bool(
+            torch.count_nonzero(anchored).item()
+        ):
+            return result
+
+        anchored_values = values[..., anchored]
+
+        mean = anchored_values.mean(
             dim=-1,
             keepdim=True,
         )
 
-        std = values.std(
+        std = anchored_values.std(
             dim=-1,
             keepdim=True,
             unbiased=False,
         )
 
-        return (
-            values - mean
+        result[..., anchored] = (
+            anchored_values - mean
         ) / (
             std + FARP_EPS
         )
+
+        return result
+
+
 
     def forward(
         self,
@@ -263,10 +282,20 @@ class FARPRouter(ContinualRouter):
 
         compatibility = self._compatibility(x)
 
-        # Per-token z-score across the 8 experts.
+        # Nonzero PCA basis means this expert-layer slot is anchored.
+        anchored = (
+            torch.count_nonzero(
+                self.farp_basis.abs(),
+                dim=(1, 2),
+            ) > 0
+        )
+
+        # Compatibility z-score over anchored experts only.
+        # Unanchored experts receive zero direct FARP-C signal.
         compatibility_z = (
             self._zscore_across_experts(
-                compatibility
+                compatibility,
+                anchored,
             )
         )
 
@@ -275,10 +304,12 @@ class FARPRouter(ContinualRouter):
             dtype=logits.dtype,
         )
 
-        # Scalar expert scores -> [1, E], then broadcast over tokens.
+        # Stability z-score over anchored experts only.
+        # Unanchored experts receive zero direct FARP-S signal.
         stability_z = (
             self._zscore_across_experts(
-                stability.unsqueeze(0)
+                stability.unsqueeze(0),
+                anchored,
             )
             .expand(
                 x.shape[0],
@@ -316,6 +347,8 @@ class FARPRouter(ContinualRouter):
             )
 
         return result
+
+
 
 
 @torch.no_grad()
@@ -366,12 +399,15 @@ def _capture_task0_probe(
     images: Tensor,
 ) -> list[list[Tensor]]:
     """
-    Return Task-0 h0 grouped by actual Top-2 membership:
+    Return Task-0 h0 grouped by actual Top-2 membership.
 
-      [layer][expert] -> [N_e, hidden_dim]
+    [layer][expert] -> [N_e, hidden_dim]
 
-    The membership comes from the actual routing object produced by
-    SparseMoE.forward(), exposed as _last_routing.
+    Expert membership comes from the actual SparseMoE routing object.
+
+    Hole-safe rule:
+      an expert with fewer than rank probe tokens is retained as an
+      unanchored slot rather than causing anchor construction to fail.
     """
     captured_h: dict[int, Tensor] = {}
     captured_indices: dict[int, Tensor] = {}
@@ -428,20 +464,16 @@ def _capture_task0_probe(
                 indices == expert_id
             ).any(dim=-1)
 
+            # Empty/short groups are valid: they are unanchored.
             values = h[mask].detach().cpu()
-
-            if values.shape[0] < 16:
-                raise RuntimeError(
-                    f"FARP anchor layer {layer}, expert {expert_id}: "
-                    f"{values.shape[0]} routed probe tokens; "
-                    "at least rank=16 are required."
-                )
 
             layer_groups.append(values)
 
         grouped.append(layer_groups)
 
     return grouped
+
+
 
 
 @torch.no_grad()
@@ -472,29 +504,55 @@ def _build_anchor_state(
         layer_z0: list[Tensor] = []
 
         for expert_id in range(num_experts):
-            h_values = grouped_h[layer][expert_id].to(
+            h_values = grouped_h[layer][expert_id]
+
+            # ------------------------------------------------
+            # UNANCHORED IS FREE
+            # ------------------------------------------------
+            if h_values.shape[0] < rank:
+                hidden_dim = h_values.shape[1]
+
+                layer_mu.append(
+                    torch.zeros(
+                        hidden_dim,
+                        dtype=torch.float32,
+                    )
+                )
+
+                layer_basis.append(
+                    torch.zeros(
+                        hidden_dim,
+                        rank,
+                        dtype=torch.float32,
+                    )
+                )
+
+                layer_z0.append(
+                    torch.empty(
+                        0,
+                        hidden_dim,
+                        dtype=torch.float32,
+                    )
+                )
+
+                continue
+
+            h_device = h_values.to(
                 device=device,
                 dtype=torch.float32,
             )
 
-            # mu0: mean of the Task-0 h values actually routed to e.
-            mu = h_values.mean(
+            # mu0
+            mu = h_device.mean(
                 dim=0
             )
 
             centered = (
-                h_values
+                h_device
                 - mu.unsqueeze(0)
             )
 
-            if centered.shape[0] < rank:
-                raise RuntimeError(
-                    f"FARP layer {layer}, expert {expert_id}: "
-                    f"{centered.shape[0]} routed tokens, "
-                    f"insufficient for rank={rank}"
-                )
-
-            # Top-rank PCA basis of the same routed h values.
+            # Task-0 PCA basis
             _, _, basis = torch.pca_lowrank(
                 centered,
                 q=rank,
@@ -509,12 +567,12 @@ def _build_anchor_state(
                 .float()
             )
 
-            # z0: Task-0 expert output on its routed probe inputs.
+            # Task-0 expert output anchor
             z0 = (
                 model.blocks[layer]
                 .moe
                 .experts[expert_id](
-                    h_values
+                    h_device
                 )
                 .detach()
                 .cpu()
@@ -572,6 +630,8 @@ def _build_anchor_state(
         "h0": grouped_h,
         "z0": z0_all,
     }
+
+
 
 
 @torch.no_grad()
@@ -671,6 +731,11 @@ def refresh_farp_state(
         ):
             h_values = h0[layer][expert_id]
             reference = z0[layer][expert_id].float()
+
+            # No historical anchor -> no historical stability constraint.
+            if h_values.shape[0] < router.farp_rank:
+                stability_scores.append(0.0)
+                continue
 
             current = _expert_outputs(
                 block.moe.experts[expert_id],
