@@ -1,0 +1,18 @@
+{
+  "seed": 0,
+  "object": "post-GELU expert activation",
+  "dimension": 1024,
+  "archive_macro": {
+    "L0": 0.2498683970601473,
+    "L1": 0.2332941378885094
+  },
+  "recomputed_macro": {
+    "L0": 0.242597,
+    "L1": 0.227251
+  },
+  "absolute_difference": {
+    "L0": 0.0072713971,
+    "L1": 0.0060431379
+  },
+  "status": "metric_recovered_to_working_tolerance"
+}
