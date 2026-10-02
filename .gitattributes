@@ -1,0 +1,4 @@
+experiments/results/**/*.pt filter=lfs diff=lfs merge=lfs -text
+experiments/results/**/*.pth filter=lfs diff=lfs merge=lfs -text
+experiments/results/**/*.ckpt filter=lfs diff=lfs merge=lfs -text
+experiments/results/**/*.bin filter=lfs diff=lfs merge=lfs -text

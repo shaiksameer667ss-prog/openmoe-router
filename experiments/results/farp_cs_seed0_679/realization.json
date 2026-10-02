@@ -1,0 +1,38 @@
+{
+  "condition": "FARP-CS @679",
+  "checkpoint": "/kaggle/working/openmoe-router/experiments/results/farp_cs_seed0_679/checkpoints/task_4.pt",
+  "device": "cuda",
+  "full_accuracy": [
+    0.0105,
+    0.013,
+    0.0275,
+    0.052,
+    0.429
+  ],
+  "task_restricted_ceiling": [
+    0.2215,
+    0.2365,
+    0.3165,
+    0.3525,
+    0.4385
+  ],
+  "sample_counts": [
+    2000,
+    2000,
+    2000,
+    2000,
+    2000
+  ],
+  "old_cil_mean_t0_t3": 0.02575,
+  "old_ceiling_mean_t0_t3": 0.28175,
+  "t4_cil": 0.429,
+  "t4_ceiling": 0.4385,
+  "old_realization_pct": 9.139307897071872,
+  "t4_realization_pct": 97.83352337514253,
+  "frontier_t4_pct_at_old_realization": 154.4716708188292,
+  "frontier_gap_pp": -56.63814744368668,
+  "coordinate": [
+    9.139307897071872,
+    97.83352337514253
+  ]
+}

@@ -1,0 +1,127 @@
+OpenMoE-Router Research Archive
+================================================================================
+
+Canonical setting:
+  Split-CIFAR-100, 5 tasks x 20 classes
+  D2 / hidden=512 / heads=4 / FFN=1024
+  8 experts / Top-2 / patch=4 / 64 tokens
+  replay=715 / seed=0 for archived diagnostic checkpoints
+
+Important experiment directories:
+  experiments/results/replication/arm_A_seed0_reproduced_checkpoints
+  experiments/results/replication/arm_A_seed0_679
+  experiments/results/crr_seed0
+  experiments/results/papa_path_anchor_seed0
+  experiments/results/test_5_3_task_supcon_seed0
+  experiments/results/diagnostics
+
+All research result files:
+experiments/results/attention_pool_diagnostic_seed0/attention_pool_diagnostic_seed0.json	1290
+experiments/results/baseline_byte_matched.json	249077
+experiments/results/baseline_byte_matched_seed1.json	249045
+experiments/results/baseline_byte_matched_seed2.json	249068
+experiments/results/baseline_none_seed0_final.json	271740
+experiments/results/baseline_sample_matched.json	248830
+experiments/results/baseline_sample_matched_seed2.json	249245
+experiments/results/bounded_decoder/abc_B_none_exact_A_buffer_seed0.json	1001
+experiments/results/bounded_decoder/abc_C_fresh_random_buffer_seed12345.pt	8800157
+experiments/results/bounded_decoder/abc_C_fresh_random_buffer_seed2.pt	8800121
+experiments/results/bounded_decoder/abc_C_none_fresh_buffer_seed0.json	988
+experiments/results/bounded_decoder/path1_multiseed_summary.json	1244
+experiments/results/bounded_decoder/path1_plain_ce_seed0_manifest.json	2845
+experiments/results/bounded_decoder/plain_ce_seed0_A_buffer.json	992
+experiments/results/bounded_decoder/plain_ce_seed0_C_buffer.json	1010
+experiments/results/bounded_decoder/plain_ce_seed0_for_match.json	302985
+experiments/results/bounded_decoder/plain_ce_seed0_for_match_checkpoints/task_3.pt	36033441
+experiments/results/bounded_decoder/plain_ce_seed0_for_match_checkpoints/task_4.pt	36033441
+experiments/results/bounded_decoder/plain_ce_seed1_A_buffer.json	1019
+experiments/results/bounded_decoder/plain_ce_seed2_A_buffer.json	990
+experiments/results/bounded_decoder/plain_ce_seed2_C_buffer.json	1009
+experiments/results/bounded_decoder/plain_ce_seed2_for_match.json	302843
+experiments/results/bounded_decoder/plain_ce_seed2_for_match_checkpoints/task_4.pt	36033441
+experiments/results/bounded_decoder/probe_b_boundary3_buffer.pt	8799994
+experiments/results/bounded_decoder/probe_b_boundary3_buffer.pt.meta.json	433
+experiments/results/bounded_decoder/probe_b_m1_plain_ce_seed0.json	923
+experiments/results/bounded_decoder/probe_b_m1_plain_ce_seed1.json	917
+experiments/results/bounded_decoder/probe_b_m1_plain_ce_seed2.json	923
+experiments/results/bounded_decoder/probe_b_m1_replay_seed0.json	930
+experiments/results/bounded_decoder/probe_b_m1_replay_seed1.json	927
+experiments/results/bounded_decoder/probe_b_m1_replay_seed2.json	924
+experiments/results/bounded_decoder/probe_b_m3_replay_seed0.json	926
+experiments/results/bounded_decoder/probe_b_m3_replay_seed1.json	926
+experiments/results/bounded_decoder/probe_b_m3_replay_seed2.json	932
+experiments/results/bounded_decoder/probe_b_results_summary.json	2022
+experiments/results/bounded_decoder/replay_715_bounded_probe_frozen_seed0.json	308065
+experiments/results/bounded_decoder/replay_715_bounded_probe_seed0.json	307596
+experiments/results/bounded_decoder/replay_715_seed0_for_probe_b_checkpoints/task_3.pt	36033441
+experiments/results/bounded_decoder/replay_715_seed0_for_probe_b_checkpoints/task_4.pt	36033441
+experiments/results/bounded_decoder/replay_715_seed1_A_buffer.json	1014
+experiments/results/bounded_decoder/replay_715_seed2_A_buffer.json	1014
+experiments/results/bounded_decoder/replay_715_seed2_buffer.pt	8799857
+experiments/results/bounded_decoder/replay_715_seed2_buffer_run.json	306185
+experiments/results/bounded_decoder/replay_715_seed2_for_decoder.json	306681
+experiments/results/bounded_decoder/replay_715_seed2_for_decoder_checkpoints/task_4.pt	36033441
+experiments/results/coarse_probe_d2_512/coarse_vs_benchmark_final.json	1850
+experiments/results/coarse_probe_d2_512/result.json	269728
+experiments/results/cross_layer_path_overlap.json	2154
+experiments/results/crr_seed0/arm_A/expert_functional_activation_audit.json	5145
+experiments/results/crr_seed0/arm_A/expert_subspace_codrift.json	2104
+experiments/results/crr_seed0/arm_A/farp_pre_audit.json	7069
+experiments/results/crr_seed0/arm_A/farp_pre_audit_cosine.json	9104
+experiments/results/crr_seed0/arm_A/pathway_2x2_decomposition_corrected.json	29072
+experiments/results/crr_seed0/arm_A/result.json	269751
+experiments/results/crr_seed0_summary.md	1956
+experiments/results/diagnostics/arm_A_679_role_migration.json	46932
+experiments/results/diagnostics/arm_A_715_role_migration.json	47083
+experiments/results/diagnostics/step1_task0_routing_pathology_seed0.md	5141
+experiments/results/er_ace/er_ace_715_3seed_summary.json	576
+experiments/results/farp_cs_seed0_679/checkpoints/farp_anchor.pt	524854813
+experiments/results/farp_cs_seed0_679/checkpoints/task_0.pt	76724170
+experiments/results/farp_cs_seed0_679/checkpoints/task_1.pt	76724170
+experiments/results/farp_cs_seed0_679/checkpoints/task_2.pt	76724170
+experiments/results/farp_cs_seed0_679/checkpoints/task_3.pt	76724170
+experiments/results/farp_cs_seed0_679/checkpoints/task_4.pt	76724170
+experiments/results/farp_cs_seed0_679/realization.json	783
+experiments/results/farp_cs_seed0_679/result.json	269806
+experiments/results/fixed_prior_logit_adjustment_none_seed0/posthoc_eval_results.json	2593
+experiments/results/fixed_prior_logit_adjustment_none_seed0/tau_1p0/result.json	307295
+experiments/results/fixed_prior_logit_adjustment_none_seed0/tau_2p0/result.json	307175
+experiments/results/fixed_prior_logit_adjustment_none_seed0/tau_3p0/result.json	307010
+experiments/results/milestone6/aggregate_seed0_seed1_seed2.json	5587
+experiments/results/papa_path_anchor_seed0/result.json	343884
+experiments/results/probe/head_masked_frozen_old_seed0.json	310858
+experiments/results/probe/head_masked_seed0.json	310842
+experiments/results/probe/none_seed0.json	310663
+experiments/results/probe/seed0_screening_summary.json	6591
+experiments/results/rcr/rcr_722_beta0.1_seed0.json	319167
+experiments/results/rcr/rcr_722_beta1.0_seed0.json	319496
+experiments/results/rcr/rcr_722_beta10.0_seed0.json	319680
+experiments/results/rcr/rcr_seed0_beta_sweep_summary.json	631
+experiments/results/rcr/replay_722_seed0.json	306220
+experiments/results/replay_A_reconstruction/matched_694/slda_ncm/slda_vs_ncm_seed0.json	5200
+experiments/results/replication/arm_A_seed0_679/checkpoints/task_0.pt	76165345
+experiments/results/replication/arm_A_seed0_679/checkpoints/task_1.pt	76165345
+experiments/results/replication/arm_A_seed0_679/checkpoints/task_2.pt	76165345
+experiments/results/replication/arm_A_seed0_679/checkpoints/task_3.pt	76165345
+experiments/results/replication/arm_A_seed0_679/checkpoints/task_4.pt	76165345
+experiments/results/replication/arm_A_seed0_679/result.json	269828
+experiments/results/replication/arm_A_seed0_reproduced.json	269847
+experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_0.pt	76165345
+experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_1.pt	76165345
+experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_2.pt	76165345
+experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_3.pt	76165345
+experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt	76165345
+experiments/results/routed_support_reconciliation.json	6574
+experiments/results/supcon_gpm_seed0_corrected/representation_audit.json	5367
+experiments/results/supcon_gpm_seed0_corrected/result.json	340418
+experiments/results/taih_seq_corrected_balanced_q_seed0/taih_seq_corrected_balanced_q_seed0_eval.json	4088
+experiments/results/test_5_3_task_supcon_seed0/checkpoints/task_0.pt	76165345
+experiments/results/test_5_3_task_supcon_seed0/checkpoints/task_1.pt	76165345
+experiments/results/test_5_3_task_supcon_seed0/checkpoints/task_2.pt	76165345
+experiments/results/test_5_3_task_supcon_seed0/checkpoints/task_3.pt	76165345
+experiments/results/test_5_3_task_supcon_seed0/checkpoints/task_4.pt	76165345
+experiments/results/test_5_3_task_supcon_seed0/result.json	307052
+experiments/results/test_5_3_task_supcon_seed0/task_id_probe_logistic_4way.json	410
+experiments/results/test_5_3_task_supcon_seed0/task_id_probe_logistic_4way_heldout.json	1090
+experiments/results/test_5_3_task_supcon_seed0/task_id_probe_results.json	991
+experiments/results/test_5_3_task_supcon_seed0/task_id_representation_probe.json	893

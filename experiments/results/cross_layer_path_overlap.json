@@ -1,0 +1,73 @@
+{
+  "experiment": "cross_layer_path_overlap",
+  "condition": "arm_A",
+  "replay_capacity": 715,
+  "seed": 0,
+  "probe_images": 500,
+  "tokens_per_image": 64,
+  "num_tokens": 32000,
+  "num_experts": 8,
+  "top_k": 2,
+  "router": {
+    "type": "continual",
+    "memory_lambda": 0.25,
+    "memory_momentum": 0.99,
+    "z_loss_weight": 5e-07,
+    "bias_lr": 0.001,
+    "temperature": 1.0
+  },
+  "definitions": {
+    "S_L0": "fraction of tokens with L0_t == L0_0",
+    "S_L1": "fraction of tokens with L1_t == L1_0",
+    "S_path": "fraction of tokens with P_t == P_0",
+    "S_path_indep": "S_L0 * S_L1",
+    "delta_indep": "S_path - S_path_indep"
+  },
+  "results": {
+    "1": {
+      "S_L0": 0.455875,
+      "S_L1": 0.021,
+      "S_path": 0.01175,
+      "S_path_indep": 0.009573375,
+      "delta_indep": 0.0021766249999999997,
+      "L0_fragmentation": 0.544125,
+      "L1_fragmentation": 0.979,
+      "path_fragmentation": 0.98825,
+      "verdict": "PATHS FRAGMENT AT INDEPENDENT RATE"
+    },
+    "2": {
+      "S_L0": 0.25315625,
+      "S_L1": 0.01903125,
+      "S_path": 0.00965625,
+      "S_path_indep": 0.004817879882812501,
+      "delta_indep": 0.004838370117187499,
+      "L0_fragmentation": 0.74684375,
+      "L1_fragmentation": 0.98096875,
+      "path_fragmentation": 0.99034375,
+      "verdict": "PATHS FRAGMENT AT INDEPENDENT RATE"
+    },
+    "3": {
+      "S_L0": 0.1913125,
+      "S_L1": 0.032375,
+      "S_path": 0.00990625,
+      "S_path_indep": 0.0061937421875,
+      "delta_indep": 0.0037125078125,
+      "L0_fragmentation": 0.8086875,
+      "L1_fragmentation": 0.967625,
+      "path_fragmentation": 0.99009375,
+      "verdict": "PATHS FRAGMENT AT INDEPENDENT RATE"
+    },
+    "4": {
+      "S_L0": 0.21515625,
+      "S_L1": 0.0535,
+      "S_path": 0.01940625,
+      "S_path_indep": 0.011510859375,
+      "delta_indep": 0.007895390625,
+      "L0_fragmentation": 0.7848437500000001,
+      "L1_fragmentation": 0.9465,
+      "path_fragmentation": 0.98059375,
+      "verdict": "PATHS FRAGMENT AT INDEPENDENT RATE"
+    }
+  },
+  "overall_verdict": "BCPR CLOSED \u2014 path fragmentation is approximately explained by independent L0/L1 fragmentation."
+}

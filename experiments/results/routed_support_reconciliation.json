@@ -1,0 +1,206 @@
+{
+  "metadata": {
+    "experiment": "routed_support_reconciliation",
+    "condition": "arm_A_715",
+    "seed": 0,
+    "replay_capacity": 715,
+    "probe_images": 500,
+    "num_experts": 8,
+    "top_k": 2,
+    "pca_rank": 16,
+    "historical_support": "actual SparseMoE _last_routing.indices",
+    "routed_metric": "mean per-example cosine",
+    "routed_subspace_metric": "rank-16 PCA subspace similarity",
+    "all_token_metric": "mean per-example cosine on all Task-0 tokens",
+    "important_handling": "experts with fewer than 16 historical routed tokens are reported as undefined rather than substituted",
+    "training": "none"
+  },
+  "results": {
+    "0": {
+      "support": {
+        "total_experts": 8,
+        "eligible_experts": 6,
+        "ineligible_experts": 2,
+        "counts": {
+          "0": 10082,
+          "1": 15197,
+          "2": 9846,
+          "3": 8,
+          "4": 669,
+          "5": 2507,
+          "6": 0,
+          "7": 25691
+        }
+      },
+      "routed_support": {
+        "eligible_expert_mean_cosine": 0.24472834914922714,
+        "eligible_expert_mean_pca16": 0.19553968186179796,
+        "denominator": 6
+      },
+      "all_token_support": {
+        "eight_expert_mean_cosine": 0.23969433829188347,
+        "eight_expert_mean_pca16": 0.16386293852701783,
+        "denominator": 8
+      },
+      "per_expert": {
+        "0": {
+          "routed_tokens": 10082,
+          "routed_eligible": true,
+          "routed_cosine": 0.4371633529663086,
+          "routed_pca16": 0.2776781916618347,
+          "all_token_cosine": 0.4012865126132965,
+          "all_token_pca16": 0.26463669538497925
+        },
+        "1": {
+          "routed_tokens": 15197,
+          "routed_eligible": true,
+          "routed_cosine": 0.2214365005493164,
+          "routed_pca16": 0.1736775040626526,
+          "all_token_cosine": 0.2564578056335449,
+          "all_token_pca16": 0.1685408651828766
+        },
+        "2": {
+          "routed_tokens": 9846,
+          "routed_eligible": true,
+          "routed_cosine": 0.07488459348678589,
+          "routed_pca16": 0.19590432941913605,
+          "all_token_cosine": 0.22797730565071106,
+          "all_token_pca16": 0.19031497836112976
+        },
+        "3": {
+          "routed_tokens": 8,
+          "routed_eligible": false,
+          "routed_cosine": null,
+          "routed_pca16": null,
+          "all_token_cosine": 0.11737236380577087,
+          "all_token_pca16": 0.08775205910205841
+        },
+        "4": {
+          "routed_tokens": 669,
+          "routed_eligible": true,
+          "routed_cosine": 0.17562516033649445,
+          "routed_pca16": 0.07158228009939194,
+          "all_token_cosine": 0.21866962313652039,
+          "all_token_pca16": 0.08194174617528915
+        },
+        "5": {
+          "routed_tokens": 2507,
+          "routed_eligible": true,
+          "routed_cosine": 0.2730499804019928,
+          "routed_pca16": 0.17011354863643646,
+          "all_token_cosine": 0.21778464317321777,
+          "all_token_pca16": 0.17221930623054504
+        },
+        "6": {
+          "routed_tokens": 0,
+          "routed_eligible": false,
+          "routed_cosine": null,
+          "routed_pca16": null,
+          "all_token_cosine": 0.17468571662902832,
+          "all_token_pca16": 0.057258497923612595
+        },
+        "7": {
+          "routed_tokens": 25691,
+          "routed_eligible": true,
+          "routed_cosine": 0.2862105071544647,
+          "routed_pca16": 0.28428223729133606,
+          "all_token_cosine": 0.3033207356929779,
+          "all_token_pca16": 0.28823935985565186
+        }
+      }
+    },
+    "1": {
+      "support": {
+        "total_experts": 8,
+        "eligible_experts": 6,
+        "ineligible_experts": 2,
+        "counts": {
+          "0": 7118,
+          "1": 31999,
+          "2": 956,
+          "3": 9613,
+          "4": 1042,
+          "5": 13272,
+          "6": 0,
+          "7": 0
+        }
+      },
+      "routed_support": {
+        "eligible_expert_mean_cosine": 0.06984749436378479,
+        "eligible_expert_mean_pca16": 0.1489835431178411,
+        "denominator": 6
+      },
+      "all_token_support": {
+        "eight_expert_mean_cosine": 0.11858619784470648,
+        "eight_expert_mean_pca16": 0.13140975777059793,
+        "denominator": 8
+      },
+      "per_expert": {
+        "0": {
+          "routed_tokens": 7118,
+          "routed_eligible": true,
+          "routed_cosine": 0.30230626463890076,
+          "routed_pca16": 0.12953466176986694,
+          "all_token_cosine": 0.3572810888290405,
+          "all_token_pca16": 0.13378047943115234
+        },
+        "1": {
+          "routed_tokens": 31999,
+          "routed_eligible": true,
+          "routed_cosine": -0.19760334491729736,
+          "routed_pca16": 0.2714076638221741,
+          "all_token_cosine": -0.1975904256105423,
+          "all_token_pca16": 0.27140694856643677
+        },
+        "2": {
+          "routed_tokens": 956,
+          "routed_eligible": true,
+          "routed_cosine": 0.06719186902046204,
+          "routed_pca16": 0.09170915931463242,
+          "all_token_cosine": 0.08741072565317154,
+          "all_token_pca16": 0.08841121196746826
+        },
+        "3": {
+          "routed_tokens": 9613,
+          "routed_eligible": true,
+          "routed_cosine": 0.17198404669761658,
+          "routed_pca16": 0.14087660610675812,
+          "all_token_cosine": 0.13387061655521393,
+          "all_token_pca16": 0.15921349823474884
+        },
+        "4": {
+          "routed_tokens": 1042,
+          "routed_eligible": true,
+          "routed_cosine": 0.15785737335681915,
+          "routed_pca16": 0.10963939875364304,
+          "all_token_cosine": 0.19988609850406647,
+          "all_token_pca16": 0.09902797639369965
+        },
+        "5": {
+          "routed_tokens": 13272,
+          "routed_eligible": true,
+          "routed_cosine": -0.08265124261379242,
+          "routed_pca16": 0.15073376893997192,
+          "all_token_cosine": 0.01190426480025053,
+          "all_token_pca16": 0.15401870012283325
+        },
+        "6": {
+          "routed_tokens": 0,
+          "routed_eligible": false,
+          "routed_cosine": null,
+          "routed_pca16": null,
+          "all_token_cosine": 0.21145111322402954,
+          "all_token_pca16": 0.07147487998008728
+        },
+        "7": {
+          "routed_tokens": 0,
+          "routed_eligible": false,
+          "routed_cosine": null,
+          "routed_pca16": null,
+          "all_token_cosine": 0.14447610080242157,
+          "all_token_pca16": 0.07394436746835709
+        }
+      }
+    }
+  }
+}
