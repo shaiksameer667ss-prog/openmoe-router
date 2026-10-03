@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-03",
+  "branch": "openmoe-router-mechanism-archive",
+  "base_archive_commit": "74881fb209c6d7bc99bb97db2edd50dfb79d40e8",
+  "current_preservation_commit": "9603beb897ed6e65a6066eb6deaa6f6868bec49c1",
+  "note": "This file preserves results summarized from the Kaggle research workflow. It is not a byte-for-byte substitute for the original Kaggle JSON/PT artifacts.",
+  "experiments": {
+    "canonical_56C72R": {
+      "checkpoint_dir": "experiments/results/diagnostics/canonical_56C72R_checkpoints",
+      "result_json": "experiments/results/diagnostics/canonical_56C72R_full_training.json",
+      "posthoc_refit_json": "experiments/results/diagnostics/canonical_56C72R_posthoc_head_refit.json",
+      "endpoint_percent": {
+        "T0": 1.2,
+        "T1": 1.15,
+        "T2": 1.4,
+        "T3": 6.7,
+        "T4": 43.1,
+        "old_mean": 2.613
+      },
+      "posthoc_refit_percent": {
+        "old_mean_before": 2.613,
+        "old_mean_after": 9.188,
+        "delta_old_mean": 6.575,
+        "T3_before": 6.7,
+        "T3_after": 12.95,
+        "T4_before": 43.1,
+        "T4_after": 35.5
+      }
+    },
+    "canonical_64C64R_fresh": {
+      "checkpoint_dir": "experiments/results/diagnostics/canonical_64C64R_fresh_checkpoints",
+      "result_json": "experiments/results/diagnostics/canonical_64C64R_fresh.json",
+      "endpoint_percent": {
+        "T0": 1.65,
+        "T1": 0.9,
+        "T2": 2.35,
+        "T3": 3.95,
+        "T4": 45.1,
+        "old_mean": 2.213
+      },
+      "reproduction_status": "Metric-level reproduction of archived canonical seed-0 boundary accuracies."
+    },
+    "prospective_56C72R": {
+      "frozen_old_head_result": "experiments/results/diagnostics/prospective_t3_t4_full_model_old_head_frozen_56C72R.json",
+      "trainable_old_head_result": "experiments/results/diagnostics/prospective_t3_t4_full_model_old_head_trainable_56C72R.json",
+      "head_only_result": "experiments/results/diagnostics/prospective_t3_t4_head_only_56C72R.json",
+      "posthoc_refit_result": "experiments/results/diagnostics/prospective_trainable_posthoc_head_refit_56C72R.json",
+      "posthoc_refit_checkpoint": "experiments/results/diagnostics/prospective_trainable_posthoc_head_refit_56C72R.pt",
+      "linear_probe_result": "experiments/results/diagnostics/prospective_trainable_linear_probe.json",
+      "initialization_sweep": "experiments/results/diagnostics/prospective_trainable_head_initialization_sweep_56C72R.json",
+      "endpoint_percent": {
+        "frozen_old_head": {
+          "old_mean": 4.275,
+          "T3": 7.45,
+          "T4": 39.25
+        },
+        "trainable_old_head": {
+          "old_mean": 3.475,
+          "T3": 4.65,
+          "T4": 39.85
+        }
+      },
+      "posthoc_default_prospective_head_percent": {
+        "old_mean_before": 3.475,
+        "old_mean_after": 2.787,
+        "T3_before": 4.65,
+        "T3_after": 3.75,
+        "T4_before": 39.85,
+        "T4_after": 42.55
+      },
+      "linear_probe_percent": {
+        "old_mean": 18.763,
+        "T3": 23.45,
+        "T4": 23.15
+      }
+    },
+    "prospective_64C64R": {
+      "checkpoint": "experiments/results/diagnostics/prospective_64C64R_checkpoint.pt",
+      "result": "experiments/results/diagnostics/prospective_64C64R_then_56C72R_head_refit.json",
+      "before_refit_percent": {
+        "old_mean": 3.038,
+        "T3": 4.65,
+        "T4": 40.3
+      },
+      "after_refit_percent": {
+        "old_mean": 3,
+        "T3": 4.85,
+        "T4": 42.65
+      }
+    },
+    "trajectory": {
+      "interpolation_refined": "experiments/results/diagnostics/t3_t4_checkpoint_interpolation_oracle_refined.json",
+      "old_task_ce_trajectory": "experiments/results/diagnostics/t3_t4_old_task_ce_trajectory.json",
+      "sampled_t4_intermediate_checkpoint_dir": "experiments/results/diagnostics/t3_t4_reconstructed_trajectory/checkpoints/t4_intermediate",
+      "actual_step_200_percent": {
+        "old_mean": 2.213,
+        "T4": 45.1
+      },
+      "notable": "No sampled actual T4 intermediate checkpoint dominated the endpoint; interpolation bulges were treated as a parameter-space shortcut, not an optimizer-trajectory mechanism."
+    }
+  },
+  "scientific_status": [
+    "Do not reopen closed router-only hypotheses.",
+    "Do not claim mechanism improvement from diagnostic/oracle results without the relevant preregistered gate.",
+    "Prospective-vs-canonical refit amenability differs strongly by training history/procedure rather than replay ratio alone.",
+    "Prospective encoder retains substantial linearly recoverable task information, so simple encoder information destruction is not sufficient to explain poor 715-example refit.",
+    "The strongest supported thesis remains historical computation loss involving representation drift plus historical expert-function drift, with layer-dependent contributions."
+  ],
+  "raw_artifact_status": {
+    "available_on_current_github_branch": false,
+    "raw_kaggle_json_pt_bytes_missing_from_this_session": true,
+    "required_action": "Upload or mount the Kaggle result files/checkpoints before committing their exact bytes."
+  }
+}
