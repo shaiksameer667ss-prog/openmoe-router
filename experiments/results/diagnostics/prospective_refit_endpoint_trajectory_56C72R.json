@@ -1,0 +1,363 @@
+{
+  "experiment": "prospective_refit_endpoint_trajectory_56C72R",
+  "seed": 0,
+  "protocol": {
+    "trajectory": {
+      "start": "theta3",
+      "task": "T4",
+      "warmup_steps": 10,
+      "adaptation_steps": 190,
+      "total_steps": 200
+    },
+    "refit": {
+      "initialization": "zero_head",
+      "current_batch_size": 56,
+      "replay_batch_size": 72,
+      "replay_capacity": 715,
+      "steps": 200,
+      "optimizer": "AdamW",
+      "lr": 0.0003,
+      "weight_decay": 0.05,
+      "encoder_frozen": true,
+      "experts_frozen": true,
+      "router_frozen": true
+    }
+  },
+  "captured_steps": [
+    10,
+    25,
+    50,
+    100,
+    150,
+    200
+  ],
+  "trajectory_native_metrics": {
+    "10": {
+      "old_acc_percent": [
+        6.550000000000001,
+        11.15,
+        13.600000000000001,
+        17.299999999999997
+      ],
+      "old_mean_percent": 12.15,
+      "T4_percent": 10.8
+    },
+    "25": {
+      "old_acc_percent": [
+        10.7,
+        7.449999999999999,
+        11.600000000000001,
+        15.5
+      ],
+      "old_mean_percent": 11.3125,
+      "T4_percent": 18.4
+    },
+    "50": {
+      "old_acc_percent": [
+        8.649999999999999,
+        5.75,
+        7.3999999999999995,
+        12.9
+      ],
+      "old_mean_percent": 8.674999999999999,
+      "T4_percent": 28.999999999999996
+    },
+    "100": {
+      "old_acc_percent": [
+        4.95,
+        4.2,
+        4.65,
+        9.0
+      ],
+      "old_mean_percent": 5.7,
+      "T4_percent": 37.05
+    },
+    "150": {
+      "old_acc_percent": [
+        4.55,
+        2.4,
+        4.0,
+        8.35
+      ],
+      "old_mean_percent": 4.824999999999999,
+      "T4_percent": 38.45
+    },
+    "200": {
+      "old_acc_percent": [
+        2.15,
+        2.55,
+        3.15,
+        5.949999999999999
+      ],
+      "old_mean_percent": 3.4499999999999997,
+      "T4_percent": 41.05
+    }
+  },
+  "refit_endpoint_results": {
+    "10": {
+      "encoder_step": 10,
+      "native_encoder_state": {
+        "old_acc_percent": [
+          6.550000000000001,
+          11.15,
+          13.600000000000001,
+          17.299999999999997
+        ],
+        "old_mean_percent": 12.15,
+        "T4_percent": 10.8
+      },
+      "zero_head_pre_refit": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "zero_head_post_refit": {
+        "old_acc_percent": [
+          5.65,
+          4.8,
+          8.200000000000001,
+          10.8
+        ],
+        "old_mean_percent": 7.3625,
+        "T4_percent": 32.85
+      },
+      "refit_endpoint": {
+        "old_mean_percent": 7.3625,
+        "T4_percent": 32.85,
+        "old_mean_gain_pp": 6.1125,
+        "T4_gain_pp": 32.85
+      }
+    },
+    "25": {
+      "encoder_step": 25,
+      "native_encoder_state": {
+        "old_acc_percent": [
+          10.7,
+          7.449999999999999,
+          11.600000000000001,
+          15.5
+        ],
+        "old_mean_percent": 11.3125,
+        "T4_percent": 18.4
+      },
+      "zero_head_pre_refit": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "zero_head_post_refit": {
+        "old_acc_percent": [
+          7.75,
+          5.25,
+          8.75,
+          9.85
+        ],
+        "old_mean_percent": 7.9,
+        "T4_percent": 31.85
+      },
+      "refit_endpoint": {
+        "old_mean_percent": 7.9,
+        "T4_percent": 31.85,
+        "old_mean_gain_pp": 6.65,
+        "T4_gain_pp": 31.85
+      }
+    },
+    "50": {
+      "encoder_step": 50,
+      "native_encoder_state": {
+        "old_acc_percent": [
+          8.649999999999999,
+          5.75,
+          7.3999999999999995,
+          12.9
+        ],
+        "old_mean_percent": 8.674999999999999,
+        "T4_percent": 28.999999999999996
+      },
+      "zero_head_pre_refit": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "zero_head_post_refit": {
+        "old_acc_percent": [
+          7.3999999999999995,
+          5.3,
+          8.799999999999999,
+          10.15
+        ],
+        "old_mean_percent": 7.9125,
+        "T4_percent": 33.300000000000004
+      },
+      "refit_endpoint": {
+        "old_mean_percent": 7.9125,
+        "T4_percent": 33.300000000000004,
+        "old_mean_gain_pp": 6.6625,
+        "T4_gain_pp": 33.300000000000004
+      }
+    },
+    "100": {
+      "encoder_step": 100,
+      "native_encoder_state": {
+        "old_acc_percent": [
+          4.95,
+          4.2,
+          4.65,
+          9.0
+        ],
+        "old_mean_percent": 5.7,
+        "T4_percent": 37.05
+      },
+      "zero_head_pre_refit": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "zero_head_post_refit": {
+        "old_acc_percent": [
+          5.8500000000000005,
+          4.35,
+          6.3,
+          8.1
+        ],
+        "old_mean_percent": 6.15,
+        "T4_percent": 39.1
+      },
+      "refit_endpoint": {
+        "old_mean_percent": 6.15,
+        "T4_percent": 39.1,
+        "old_mean_gain_pp": 4.9,
+        "T4_gain_pp": 39.1
+      }
+    },
+    "150": {
+      "encoder_step": 150,
+      "native_encoder_state": {
+        "old_acc_percent": [
+          4.55,
+          2.4,
+          4.0,
+          8.35
+        ],
+        "old_mean_percent": 4.824999999999999,
+        "T4_percent": 38.45
+      },
+      "zero_head_pre_refit": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "zero_head_post_refit": {
+        "old_acc_percent": [
+          4.3,
+          2.9000000000000004,
+          4.8500000000000005,
+          8.05
+        ],
+        "old_mean_percent": 5.025,
+        "T4_percent": 40.25
+      },
+      "refit_endpoint": {
+        "old_mean_percent": 5.025,
+        "T4_percent": 40.25,
+        "old_mean_gain_pp": 3.7750000000000004,
+        "T4_gain_pp": 40.25
+      }
+    },
+    "200": {
+      "encoder_step": 200,
+      "native_encoder_state": {
+        "old_acc_percent": [
+          2.15,
+          2.55,
+          3.15,
+          5.949999999999999
+        ],
+        "old_mean_percent": 3.4499999999999997,
+        "T4_percent": 41.05
+      },
+      "zero_head_pre_refit": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "zero_head_post_refit": {
+        "old_acc_percent": [
+          3.05,
+          2.65,
+          4.2,
+          6.65
+        ],
+        "old_mean_percent": 4.137499999999999,
+        "T4_percent": 42.4
+      },
+      "refit_endpoint": {
+        "old_mean_percent": 4.137499999999999,
+        "T4_percent": 42.4,
+        "old_mean_gain_pp": 2.8874999999999993,
+        "T4_gain_pp": 42.4
+      }
+    }
+  },
+  "endpoint_summary": {
+    "old_endpoint_percent": [
+      7.3625,
+      7.9,
+      7.9125,
+      6.15,
+      5.025,
+      4.137499999999999
+    ],
+    "T4_endpoint_percent": [
+      32.85,
+      31.85,
+      33.300000000000004,
+      39.1,
+      40.25,
+      42.4
+    ],
+    "old_total_movement_pp": -3.2250000000000005,
+    "T4_total_movement_pp": 9.549999999999997,
+    "old_step_spearman": {
+      "rho": -0.7714285714285715,
+      "p": 0.07239650145772594
+    },
+    "T4_step_spearman": {
+      "rho": 0.942857142857143,
+      "p": 0.004804664723032055
+    },
+    "old_monotonic": false,
+    "T4_monotonic": false
+  },
+  "interpretation_note": "Each endpoint is the result of the prescribed 200-step zero-head refit from a frozen prospective encoder snapshot. These are finite-horizon refit endpoints, not mathematical asymptotic fixed points."
+}

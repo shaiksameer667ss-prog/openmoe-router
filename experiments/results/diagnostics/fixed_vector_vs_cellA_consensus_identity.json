@@ -1,0 +1,29 @@
+{
+  "cell": "fixed_vector_vs_cellA_consensus_identity",
+  "historical_fixed_vector": {
+    "definition": "mean over L1 tokens of gate-weighted historical-current expert secant",
+    "fit_tasks": [
+      1,
+      2,
+      3
+    ],
+    "images_per_task": 400,
+    "fit_tokens": 76800,
+    "top_k": 2,
+    "expert_identity_as_predictor": false,
+    "rank": 0,
+    "norm": 9.003647804260254,
+    "mean_gate_sum_per_token": 1.0000000000571239
+  },
+  "cellA_consensus": {
+    "definition": "mean over expert identity of b_e",
+    "layer": 1,
+    "replay_images": 715,
+    "vectors_per_layer": 45760,
+    "norm": 10.780990600585938
+  },
+  "comparison": {
+    "cosine_historical_fixed_vs_cellA_b_bar": 0.7915162444114685
+  },
+  "status": "PARTIAL ALIGNMENT: a meaningful relationship exists, but the earlier fixed-vector effect cannot be identified with Cell-A consensus."
+}

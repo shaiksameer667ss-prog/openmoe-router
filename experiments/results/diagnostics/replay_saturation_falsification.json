@@ -1,0 +1,136 @@
+{
+  "experiment": "replay_saturation_falsification",
+  "seed": 0,
+  "target_replay_ce": 5.23,
+  "protocol": {
+    "current_batch_size": 56,
+    "replay_batch_size": 72,
+    "replay_capacity": 715,
+    "refit_steps": 200,
+    "old_rows_perturbed": "0:80",
+    "new_rows_untouched": "80:100"
+  },
+  "noise_calibration": {
+    "step10": {
+      "target_ce": 5.23,
+      "achieved_ce": 5.2300000597546985,
+      "sigma": 0.11624102713540196
+    },
+    "final_theta3": {
+      "target_ce": 5.23,
+      "achieved_ce": 5.230000657301683,
+      "sigma": 0.2488647480495274
+    }
+  },
+  "results": {
+    "step10_native": {
+      "pre_replay_ce": 3.3968666983651112,
+      "pre": {
+        "old_acc_percent": [
+          6.550000000000001,
+          11.15,
+          13.600000000000001,
+          17.299999999999997
+        ],
+        "old_mean_percent": 12.15,
+        "T4_percent": 10.8
+      },
+      "post": {
+        "old_acc_percent": [
+          8.9,
+          7.8,
+          11.600000000000001,
+          15.15
+        ],
+        "old_mean_percent": 10.8625,
+        "T4_percent": 26.150000000000002
+      },
+      "gain": {
+        "old_mean_pp": -1.2874999999999996,
+        "T4_pp": 15.350000000000001
+      }
+    },
+    "step10_unsaturated": {
+      "pre_replay_ce": 5.2300000597546985,
+      "pre": {
+        "old_acc_percent": [
+          4.1000000000000005,
+          6.35,
+          8.15,
+          8.85
+        ],
+        "old_mean_percent": 6.862500000000001,
+        "T4_percent": 0.1
+      },
+      "post": {
+        "old_acc_percent": [
+          7.3999999999999995,
+          6.7,
+          10.45,
+          13.25
+        ],
+        "old_mean_percent": 9.45,
+        "T4_percent": 22.2
+      },
+      "gain": {
+        "old_mean_pp": 2.5874999999999986,
+        "T4_pp": 22.099999999999998
+      }
+    },
+    "final_theta3": {
+      "pre_replay_ce": 0.1391822027993369,
+      "pre": {
+        "old_acc_percent": [
+          3.4000000000000004,
+          3.65,
+          4.8,
+          6.800000000000001
+        ],
+        "old_mean_percent": 4.6625000000000005,
+        "T4_percent": 38.550000000000004
+      },
+      "post": {
+        "old_acc_percent": [
+          2.1999999999999997,
+          1.7999999999999998,
+          2.85,
+          4.15
+        ],
+        "old_mean_percent": 2.75,
+        "T4_percent": 43.2
+      },
+      "gain": {
+        "old_mean_pp": -1.9125000000000005,
+        "T4_pp": 4.649999999999999
+      }
+    },
+    "final_theta3_unsaturated": {
+      "pre_replay_ce": 5.230000657301683,
+      "pre": {
+        "old_acc_percent": [
+          4.6,
+          3.5999999999999996,
+          2.1,
+          3.5000000000000004
+        ],
+        "old_mean_percent": 3.4499999999999997,
+        "T4_percent": 0.15
+      },
+      "post": {
+        "old_acc_percent": [
+          3.1,
+          2.65,
+          2.6,
+          4.15
+        ],
+        "old_mean_percent": 3.125,
+        "T4_percent": 36.6
+      },
+      "gain": {
+        "old_mean_pp": -0.32499999999999973,
+        "T4_pp": 36.45
+      }
+    }
+  },
+  "interpretation_note": "A positive effect from CE-matched old-row perturbation would support replay saturation as a causal contributor. It would not establish that replay CE alone determines the refit endpoint. The step-10 comparison is essential because its native replay CE is approximately 3.40 rather than the 0.13 observed when theta3 is transplanted onto the final prospective encoder."
+}

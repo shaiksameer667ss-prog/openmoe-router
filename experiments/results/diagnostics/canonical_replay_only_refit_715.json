@@ -1,0 +1,43 @@
+{
+  "experiment": "canonical_replay_only_refit_715",
+  "seed": 0,
+  "encoder": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+  "head_initialization": "zero",
+  "replay_examples": 715,
+  "composition": "0C/128R",
+  "steps": 200,
+  "optimizer": {
+    "name": "AdamW",
+    "lr": 0.0003,
+    "weight_decay": 0.05
+  },
+  "pre": {
+    "old_acc_percent": [
+      5.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "old_mean_percent": 1.25,
+    "T4_percent": 0.0
+  },
+  "post": {
+    "old_acc_percent": [
+      10.75,
+      10.25,
+      15.6,
+      17.150000000000002
+    ],
+    "old_mean_percent": 13.4375,
+    "T4_percent": 0.0
+  },
+  "gain": {
+    "old_mean_pp": 12.1875,
+    "T4_pp": 0.0
+  },
+  "prospective_comparator": {
+    "old_mean_percent": 14.625,
+    "T4_percent": 0.0
+  },
+  "interpretation_note": "This is the matched replay-only control for the prospective 0C/128R experiment. It tests whether replay-only extraction differs between canonical and prospective encoders under the same finite refit procedure."
+}

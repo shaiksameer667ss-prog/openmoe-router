@@ -1,0 +1,429 @@
+{
+  "experiment": "prospective_head_state_trajectory_56C72R",
+  "seed": 0,
+  "device": "cuda",
+  "source_theta3": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_3.pt",
+  "replay_buffer": "/kaggle/working/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+  "protocol": {
+    "router": "continual",
+    "replay_capacity": 715,
+    "current_batch_size": 56,
+    "replay_batch_size": 72,
+    "warmup_steps": 10,
+    "adaptation_steps": 190,
+    "refit_steps": 200
+  },
+  "trajectory_steps": [
+    10,
+    25,
+    50,
+    75,
+    100,
+    125,
+    150,
+    175,
+    200
+  ],
+  "trajectory": {
+    "10": {
+      "step": 10,
+      "old_replay_ce": 3.3968667623880027,
+      "old_acc_percent": [
+        6.550000000000001,
+        11.15,
+        13.600000000000001,
+        17.299999999999997
+      ],
+      "old_mean_percent": 12.15,
+      "T4_acc_percent": 10.8,
+      "head_weight_norm": 7.2176737785339355,
+      "head_bias_norm": 0.4019051492214203
+    },
+    "25": {
+      "step": 25,
+      "old_replay_ce": 2.169945904925153,
+      "old_acc_percent": [
+        10.7,
+        7.449999999999999,
+        11.600000000000001,
+        15.5
+      ],
+      "old_mean_percent": 11.3125,
+      "T4_acc_percent": 18.4,
+      "head_weight_norm": 7.195005416870117,
+      "head_bias_norm": 0.40101388096809387
+    },
+    "50": {
+      "step": 50,
+      "old_replay_ce": 1.1202899746127895,
+      "old_acc_percent": [
+        8.649999999999999,
+        5.75,
+        7.3999999999999995,
+        12.9
+      ],
+      "old_mean_percent": 8.674999999999999,
+      "T4_acc_percent": 28.999999999999996,
+      "head_weight_norm": 7.245823383331299,
+      "head_bias_norm": 0.40023505687713623
+    },
+    "75": {
+      "step": 75,
+      "old_replay_ce": 0.5349813768080064,
+      "old_acc_percent": [
+        4.8500000000000005,
+        5.35,
+        7.6,
+        9.3
+      ],
+      "old_mean_percent": 6.775,
+      "T4_acc_percent": 34.8,
+      "head_weight_norm": 7.348456859588623,
+      "head_bias_norm": 0.39874327182769775
+    },
+    "100": {
+      "step": 100,
+      "old_replay_ce": 0.2794869883077128,
+      "old_acc_percent": [
+        4.65,
+        3.5000000000000004,
+        4.7,
+        10.100000000000001
+      ],
+      "old_mean_percent": 5.737500000000001,
+      "T4_acc_percent": 37.95,
+      "head_weight_norm": 7.450721263885498,
+      "head_bias_norm": 0.39730581641197205
+    },
+    "125": {
+      "step": 125,
+      "old_replay_ce": 0.2347903858531605,
+      "old_acc_percent": [
+        3.4000000000000004,
+        3.0,
+        3.75,
+        7.049999999999999
+      ],
+      "old_mean_percent": 4.3,
+      "T4_acc_percent": 39.4,
+      "head_weight_norm": 7.540890216827393,
+      "head_bias_norm": 0.3965373933315277
+    },
+    "150": {
+      "step": 150,
+      "old_replay_ce": 0.17425138033353366,
+      "old_acc_percent": [
+        3.4000000000000004,
+        1.3,
+        5.35,
+        5.75
+      ],
+      "old_mean_percent": 3.95,
+      "T4_acc_percent": 39.6,
+      "head_weight_norm": 7.619253635406494,
+      "head_bias_norm": 0.395813524723053
+    },
+    "175": {
+      "step": 175,
+      "old_replay_ce": 0.11948751569627881,
+      "old_acc_percent": [
+        3.15,
+        3.0,
+        3.15,
+        7.3
+      ],
+      "old_mean_percent": 4.15,
+      "T4_acc_percent": 40.400000000000006,
+      "head_weight_norm": 7.689004898071289,
+      "head_bias_norm": 0.3954801857471466
+    },
+    "200": {
+      "step": 200,
+      "old_replay_ce": 0.11633556139219058,
+      "old_acc_percent": [
+        2.45,
+        2.8000000000000003,
+        3.1,
+        4.0
+      ],
+      "old_mean_percent": 3.0875000000000004,
+      "T4_acc_percent": 40.8,
+      "head_weight_norm": 7.751276969909668,
+      "head_bias_norm": 0.3948281705379486
+    }
+  },
+  "refit_from_each_state": {
+    "10": {
+      "step": 10,
+      "pre_refit": {
+        "old_replay_ce": 3.3968667623880027,
+        "old_acc_percent": [
+          6.550000000000001,
+          11.15,
+          13.600000000000001,
+          17.299999999999997
+        ],
+        "old_mean_percent": 12.15,
+        "T4_acc_percent": 10.8
+      },
+      "post_refit": {
+        "old_replay_ce": 2.115276928881665,
+        "old_acc_percent": [
+          8.649999999999999,
+          7.95,
+          11.4,
+          14.95
+        ],
+        "old_mean_percent": 10.737499999999999,
+        "T4_acc_percent": 26.3
+      },
+      "refit_gain": {
+        "old_mean_pp": -1.4125000000000014,
+        "T3_pp": -2.349999999999998,
+        "T4_pp": 15.5
+      }
+    },
+    "25": {
+      "step": 25,
+      "pre_refit": {
+        "old_replay_ce": 2.169945904925153,
+        "old_acc_percent": [
+          10.7,
+          7.449999999999999,
+          11.600000000000001,
+          15.5
+        ],
+        "old_mean_percent": 11.3125,
+        "T4_acc_percent": 18.4
+      },
+      "post_refit": {
+        "old_replay_ce": 1.3858301976343967,
+        "old_acc_percent": [
+          9.2,
+          6.9,
+          10.65,
+          12.950000000000001
+        ],
+        "old_mean_percent": 9.925,
+        "T4_acc_percent": 28.4
+      },
+      "refit_gain": {
+        "old_mean_pp": -1.3874999999999993,
+        "T3_pp": -2.549999999999999,
+        "T4_pp": 10.0
+      }
+    },
+    "50": {
+      "step": 50,
+      "pre_refit": {
+        "old_replay_ce": 1.1202899746127895,
+        "old_acc_percent": [
+          8.649999999999999,
+          5.75,
+          7.3999999999999995,
+          12.9
+        ],
+        "old_mean_percent": 8.674999999999999,
+        "T4_acc_percent": 28.999999999999996
+      },
+      "post_refit": {
+        "old_replay_ce": 0.5585431505750109,
+        "old_acc_percent": [
+          6.7,
+          4.5,
+          8.0,
+          11.15
+        ],
+        "old_mean_percent": 7.5875,
+        "T4_acc_percent": 34.949999999999996
+      },
+      "refit_gain": {
+        "old_mean_pp": -1.0874999999999986,
+        "T3_pp": -1.75,
+        "T4_pp": 5.949999999999999
+      }
+    },
+    "75": {
+      "step": 75,
+      "pre_refit": {
+        "old_replay_ce": 0.5349813768080064,
+        "old_acc_percent": [
+          4.8500000000000005,
+          5.35,
+          7.6,
+          9.3
+        ],
+        "old_mean_percent": 6.775,
+        "T4_acc_percent": 34.8
+      },
+      "post_refit": {
+        "old_replay_ce": 0.2290663472422353,
+        "old_acc_percent": [
+          4.8,
+          4.5,
+          5.949999999999999,
+          8.799999999999999
+        ],
+        "old_mean_percent": 6.012499999999999,
+        "T4_acc_percent": 38.4
+      },
+      "refit_gain": {
+        "old_mean_pp": -0.7625000000000011,
+        "T3_pp": -0.5000000000000018,
+        "T4_pp": 3.6000000000000014
+      }
+    },
+    "100": {
+      "step": 100,
+      "pre_refit": {
+        "old_replay_ce": 0.2794869883077128,
+        "old_acc_percent": [
+          4.65,
+          3.5000000000000004,
+          4.7,
+          10.100000000000001
+        ],
+        "old_mean_percent": 5.737500000000001,
+        "T4_acc_percent": 37.95
+      },
+      "post_refit": {
+        "old_replay_ce": 0.10309660318014505,
+        "old_acc_percent": [
+          3.5999999999999996,
+          2.85,
+          4.35,
+          7.9
+        ],
+        "old_mean_percent": 4.675,
+        "T4_acc_percent": 41.0
+      },
+      "refit_gain": {
+        "old_mean_pp": -1.0625000000000009,
+        "T3_pp": -2.200000000000001,
+        "T4_pp": 3.049999999999997
+      }
+    },
+    "125": {
+      "step": 125,
+      "pre_refit": {
+        "old_replay_ce": 0.2347903858531605,
+        "old_acc_percent": [
+          3.4000000000000004,
+          3.0,
+          3.75,
+          7.049999999999999
+        ],
+        "old_mean_percent": 4.3,
+        "T4_acc_percent": 39.4
+      },
+      "post_refit": {
+        "old_replay_ce": 0.06420714905211976,
+        "old_acc_percent": [
+          3.4000000000000004,
+          2.1999999999999997,
+          3.95,
+          6.6000000000000005
+        ],
+        "old_mean_percent": 4.0375000000000005,
+        "T4_acc_percent": 41.099999999999994
+      },
+      "refit_gain": {
+        "old_mean_pp": -0.2624999999999993,
+        "T3_pp": -0.4499999999999984,
+        "T4_pp": 1.6999999999999957
+      }
+    },
+    "150": {
+      "step": 150,
+      "pre_refit": {
+        "old_replay_ce": 0.17425138033353366,
+        "old_acc_percent": [
+          3.4000000000000004,
+          1.3,
+          5.35,
+          5.75
+        ],
+        "old_mean_percent": 3.95,
+        "T4_acc_percent": 39.6
+      },
+      "post_refit": {
+        "old_replay_ce": 0.05102302778017271,
+        "old_acc_percent": [
+          3.25,
+          1.6500000000000001,
+          3.9,
+          5.25
+        ],
+        "old_mean_percent": 3.5125,
+        "T4_acc_percent": 43.15
+      },
+      "refit_gain": {
+        "old_mean_pp": -0.4375,
+        "T3_pp": -0.5,
+        "T4_pp": 3.549999999999997
+      }
+    },
+    "175": {
+      "step": 175,
+      "pre_refit": {
+        "old_replay_ce": 0.11948751569627881,
+        "old_acc_percent": [
+          3.15,
+          3.0,
+          3.15,
+          7.3
+        ],
+        "old_mean_percent": 4.15,
+        "T4_acc_percent": 40.400000000000006
+      },
+      "post_refit": {
+        "old_replay_ce": 0.04056052127918163,
+        "old_acc_percent": [
+          2.65,
+          2.15,
+          2.6,
+          5.1499999999999995
+        ],
+        "old_mean_percent": 3.1374999999999997,
+        "T4_acc_percent": 45.050000000000004
+      },
+      "refit_gain": {
+        "old_mean_pp": -1.0125000000000006,
+        "T3_pp": -2.1500000000000004,
+        "T4_pp": 4.649999999999999
+      }
+    },
+    "200": {
+      "step": 200,
+      "pre_refit": {
+        "old_replay_ce": 0.11633556139219058,
+        "old_acc_percent": [
+          2.45,
+          2.8000000000000003,
+          3.1,
+          4.0
+        ],
+        "old_mean_percent": 3.0875000000000004,
+        "T4_acc_percent": 40.8
+      },
+      "post_refit": {
+        "old_replay_ce": 0.028592372774244187,
+        "old_acc_percent": [
+          2.1,
+          1.95,
+          2.7,
+          4.0
+        ],
+        "old_mean_percent": 2.6875,
+        "T4_acc_percent": 43.55
+      },
+      "refit_gain": {
+        "old_mean_pp": -0.40000000000000036,
+        "T3_pp": 0.0,
+        "T4_pp": 2.75
+      }
+    }
+  },
+  "interpretation_note": "Refit gains describe how the same frozen-backbone head-only procedure responds to each prospective head state. They do not by themselves establish a mechanism or prescribe a loss.",
+  "saved_final_checkpoint": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_head_state_trajectory_56C72R_final.pt"
+}

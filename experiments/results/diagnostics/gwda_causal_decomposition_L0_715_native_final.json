@@ -1,0 +1,219 @@
+{
+  "experiment": "gwda_causal_decomposition",
+  "status": "final",
+  "layer": 0,
+  "intervention": "native model_4 forward hook at L0 SparseMoE mixture output",
+  "replay_n": 715,
+  "fit": {
+    "protocol": "LOO pooled uncentered ridge followed by rank-4 SVD",
+    "ridge_alpha": 1.0,
+    "rank": 4,
+    "target": "d_g",
+    "b_fixed_definition": "mean_fit[X W_rank4]"
+  },
+  "test": {
+    "dataset": "fresh deterministic CIFAR100 test",
+    "images_per_task": 2000,
+    "bootstrap_replicates": 5000,
+    "bootstrap": "paired stratified by CIFAR-100 class"
+  },
+  "natural_accuracy_percent": {
+    "0": 1.65,
+    "1": 0.9,
+    "2": 2.35,
+    "3": 3.95
+  },
+  "task_results": {
+    "0": {
+      "b_fixed": {
+        "delta_pp": -0.5499999970197678,
+        "ci95_low_pp": -1.0000001192092896,
+        "ci95_high_pp": -0.09999997168779373
+      },
+      "mu_g": {
+        "delta_pp": 0.05000010132789612,
+        "ci95_low_pp": -0.45000001788139343,
+        "ci95_high_pp": 0.550000011920929
+      },
+      "residual": {
+        "delta_pp": 2.749999985098839,
+        "ci95_low_pp": 1.850000023841858,
+        "ci95_high_pp": 3.6500003337860107
+      },
+      "full": {
+        "delta_pp": 5.249999836087227,
+        "ci95_low_pp": 4.299999713897705,
+        "ci95_high_pp": 6.249999046325684
+      }
+    },
+    "1": {
+      "b_fixed": {
+        "delta_pp": -0.34999996423721313,
+        "ci95_low_pp": -0.7000000476837158,
+        "ci95_high_pp": 0.0
+      },
+      "mu_g": {
+        "delta_pp": -0.19999993965029716,
+        "ci95_low_pp": -0.550000011920929,
+        "ci95_high_pp": 0.10000003129243851
+      },
+      "residual": {
+        "delta_pp": -0.7999999565072358,
+        "ci95_low_pp": -1.25,
+        "ci95_high_pp": -0.3999999761581421
+      },
+      "full": {
+        "delta_pp": -0.549999950453639,
+        "ci95_low_pp": -1.0,
+        "ci95_high_pp": -0.09999999403953552
+      }
+    },
+    "2": {
+      "b_fixed": {
+        "delta_pp": -1.899999938905239,
+        "ci95_low_pp": -2.5,
+        "ci95_high_pp": -1.3499999046325684
+      },
+      "mu_g": {
+        "delta_pp": -1.7999999225139618,
+        "ci95_low_pp": -2.4000000953674316,
+        "ci95_high_pp": -1.2499998807907104
+      },
+      "residual": {
+        "delta_pp": 1.7500001937150955,
+        "ci95_low_pp": 0.8987497091293335,
+        "ci95_high_pp": 2.6499998569488525
+      },
+      "full": {
+        "delta_pp": 0.0,
+        "ci95_low_pp": -0.7499998807907104,
+        "ci95_high_pp": 0.7000000476837158
+      }
+    },
+    "3": {
+      "b_fixed": {
+        "delta_pp": -1.5000002458691597,
+        "ci95_low_pp": -2.299999952316284,
+        "ci95_high_pp": -0.7000000476837158
+      },
+      "mu_g": {
+        "delta_pp": -1.600000262260437,
+        "ci95_low_pp": -2.4000000953674316,
+        "ci95_high_pp": -0.7999999523162842
+      },
+      "residual": {
+        "delta_pp": -1.4500001445412636,
+        "ci95_low_pp": -2.4000000953674316,
+        "ci95_high_pp": -0.4999999403953552
+      },
+      "full": {
+        "delta_pp": -2.1500002592802048,
+        "ci95_low_pp": -3.0,
+        "ci95_high_pp": -1.3499999046325684
+      }
+    }
+  },
+  "old_mean": {
+    "b_fixed": {
+      "delta_pp": -1.075000036507845,
+      "ci95_low_pp": -1.3624999523162842,
+      "ci95_high_pp": -0.7874999046325684
+    },
+    "mu_g": {
+      "delta_pp": -0.8875000057742,
+      "ci95_low_pp": -1.1750001907348633,
+      "ci95_high_pp": -0.5999999642372131
+    },
+    "residual": {
+      "delta_pp": 0.5625000194413587,
+      "ci95_low_pp": 0.13750004768371582,
+      "ci95_high_pp": 0.9750001430511475
+    },
+    "full": {
+      "delta_pp": 0.6374999065883458,
+      "ci95_low_pp": 0.2624998688697815,
+      "ci95_high_pp": 1.0249998569488525
+    }
+  },
+  "ordering": [
+    "full",
+    "residual",
+    "natural",
+    "mu_g",
+    "b_fixed"
+  ],
+  "contrasts": {
+    "full_minus_mean_pp": 1.5249999123625457,
+    "residual_only_pp": 0.5625000194413587
+  },
+  "loo_vectors": {
+    "0": {
+      "source_tasks": [
+        1,
+        2,
+        3
+      ],
+      "n_fit_tokens": 34304,
+      "b_fixed_norm": 10.349638101937028,
+      "mu_g_norm": 11.525110241091166,
+      "cos_b_fixed_mu_g": 0.9066794958886832,
+      "rank4_singular_values": [
+        98.861817402735,
+        1.650849732383009,
+        1.102561983286505,
+        0.8017818254126635
+      ]
+    },
+    "1": {
+      "source_tasks": [
+        0,
+        2,
+        3
+      ],
+      "n_fit_tokens": 34304,
+      "b_fixed_norm": 10.230521856823046,
+      "mu_g_norm": 11.80898100165064,
+      "cos_b_fixed_mu_g": 0.9180051424092268,
+      "rank4_singular_values": [
+        99.34748916444744,
+        1.6312560139304477,
+        1.093710471415482,
+        0.802128137976448
+      ]
+    },
+    "2": {
+      "source_tasks": [
+        0,
+        1,
+        3
+      ],
+      "n_fit_tokens": 34304,
+      "b_fixed_norm": 10.361802979996893,
+      "mu_g_norm": 10.946877927842888,
+      "cos_b_fixed_mu_g": 0.8956976482887735,
+      "rank4_singular_values": [
+        97.5559399355987,
+        1.6529345649053064,
+        1.0947686224360467,
+        0.8991722819812832
+      ]
+    },
+    "3": {
+      "source_tasks": [
+        0,
+        1,
+        2
+      ],
+      "n_fit_tokens": 34368,
+      "b_fixed_norm": 10.261369011453215,
+      "mu_g_norm": 11.234544143691279,
+      "cos_b_fixed_mu_g": 0.8949831597193045,
+      "rank4_singular_values": [
+        90.86911749796826,
+        1.6411170002462883,
+        0.9835964763061844,
+        0.7834880782299042
+      ]
+    }
+  }
+}

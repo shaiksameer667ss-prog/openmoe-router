@@ -1,0 +1,48 @@
+{
+  "experiment": "zero_head_gradient_mechanism_diagnostic_56C72R",
+  "seed": 0,
+  "device": "cuda",
+  "sample_count": 715,
+  "old_data": "715 examples from exact reconstructed canonical seed-0 replay identity",
+  "new_data": "first 715 deterministic T4 training examples",
+  "head_initialization": {
+    "weight": "zero",
+    "bias": "zero"
+  },
+  "canonical_checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+  "prospective_checkpoint": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_t3_t4_replay_identity_canonical_56C72R.pt",
+  "results": {
+    "canonical_arm_A_theta4": {
+      "old_ce": 4.605171203613281,
+      "t4_ce": 4.605171203613281,
+      "old_gradient_norm": 1.2348891496658325,
+      "t4_gradient_norm": 2.838517904281616,
+      "t4_to_old_gradient_ratio": 2.2986013805771424,
+      "gradient_cosine_old_vs_t4": -0.28350570797920227
+    },
+    "prospective_canonical_replay_theta4": {
+      "old_ce": 4.605171203613281,
+      "t4_ce": 4.605171203613281,
+      "old_gradient_norm": 1.9043810367584229,
+      "t4_gradient_norm": 2.844851493835449,
+      "t4_to_old_gradient_ratio": 1.4938457372364227,
+      "gradient_cosine_old_vs_t4": -0.10176165401935577
+    }
+  },
+  "contrast": {
+    "canonical_t4_to_old_ratio": 2.2986013805771424,
+    "prospective_t4_to_old_ratio": 1.4938457372364227,
+    "prospective_div_canonical_ratio": 0.6498933437781812,
+    "canonical_old_gradient_norm": 1.2348891496658325,
+    "prospective_old_gradient_norm": 1.9043810367584229,
+    "canonical_t4_gradient_norm": 2.838517904281616,
+    "prospective_t4_gradient_norm": 2.844851493835449,
+    "canonical_gradient_cosine": -0.28350570797920227,
+    "prospective_gradient_cosine": -0.10176165401935577
+  },
+  "classification": {
+    "encoder_driven_signal": false,
+    "head_state_driven_signal": true,
+    "note": "Interpret relative to the earlier current-head result. A large prospective/canonical ratio at zero head supports an encoder-dependent asymmetry; convergence of the ratios supports a head-state explanation."
+  }
+}

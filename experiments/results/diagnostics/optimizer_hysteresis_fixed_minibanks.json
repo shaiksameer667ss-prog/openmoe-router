@@ -1,0 +1,21 @@
+{
+  "experiment": "optimizer_hysteresis_2x2_56C72R",
+  "reference_notebook": "forntier-22.ipynb Cell 139",
+  "current_bank": {
+    "steps": 100,
+    "batch_size": 112,
+    "generator_seed": 210001,
+    "sha256": "c318865a2b5eb2eb22163003602a46e9e3120c161b4503e706c5355aa658748f"
+  },
+  "replay_bank": {
+    "steps": 100,
+    "batch_size": 144,
+    "generator_seed": 220001,
+    "sha256": "f3cbe2996fc1aa4d1152fd20f0d807548a813d246ff0b075a69381bc3f12c00b"
+  },
+  "replay": {
+    "num_samples": 715,
+    "tensor_content_sha256": "138bdc366718ff99cf4ff7506ad23282e3a12bc76c92d76b4ef153964684f706",
+    "historical_identity": "ac54b7af81500046ef1472d2236eb6eb7aa3e738aa17903e6d4ed7976bdc4963"
+  }
+}

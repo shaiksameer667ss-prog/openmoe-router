@@ -1,0 +1,394 @@
+{
+  "experiment": "prospective_refit_order_test_715",
+  "seed": 0,
+  "encoder": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_200.pt",
+  "head_initialization": "zero",
+  "replay_buffer": "/kaggle/working/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+  "protocol": {
+    "total_updates": 200,
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "weight_decay": 0.05,
+    "encoder_frozen": true,
+    "experts_frozen": true,
+    "router_frozen": true,
+    "head_trainable": true
+  },
+  "conditions": {
+    "baseline 56C/72R mixed \u00d7 200": {
+      "name": "baseline 56C/72R mixed \u00d7 200",
+      "phases": [
+        {
+          "kind": "mixed",
+          "steps": 200,
+          "batch_size": 128
+        }
+      ],
+      "cumulative_current_examples": 11200,
+      "cumulative_replay_examples": 14400,
+      "replay_fraction": 0.5625,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          3.05,
+          2.6,
+          4.15,
+          6.4
+        ],
+        "old_mean_percent": 4.050000000000001,
+        "T4_percent": 42.699999999999996
+      },
+      "gain": {
+        "old_mean_pp": 2.8000000000000007,
+        "T4_pp": 42.699999999999996
+      },
+      "phase_records": [
+        {
+          "phase": 1,
+          "kind": "mixed",
+          "steps": 200,
+          "batch_size": 128,
+          "evaluation": {
+            "old_acc_percent": [
+              3.05,
+              2.6,
+              4.15,
+              6.4
+            ],
+            "old_mean_percent": 4.050000000000001,
+            "T4_percent": 42.699999999999996
+          }
+        }
+      ]
+    },
+    "forward light: 112C \u00d7 100 -> 144R \u00d7 100": {
+      "name": "forward light: 112C \u00d7 100 -> 144R \u00d7 100",
+      "phases": [
+        {
+          "kind": "current",
+          "steps": 100,
+          "batch_size": 112
+        },
+        {
+          "kind": "replay",
+          "steps": 100,
+          "batch_size": 144
+        }
+      ],
+      "cumulative_current_examples": 11200,
+      "cumulative_replay_examples": 14400,
+      "replay_fraction": 0.5625,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          10.45,
+          12.049999999999999,
+          12.55,
+          16.55
+        ],
+        "old_mean_percent": 12.899999999999999,
+        "T4_percent": 16.150000000000002
+      },
+      "gain": {
+        "old_mean_pp": 11.649999999999999,
+        "T4_pp": 16.150000000000002
+      },
+      "phase_records": [
+        {
+          "phase": 1,
+          "kind": "current",
+          "steps": 100,
+          "batch_size": 112,
+          "evaluation": {
+            "old_acc_percent": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "old_mean_percent": 0.0,
+            "T4_percent": 43.6
+          }
+        },
+        {
+          "phase": 2,
+          "kind": "replay",
+          "steps": 100,
+          "batch_size": 144,
+          "evaluation": {
+            "old_acc_percent": [
+              10.45,
+              12.049999999999999,
+              12.55,
+              16.55
+            ],
+            "old_mean_percent": 12.899999999999999,
+            "T4_percent": 16.150000000000002
+          }
+        }
+      ]
+    },
+    "reverse light: 144R \u00d7 100 -> 112C \u00d7 100": {
+      "name": "reverse light: 144R \u00d7 100 -> 112C \u00d7 100",
+      "phases": [
+        {
+          "kind": "replay",
+          "steps": 100,
+          "batch_size": 144
+        },
+        {
+          "kind": "current",
+          "steps": 100,
+          "batch_size": 112
+        }
+      ],
+      "cumulative_current_examples": 11200,
+      "cumulative_replay_examples": 14400,
+      "replay_fraction": 0.5625,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          0.8500000000000001,
+          0.1,
+          0.7000000000000001,
+          1.7999999999999998
+        ],
+        "old_mean_percent": 0.8625,
+        "T4_percent": 44.05
+      },
+      "gain": {
+        "old_mean_pp": -0.38749999999999996,
+        "T4_pp": 44.05
+      },
+      "phase_records": [
+        {
+          "phase": 1,
+          "kind": "replay",
+          "steps": 100,
+          "batch_size": 144,
+          "evaluation": {
+            "old_acc_percent": [
+              11.35,
+              13.55,
+              14.099999999999998,
+              17.0
+            ],
+            "old_mean_percent": 14.0,
+            "T4_percent": 0.0
+          }
+        },
+        {
+          "phase": 2,
+          "kind": "current",
+          "steps": 100,
+          "batch_size": 112,
+          "evaluation": {
+            "old_acc_percent": [
+              0.8500000000000001,
+              0.1,
+              0.7000000000000001,
+              1.7999999999999998
+            ],
+            "old_mean_percent": 0.8625,
+            "T4_percent": 44.05
+          }
+        }
+      ]
+    },
+    "forward heavy: 112C \u00d7 50 -> 144R \u00d7 150": {
+      "name": "forward heavy: 112C \u00d7 50 -> 144R \u00d7 150",
+      "phases": [
+        {
+          "kind": "current",
+          "steps": 50,
+          "batch_size": 112
+        },
+        {
+          "kind": "replay",
+          "steps": 150,
+          "batch_size": 144
+        }
+      ],
+      "cumulative_current_examples": 5600,
+      "cumulative_replay_examples": 21600,
+      "replay_fraction": 0.7941176470588235,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          11.75,
+          13.350000000000001,
+          14.000000000000002,
+          17.9
+        ],
+        "old_mean_percent": 14.25,
+        "T4_percent": 2.6
+      },
+      "gain": {
+        "old_mean_pp": 13.0,
+        "T4_pp": 2.6
+      },
+      "phase_records": [
+        {
+          "phase": 1,
+          "kind": "current",
+          "steps": 50,
+          "batch_size": 112,
+          "evaluation": {
+            "old_acc_percent": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "old_mean_percent": 0.0,
+            "T4_percent": 42.3
+          }
+        },
+        {
+          "phase": 2,
+          "kind": "replay",
+          "steps": 150,
+          "batch_size": 144,
+          "evaluation": {
+            "old_acc_percent": [
+              11.75,
+              13.350000000000001,
+              14.000000000000002,
+              17.9
+            ],
+            "old_mean_percent": 14.25,
+            "T4_percent": 2.6
+          }
+        }
+      ]
+    },
+    "reverse heavy: 144R \u00d7 150 -> 112C \u00d7 50": {
+      "name": "reverse heavy: 144R \u00d7 150 -> 112C \u00d7 50",
+      "phases": [
+        {
+          "kind": "replay",
+          "steps": 150,
+          "batch_size": 144
+        },
+        {
+          "kind": "current",
+          "steps": 50,
+          "batch_size": 112
+        }
+      ],
+      "cumulative_current_examples": 5600,
+      "cumulative_replay_examples": 21600,
+      "replay_fraction": 0.7941176470588235,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          2.65,
+          1.9,
+          2.4,
+          5.5
+        ],
+        "old_mean_percent": 3.1125,
+        "T4_percent": 42.1
+      },
+      "gain": {
+        "old_mean_pp": 1.8624999999999998,
+        "T4_pp": 42.1
+      },
+      "phase_records": [
+        {
+          "phase": 1,
+          "kind": "replay",
+          "steps": 150,
+          "batch_size": 144,
+          "evaluation": {
+            "old_acc_percent": [
+              11.55,
+              13.600000000000001,
+              14.75,
+              17.9
+            ],
+            "old_mean_percent": 14.450000000000001,
+            "T4_percent": 0.0
+          }
+        },
+        {
+          "phase": 2,
+          "kind": "current",
+          "steps": 50,
+          "batch_size": 112,
+          "evaluation": {
+            "old_acc_percent": [
+              2.65,
+              1.9,
+              2.4,
+              5.5
+            ],
+            "old_mean_percent": 3.1125,
+            "T4_percent": 42.1
+          }
+        }
+      ]
+    }
+  },
+  "order_contrasts": {
+    "light_exact_composition": {
+      "forward_minus_reverse": {
+        "old_mean_pp": 12.037499999999998,
+        "T4_pp": -27.899999999999995
+      }
+    },
+    "heavy_replay_composition": {
+      "forward_minus_reverse": {
+        "old_mean_pp": 11.1375,
+        "T4_pp": -39.5
+      }
+    }
+  },
+  "preregistered_prior": "25-30% prior probability that sequential scheduling would produce a Pareto point dominating the mixed composition curve.",
+  "design_note": "The light C->R and R->C conditions exactly match the baseline cumulative exposure: 11,200 current and 14,400 replay examples. Heavy forward/reverse conditions also match each other exactly, but use a replay-heavier cumulative composition."
+}

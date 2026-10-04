@@ -1,0 +1,75 @@
+{
+  "experiment": "canonical_seed0_replay715_exact_reconstruction",
+  "seed": 0,
+  "device": "cuda",
+  "tasks_replayed": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "train_batch_size": 128,
+  "current_batch_size": 64,
+  "replay_batch_size": 64,
+  "replay_capacity": 715,
+  "warmup_steps_per_task": 10,
+  "adaptation_steps_per_task": 190,
+  "router": "continual",
+  "model_initialization_reproduced": true,
+  "evaluation_stream_constructed": true,
+  "replay_generator_seed": 100000,
+  "boundary_history": [
+    {
+      "task_id": 0,
+      "num_samples": 715,
+      "per_task": {
+        "0": 715
+      },
+      "incoming_examples": 715
+    },
+    {
+      "task_id": 1,
+      "num_samples": 715,
+      "per_task": {
+        "0": 358,
+        "1": 357
+      },
+      "incoming_examples": 715
+    },
+    {
+      "task_id": 2,
+      "num_samples": 715,
+      "per_task": {
+        "0": 239,
+        "1": 238,
+        "2": 238
+      },
+      "incoming_examples": 715
+    },
+    {
+      "task_id": 3,
+      "num_samples": 715,
+      "per_task": {
+        "0": 179,
+        "1": 179,
+        "2": 179,
+        "3": 178
+      },
+      "incoming_examples": 715
+    }
+  ],
+  "final_num_samples": 715,
+  "final_per_task": {
+    "0": 179,
+    "1": 179,
+    "2": 179,
+    "3": 178
+  },
+  "image_bytes": 8785920,
+  "label_bytes": 5720,
+  "task_id_bytes": 5720,
+  "total_bytes": 8797360,
+  "content_sha256": "ac54b7af81500046ef1472d2236eb6eb7aa3e738aa17903e6d4ed7976bdc4963",
+  "saved_buffer": "/kaggle/working/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+  "status": "Algorithmic reconstruction of canonical replay identity; not a byte comparison against a separately archived canonical buffer, because no such seed-0 buffer tensor was previously archived."
+}

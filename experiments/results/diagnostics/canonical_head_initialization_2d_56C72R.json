@@ -1,0 +1,822 @@
+{
+  "experiment": "canonical_head_initialization_2d_56C72R",
+  "seed": 0,
+  "encoder_checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+  "theta3_checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_3.pt",
+  "grid": {
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "betas": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "old_rows": "0:80",
+    "new_rows": "80:100",
+    "formula_old": "alpha*theta3_old + (1-alpha)*zero_old",
+    "formula_new": "beta*theta3_new + (1-beta)*zero_new"
+  },
+  "refit_protocol": {
+    "current_batch_size": 56,
+    "replay_batch_size": 72,
+    "replay_capacity": 715,
+    "steps": 200,
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "weight_decay": 0.05,
+    "encoder_frozen": true,
+    "router_frozen": true,
+    "experts_frozen": true,
+    "head_trainable": true
+  },
+  "grid_results": {
+    "alpha=0.00_beta=0.00": {
+      "alpha": 0.0,
+      "beta": 0.0,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_acc_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          3.0,
+          3.35,
+          7.449999999999999,
+          8.1
+        ],
+        "old_mean_percent": 5.475,
+        "T4_acc_percent": 44.5
+      },
+      "gain": {
+        "old_mean_pp": 4.225,
+        "T3_pp": 8.1,
+        "T4_pp": 44.5
+      }
+    },
+    "alpha=0.00_beta=0.25": {
+      "alpha": 0.0,
+      "beta": 0.25,
+      "pre": {
+        "old_acc_percent": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.0,
+        "T4_acc_percent": 42.5
+      },
+      "post": {
+        "old_acc_percent": [
+          3.0,
+          3.3000000000000003,
+          7.199999999999999,
+          7.75
+        ],
+        "old_mean_percent": 5.3125,
+        "T4_acc_percent": 45.15
+      },
+      "gain": {
+        "old_mean_pp": 5.3125,
+        "T3_pp": 7.75,
+        "T4_pp": 2.6499999999999986
+      }
+    },
+    "alpha=0.00_beta=0.50": {
+      "alpha": 0.0,
+      "beta": 0.5,
+      "pre": {
+        "old_acc_percent": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.0,
+        "T4_acc_percent": 42.5
+      },
+      "post": {
+        "old_acc_percent": [
+          3.1,
+          3.3000000000000003,
+          7.1499999999999995,
+          7.85
+        ],
+        "old_mean_percent": 5.35,
+        "T4_acc_percent": 44.55
+      },
+      "gain": {
+        "old_mean_pp": 5.35,
+        "T3_pp": 7.85,
+        "T4_pp": 2.049999999999997
+      }
+    },
+    "alpha=0.00_beta=0.75": {
+      "alpha": 0.0,
+      "beta": 0.75,
+      "pre": {
+        "old_acc_percent": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.0,
+        "T4_acc_percent": 42.5
+      },
+      "post": {
+        "old_acc_percent": [
+          3.05,
+          3.1,
+          6.8500000000000005,
+          7.8
+        ],
+        "old_mean_percent": 5.2,
+        "T4_acc_percent": 44.55
+      },
+      "gain": {
+        "old_mean_pp": 5.2,
+        "T3_pp": 7.8,
+        "T4_pp": 2.049999999999997
+      }
+    },
+    "alpha=0.00_beta=1.00": {
+      "alpha": 0.0,
+      "beta": 1.0,
+      "pre": {
+        "old_acc_percent": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.0,
+        "T4_acc_percent": 42.5
+      },
+      "post": {
+        "old_acc_percent": [
+          2.9499999999999997,
+          3.05,
+          6.75,
+          7.6499999999999995
+        ],
+        "old_mean_percent": 5.1,
+        "T4_acc_percent": 44.55
+      },
+      "gain": {
+        "old_mean_pp": 5.1,
+        "T3_pp": 7.6499999999999995,
+        "T4_pp": 2.049999999999997
+      }
+    },
+    "alpha=0.25_beta=0.00": {
+      "alpha": 0.25,
+      "beta": 0.0,
+      "pre": {
+        "old_acc_percent": [
+          10.100000000000001,
+          7.9,
+          14.05,
+          24.9
+        ],
+        "old_mean_percent": 14.237499999999999,
+        "T4_acc_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          4.9,
+          4.55,
+          9.2,
+          9.3
+        ],
+        "old_mean_percent": 6.9875,
+        "T4_acc_percent": 42.449999999999996
+      },
+      "gain": {
+        "old_mean_pp": -7.249999999999999,
+        "T3_pp": -15.599999999999998,
+        "T4_pp": 42.449999999999996
+      }
+    },
+    "alpha=0.25_beta=0.25": {
+      "alpha": 0.25,
+      "beta": 0.25,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          3.8,
+          6.8500000000000005,
+          14.649999999999999
+        ],
+        "old_mean_percent": 7.575,
+        "T4_acc_percent": 35.0
+      },
+      "post": {
+        "old_acc_percent": [
+          4.8500000000000005,
+          4.6,
+          9.0,
+          9.3
+        ],
+        "old_mean_percent": 6.9375,
+        "T4_acc_percent": 43.35
+      },
+      "gain": {
+        "old_mean_pp": -0.6375000000000002,
+        "T3_pp": -5.349999999999998,
+        "T4_pp": 8.350000000000001
+      }
+    },
+    "alpha=0.25_beta=0.50": {
+      "alpha": 0.25,
+      "beta": 0.5,
+      "pre": {
+        "old_acc_percent": [
+          0.5,
+          0.5,
+          0.3,
+          0.8999999999999999
+        ],
+        "old_mean_percent": 0.55,
+        "T4_acc_percent": 42.4
+      },
+      "post": {
+        "old_acc_percent": [
+          4.7,
+          4.5,
+          8.75,
+          9.15
+        ],
+        "old_mean_percent": 6.775,
+        "T4_acc_percent": 43.45
+      },
+      "gain": {
+        "old_mean_pp": 6.2250000000000005,
+        "T3_pp": 8.25,
+        "T4_pp": 1.0500000000000043
+      }
+    },
+    "alpha=0.25_beta=0.75": {
+      "alpha": 0.25,
+      "beta": 0.75,
+      "pre": {
+        "old_acc_percent": [
+          0.1,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.025,
+        "T4_acc_percent": 42.449999999999996
+      },
+      "post": {
+        "old_acc_percent": [
+          4.8500000000000005,
+          4.3,
+          8.649999999999999,
+          9.15
+        ],
+        "old_mean_percent": 6.737499999999999,
+        "T4_acc_percent": 43.35
+      },
+      "gain": {
+        "old_mean_pp": 6.712499999999999,
+        "T3_pp": 9.15,
+        "T4_pp": 0.9000000000000057
+      }
+    },
+    "alpha=0.25_beta=1.00": {
+      "alpha": 0.25,
+      "beta": 1.0,
+      "pre": {
+        "old_acc_percent": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.0,
+        "T4_acc_percent": 42.5
+      },
+      "post": {
+        "old_acc_percent": [
+          4.8,
+          4.35,
+          8.5,
+          9.15
+        ],
+        "old_mean_percent": 6.699999999999999,
+        "T4_acc_percent": 43.25
+      },
+      "gain": {
+        "old_mean_pp": 6.699999999999999,
+        "T3_pp": 9.15,
+        "T4_pp": 0.75
+      }
+    },
+    "alpha=0.50_beta=0.00": {
+      "alpha": 0.5,
+      "beta": 0.0,
+      "pre": {
+        "old_acc_percent": [
+          10.100000000000001,
+          7.9,
+          14.05,
+          24.9
+        ],
+        "old_mean_percent": 14.237499999999999,
+        "T4_acc_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          5.8999999999999995,
+          6.25,
+          10.4,
+          11.1
+        ],
+        "old_mean_percent": 8.4125,
+        "T4_acc_percent": 40.5
+      },
+      "gain": {
+        "old_mean_pp": -5.824999999999999,
+        "T3_pp": -13.799999999999999,
+        "T4_pp": 40.5
+      }
+    },
+    "alpha=0.50_beta=0.25": {
+      "alpha": 0.5,
+      "beta": 0.25,
+      "pre": {
+        "old_acc_percent": [
+          9.8,
+          7.35,
+          13.750000000000002,
+          24.25
+        ],
+        "old_mean_percent": 13.7875,
+        "T4_acc_percent": 4.6
+      },
+      "post": {
+        "old_acc_percent": [
+          5.8500000000000005,
+          5.949999999999999,
+          10.15,
+          10.65
+        ],
+        "old_mean_percent": 8.15,
+        "T4_acc_percent": 41.75
+      },
+      "gain": {
+        "old_mean_pp": -5.637499999999999,
+        "T3_pp": -13.6,
+        "T4_pp": 37.15
+      }
+    },
+    "alpha=0.50_beta=0.50": {
+      "alpha": 0.5,
+      "beta": 0.5,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          3.8,
+          6.8500000000000005,
+          14.649999999999999
+        ],
+        "old_mean_percent": 7.575,
+        "T4_acc_percent": 35.0
+      },
+      "post": {
+        "old_acc_percent": [
+          5.8500000000000005,
+          5.949999999999999,
+          9.700000000000001,
+          10.75
+        ],
+        "old_mean_percent": 8.0625,
+        "T4_acc_percent": 41.349999999999994
+      },
+      "gain": {
+        "old_mean_pp": 0.4874999999999998,
+        "T3_pp": -3.8999999999999986,
+        "T4_pp": 6.349999999999994
+      }
+    },
+    "alpha=0.50_beta=0.75": {
+      "alpha": 0.5,
+      "beta": 0.75,
+      "pre": {
+        "old_acc_percent": [
+          1.7000000000000002,
+          1.0,
+          1.7000000000000002,
+          4.25
+        ],
+        "old_mean_percent": 2.1625,
+        "T4_acc_percent": 41.55
+      },
+      "post": {
+        "old_acc_percent": [
+          5.800000000000001,
+          6.05,
+          9.35,
+          10.6
+        ],
+        "old_mean_percent": 7.950000000000001,
+        "T4_acc_percent": 41.5
+      },
+      "gain": {
+        "old_mean_pp": 5.787500000000001,
+        "T3_pp": 6.35,
+        "T4_pp": -0.04999999999999716
+      }
+    },
+    "alpha=0.50_beta=1.00": {
+      "alpha": 0.5,
+      "beta": 1.0,
+      "pre": {
+        "old_acc_percent": [
+          0.5,
+          0.5,
+          0.3,
+          0.8999999999999999
+        ],
+        "old_mean_percent": 0.55,
+        "T4_acc_percent": 42.4
+      },
+      "post": {
+        "old_acc_percent": [
+          5.7,
+          6.05,
+          9.35,
+          10.35
+        ],
+        "old_mean_percent": 7.862500000000001,
+        "T4_acc_percent": 41.75
+      },
+      "gain": {
+        "old_mean_pp": 7.312500000000001,
+        "T3_pp": 9.45,
+        "T4_pp": -0.6499999999999986
+      }
+    },
+    "alpha=0.75_beta=0.00": {
+      "alpha": 0.75,
+      "beta": 0.0,
+      "pre": {
+        "old_acc_percent": [
+          10.100000000000001,
+          7.9,
+          14.05,
+          24.9
+        ],
+        "old_mean_percent": 14.237499999999999,
+        "T4_acc_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          7.3999999999999995,
+          6.7,
+          10.7,
+          12.0
+        ],
+        "old_mean_percent": 9.2,
+        "T4_acc_percent": 38.1
+      },
+      "gain": {
+        "old_mean_pp": -5.0375,
+        "T3_pp": -12.899999999999999,
+        "T4_pp": 38.1
+      }
+    },
+    "alpha=0.75_beta=0.25": {
+      "alpha": 0.75,
+      "beta": 0.25,
+      "pre": {
+        "old_acc_percent": [
+          10.100000000000001,
+          7.9,
+          14.05,
+          24.9
+        ],
+        "old_mean_percent": 14.237499999999999,
+        "T4_acc_percent": 0.2
+      },
+      "post": {
+        "old_acc_percent": [
+          7.1499999999999995,
+          6.35,
+          10.4,
+          11.65
+        ],
+        "old_mean_percent": 8.8875,
+        "T4_acc_percent": 39.35
+      },
+      "gain": {
+        "old_mean_pp": -5.35,
+        "T3_pp": -13.249999999999998,
+        "T4_pp": 39.15
+      }
+    },
+    "alpha=0.75_beta=0.50": {
+      "alpha": 0.75,
+      "beta": 0.5,
+      "pre": {
+        "old_acc_percent": [
+          8.6,
+          6.550000000000001,
+          12.45,
+          22.7
+        ],
+        "old_mean_percent": 12.575,
+        "T4_acc_percent": 15.299999999999999
+      },
+      "post": {
+        "old_acc_percent": [
+          6.9,
+          6.2,
+          10.4,
+          11.65
+        ],
+        "old_mean_percent": 8.7875,
+        "T4_acc_percent": 39.25
+      },
+      "gain": {
+        "old_mean_pp": -3.7874999999999996,
+        "T3_pp": -11.049999999999999,
+        "T4_pp": 23.950000000000003
+      }
+    },
+    "alpha=0.75_beta=0.75": {
+      "alpha": 0.75,
+      "beta": 0.75,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          3.8,
+          6.8500000000000005,
+          14.649999999999999
+        ],
+        "old_mean_percent": 7.575,
+        "T4_acc_percent": 35.0
+      },
+      "post": {
+        "old_acc_percent": [
+          6.8500000000000005,
+          6.25,
+          10.2,
+          11.450000000000001
+        ],
+        "old_mean_percent": 8.6875,
+        "T4_acc_percent": 39.65
+      },
+      "gain": {
+        "old_mean_pp": 1.1124999999999998,
+        "T3_pp": -3.1999999999999975,
+        "T4_pp": 4.649999999999999
+      }
+    },
+    "alpha=0.75_beta=1.00": {
+      "alpha": 0.75,
+      "beta": 1.0,
+      "pre": {
+        "old_acc_percent": [
+          2.35,
+          1.5,
+          2.9000000000000004,
+          6.7
+        ],
+        "old_mean_percent": 3.3625,
+        "T4_acc_percent": 40.400000000000006
+      },
+      "post": {
+        "old_acc_percent": [
+          6.9,
+          6.35,
+          10.0,
+          11.55
+        ],
+        "old_mean_percent": 8.7,
+        "T4_acc_percent": 39.65
+      },
+      "gain": {
+        "old_mean_pp": 5.3374999999999995,
+        "T3_pp": 4.8500000000000005,
+        "T4_pp": -0.7500000000000071
+      }
+    },
+    "alpha=1.00_beta=0.00": {
+      "alpha": 1.0,
+      "beta": 0.0,
+      "pre": {
+        "old_acc_percent": [
+          10.100000000000001,
+          7.9,
+          14.05,
+          24.9
+        ],
+        "old_mean_percent": 14.237499999999999,
+        "T4_acc_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          8.05,
+          7.3,
+          11.35,
+          13.0
+        ],
+        "old_mean_percent": 9.925,
+        "T4_acc_percent": 35.199999999999996
+      },
+      "gain": {
+        "old_mean_pp": -4.312499999999998,
+        "T3_pp": -11.899999999999999,
+        "T4_pp": 35.199999999999996
+      }
+    },
+    "alpha=1.00_beta=0.25": {
+      "alpha": 1.0,
+      "beta": 0.25,
+      "pre": {
+        "old_acc_percent": [
+          10.100000000000001,
+          7.9,
+          14.05,
+          24.9
+        ],
+        "old_mean_percent": 14.237499999999999,
+        "T4_acc_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          7.95,
+          7.3,
+          10.9,
+          13.3
+        ],
+        "old_mean_percent": 9.8625,
+        "T4_acc_percent": 36.05
+      },
+      "gain": {
+        "old_mean_pp": -4.374999999999998,
+        "T3_pp": -11.599999999999998,
+        "T4_pp": 36.05
+      }
+    },
+    "alpha=1.00_beta=0.50": {
+      "alpha": 1.0,
+      "beta": 0.5,
+      "pre": {
+        "old_acc_percent": [
+          9.8,
+          7.35,
+          13.750000000000002,
+          24.25
+        ],
+        "old_mean_percent": 13.7875,
+        "T4_acc_percent": 4.6
+      },
+      "post": {
+        "old_acc_percent": [
+          7.95,
+          6.950000000000001,
+          10.7,
+          12.9
+        ],
+        "old_mean_percent": 9.625,
+        "T4_acc_percent": 36.35
+      },
+      "gain": {
+        "old_mean_pp": -4.1625,
+        "T3_pp": -11.35,
+        "T4_pp": 31.75
+      }
+    },
+    "alpha=1.00_beta=0.75": {
+      "alpha": 1.0,
+      "beta": 0.75,
+      "pre": {
+        "old_acc_percent": [
+          7.449999999999999,
+          5.7,
+          11.4,
+          21.2
+        ],
+        "old_mean_percent": 11.4375,
+        "T4_acc_percent": 21.25
+      },
+      "post": {
+        "old_acc_percent": [
+          7.95,
+          6.7,
+          10.65,
+          12.8
+        ],
+        "old_mean_percent": 9.525,
+        "T4_acc_percent": 37.0
+      },
+      "gain": {
+        "old_mean_pp": -1.9124999999999996,
+        "T3_pp": -8.399999999999999,
+        "T4_pp": 15.75
+      }
+    },
+    "alpha=1.00_beta=1.00": {
+      "alpha": 1.0,
+      "beta": 1.0,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          3.8,
+          6.8500000000000005,
+          14.649999999999999
+        ],
+        "old_mean_percent": 7.575,
+        "T4_acc_percent": 35.0
+      },
+      "post": {
+        "old_acc_percent": [
+          8.0,
+          6.65,
+          10.6,
+          12.65
+        ],
+        "old_mean_percent": 9.475,
+        "T4_acc_percent": 37.25
+      },
+      "gain": {
+        "old_mean_pp": 1.8999999999999995,
+        "T3_pp": -1.9999999999999982,
+        "T4_pp": 2.25
+      }
+    }
+  },
+  "theta4_anchor": {
+    "pre": {
+      "old_acc_percent": [
+        1.6500000000000001,
+        0.8999999999999999,
+        2.35,
+        3.95
+      ],
+      "old_mean_percent": 2.2125000000000004,
+      "T4_acc_percent": 45.1
+    },
+    "post": {
+      "old_acc_percent": [
+        7.7,
+        6.65,
+        10.75,
+        12.8
+      ],
+      "old_mean_percent": 9.475000000000001,
+      "T4_acc_percent": 37.3
+    },
+    "gain": {
+      "old_mean_pp": 7.262500000000001,
+      "T3_pp": 8.850000000000001,
+      "T4_pp": -7.800000000000004
+    }
+  },
+  "endpoint_diagnostics": {
+    "old_min_percent": 5.1,
+    "old_max_percent": 9.925,
+    "old_spread_pp": 4.825000000000001,
+    "T4_min_percent": 35.199999999999996,
+    "T4_max_percent": 45.15,
+    "T4_spread_pp": 9.950000000000003,
+    "old_mean_percent": 7.747499999999999,
+    "T4_mean_percent": 40.95399999999999
+  },
+  "post_refit_spearman": {
+    "alpha_old": {
+      "rho": 0.9805806756909201,
+      "p": 8.953397119269261e-18
+    },
+    "beta_old": {
+      "rho": -0.18827148973265667,
+      "p": 0.3674496954405634
+    },
+    "alpha_T4": {
+      "rho": -0.9819033595429244,
+      "p": 4.0037707397626526e-18
+    },
+    "beta_T4": {
+      "rho": 0.10997317626880754,
+      "p": 0.6007608927670842
+    }
+  },
+  "interpretation_note": "Endpoint concentration tests whether the fixed 200-step refit map largely erases initialization differences. This is evidence for a common endpoint under the prescribed refit protocol, not proof of an asymptotic mathematical fixed point."
+}

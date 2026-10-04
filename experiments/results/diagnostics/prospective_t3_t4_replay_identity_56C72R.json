@@ -1,0 +1,97 @@
+{
+  "experiment": "prospective_t3_t4_replay_identity_56C72R",
+  "seed": 0,
+  "router": "continual",
+  "current_batch_size": 56,
+  "replay_batch_size": 72,
+  "replay_capacity": 715,
+  "warmup_steps": 10,
+  "adaptation_steps": 190,
+  "head_refit_steps": 200,
+  "canonical_buffer_sha256": "ac54b7af81500046ef1472d2236eb6eb7aa3e738aa17903e6d4ed7976bdc4963",
+  "early_buffer_sha256": "0d18376557e190ad8e1a1a80689d0dbd7af6a1433bdf8525dc308b85c35080c1",
+  "replay_overlap": {
+    "0": {
+      "early": 179,
+      "canonical": 179,
+      "same_examples": 7,
+      "overlap_fraction": 0.03910614525139665
+    },
+    "1": {
+      "early": 179,
+      "canonical": 179,
+      "same_examples": 1,
+      "overlap_fraction": 0.00558659217877095
+    },
+    "2": {
+      "early": 179,
+      "canonical": 179,
+      "same_examples": 3,
+      "overlap_fraction": 0.01675977653631285
+    },
+    "3": {
+      "early": 178,
+      "canonical": 178,
+      "same_examples": 3,
+      "overlap_fraction": 0.016853932584269662
+    }
+  },
+  "paired_rng": {
+    "same_train_rng_state": true,
+    "same_refit_rng_state": true,
+    "same_replay_generator_seed": true
+  },
+  "early_replay": {
+    "condition": "early_replay",
+    "replay_sha256": "0d18376557e190ad8e1a1a80689d0dbd7af6a1433bdf8525dc308b85c35080c1",
+    "pre_refit_accuracy_percent": [
+      2.1999999999999997,
+      4.05,
+      3.5000000000000004,
+      4.35,
+      41.85
+    ],
+    "pre_refit_old_mean_percent": 3.525,
+    "post_refit_accuracy_percent": [
+      1.95,
+      3.5999999999999996,
+      2.75,
+      3.85,
+      44.35
+    ],
+    "post_refit_old_mean_percent": 3.0375,
+    "refit_gain_old_mean_pp": -0.4874999999999998,
+    "refit_gain_T3_pp": -0.49999999999999956,
+    "refit_gain_T4_pp": 2.5,
+    "pre_refit_checkpoint": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_t3_t4_replay_identity_early_56C72R.pt",
+    "post_refit_checkpoint": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_t3_t4_replay_identity_early_56C72R_head_refit.pt"
+  },
+  "canonical_replay": {
+    "condition": "canonical_replay",
+    "replay_sha256": "ac54b7af81500046ef1472d2236eb6eb7aa3e738aa17903e6d4ed7976bdc4963",
+    "pre_refit_accuracy_percent": [
+      3.55,
+      2.75,
+      4.0,
+      6.0,
+      40.300000000000004
+    ],
+    "pre_refit_old_mean_percent": 4.075,
+    "post_refit_accuracy_percent": [
+      2.65,
+      1.55,
+      2.9000000000000004,
+      4.8500000000000005,
+      43.25
+    ],
+    "post_refit_old_mean_percent": 2.9875000000000003,
+    "refit_gain_old_mean_pp": -1.0875,
+    "refit_gain_T3_pp": -1.1499999999999995,
+    "refit_gain_T4_pp": 2.9499999999999957,
+    "pre_refit_checkpoint": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_t3_t4_replay_identity_canonical_56C72R.pt",
+    "post_refit_checkpoint": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_t3_t4_replay_identity_canonical_56C72R_head_refit.pt"
+  },
+  "identity_effect_on_refit_gain_old_mean_pp": -0.6000000000000001,
+  "amenability_gate_canonical_gain_ge_5pp": false,
+  "interpretation_note": "This is the final planned replay-identity control. Interpret replay identity as a causal component only if the canonical-replay condition materially restores refit amenability relative to the early-replay paired control."
+}

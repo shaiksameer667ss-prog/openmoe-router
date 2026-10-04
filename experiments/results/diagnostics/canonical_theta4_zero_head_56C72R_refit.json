@@ -1,0 +1,64 @@
+{
+  "experiment": "canonical_theta4_zero_head_56C72R_refit",
+  "seed": 0,
+  "device": "cuda",
+  "source_checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+  "replay_buffer": "/kaggle/working/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+  "replay_samples": 715,
+  "replay_per_task": {
+    "0": 179,
+    "1": 179,
+    "2": 179,
+    "3": 178
+  },
+  "refit_protocol": {
+    "current_batch_size": 56,
+    "replay_batch_size": 72,
+    "replay_capacity": 715,
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "weight_decay": 0.05,
+    "steps": 200,
+    "trainable_parameters": "classifier head only"
+  },
+  "native_canonical": {
+    "accuracy_percent": [
+      1.6500000000000001,
+      0.8999999999999999,
+      2.35,
+      3.95,
+      45.1
+    ],
+    "old_mean_percent": 2.2125
+  },
+  "zero_head_start": {
+    "accuracy_percent": [
+      5.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "old_mean_percent": 1.25
+  },
+  "zero_head_refit": {
+    "accuracy_percent": [
+      3.4000000000000004,
+      3.25,
+      7.000000000000001,
+      8.05,
+      43.55
+    ],
+    "old_mean_percent": 5.425000000000001
+  },
+  "gains": {
+    "from_zero_head_old_mean_pp": 4.175000000000001,
+    "relative_to_native_canonical_pp": 3.212500000000001,
+    "T3_pp": 8.05,
+    "T4_pp": 43.55
+  },
+  "interpretation": {
+    "canonical_zero_head_refit_amenable": false,
+    "note": "The >=5 pp threshold is a descriptive comparison to the established canonical refit magnitude, not a new preregistered mechanism gate."
+  }
+}

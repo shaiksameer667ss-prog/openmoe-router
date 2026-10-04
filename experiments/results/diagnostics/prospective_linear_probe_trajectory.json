@@ -1,0 +1,132 @@
+{
+  "experiment": "prospective_linear_probe_trajectory",
+  "seed": 0,
+  "checkpoint_directory": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R",
+  "checkpoints": [
+    10,
+    25,
+    50,
+    100,
+    150,
+    200
+  ],
+  "training_protocol": {
+    "examples_per_task": 10000,
+    "tasks_used_for_probe_fit": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "total_training_examples": 50000,
+    "probe": "centered ridge",
+    "ridge_lambda": 0.01
+  },
+  "results": {
+    "10": {
+      "encoder_step": 10,
+      "probe_T0_percent": 16.15000069141388,
+      "probe_T1_percent": 18.449999392032623,
+      "probe_T2_percent": 22.14999943971634,
+      "probe_T3_percent": 25.65000057220459,
+      "probe_T4_percent": 15.800000727176666,
+      "probe_old_mean_percent": 20.600000023841858,
+      "probe_ridge_lambda": 0.01,
+      "probe_effective_lambda": 289.5878515625,
+      "train_examples": 50000
+    },
+    "25": {
+      "encoder_step": 25,
+      "probe_T0_percent": 16.79999977350235,
+      "probe_T1_percent": 17.550000548362732,
+      "probe_T2_percent": 22.14999943971634,
+      "probe_T3_percent": 25.949999690055847,
+      "probe_T4_percent": 15.449999272823334,
+      "probe_old_mean_percent": 20.612499862909317,
+      "probe_ridge_lambda": 0.01,
+      "probe_effective_lambda": 335.28476562500003,
+      "train_examples": 50000
+    },
+    "50": {
+      "encoder_step": 50,
+      "probe_T0_percent": 16.050000488758087,
+      "probe_T1_percent": 18.75,
+      "probe_T2_percent": 22.849999368190765,
+      "probe_T3_percent": 25.699999928474426,
+      "probe_T4_percent": 17.84999966621399,
+      "probe_old_mean_percent": 20.83749994635582,
+      "probe_ridge_lambda": 0.01,
+      "probe_effective_lambda": 363.9865625,
+      "train_examples": 50000
+    },
+    "100": {
+      "encoder_step": 100,
+      "probe_T0_percent": 15.850000083446503,
+      "probe_T1_percent": 18.250000476837158,
+      "probe_T2_percent": 20.900000631809235,
+      "probe_T3_percent": 25.40000081062317,
+      "probe_T4_percent": 21.199999749660492,
+      "probe_old_mean_percent": 20.100000500679016,
+      "probe_ridge_lambda": 0.01,
+      "probe_effective_lambda": 365.256328125,
+      "train_examples": 50000
+    },
+    "150": {
+      "encoder_step": 150,
+      "probe_T0_percent": 15.950000286102295,
+      "probe_T1_percent": 17.000000178813934,
+      "probe_T2_percent": 21.150000393390656,
+      "probe_T3_percent": 24.950000643730164,
+      "probe_T4_percent": 22.80000001192093,
+      "probe_old_mean_percent": 19.762500375509262,
+      "probe_ridge_lambda": 0.01,
+      "probe_effective_lambda": 367.6795703125,
+      "train_examples": 50000
+    },
+    "200": {
+      "encoder_step": 200,
+      "probe_T0_percent": 16.349999606609344,
+      "probe_T1_percent": 17.249999940395355,
+      "probe_T2_percent": 20.600000023841858,
+      "probe_T3_percent": 24.09999966621399,
+      "probe_T4_percent": 23.000000417232513,
+      "probe_old_mean_percent": 19.574999809265137,
+      "probe_ridge_lambda": 0.01,
+      "probe_effective_lambda": 352.80046875,
+      "train_examples": 50000
+    }
+  },
+  "refit_endpoint_source": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R.json",
+  "comparison": {
+    "probe_old_mean_percent": [
+      20.600000023841858,
+      20.612499862909317,
+      20.83749994635582,
+      20.100000500679016,
+      19.762500375509262,
+      19.574999809265137
+    ],
+    "refit_endpoint_old_mean_percent": [
+      7.3625,
+      7.9,
+      7.9125,
+      6.15,
+      5.025,
+      4.137499999999999
+    ],
+    "spearman_probe_vs_refit_endpoint": {
+      "rho": 1.0,
+      "p": 0.0
+    },
+    "spearman_step_vs_probe_old": {
+      "rho": -0.7714285714285715,
+      "p": 0.07239650145772594
+    },
+    "spearman_step_vs_refit_endpoint_old": {
+      "rho": -0.7714285714285715,
+      "p": 0.07239650145772594
+    }
+  },
+  "interpretation_note": "The probe is a deterministic centered ridge readout fit on all 50,000 training examples and evaluated separately on T0..T4. Correlation with the refit endpoint is descriptive and does not establish that linear separability is the causal feature quantity."
+}

@@ -1,0 +1,247 @@
+{
+  "experiment": "prospective_t3_t4_no_warmup_56C72R",
+  "seed": 0,
+  "device": "cuda",
+  "source_checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_3.pt",
+  "router": "continual",
+  "replay_capacity": 715,
+  "replay_per_task": {
+    "0": 179,
+    "1": 179,
+    "2": 179,
+    "3": 178
+  },
+  "current_batch_size": 56,
+  "replay_batch_size": 72,
+  "prospective_warmup_steps": 0,
+  "prospective_training_steps": 200,
+  "head_refit_steps": 200,
+  "theta3": {
+    "old_acc_percent": [
+      4.1000000000000005,
+      2.85,
+      7.6499999999999995,
+      40.8
+    ],
+    "old_mean_percent": 13.85,
+    "T4_acc_percent": 0.0
+  },
+  "prospective_before_refit": {
+    "accuracy_percent": [
+      1.95,
+      3.15,
+      2.8000000000000003,
+      4.7,
+      39.95
+    ],
+    "old_mean_percent": 3.15
+  },
+  "prospective_after_refit": {
+    "accuracy_percent": [
+      1.9,
+      2.65,
+      2.55,
+      3.65,
+      42.95
+    ],
+    "old_mean_percent": 2.6875
+  },
+  "refit_gain": {
+    "old_mean_pp": -0.4624999999999999,
+    "T3_pp": -1.0500000000000003,
+    "T4_pp": 3.0
+  },
+  "history_tail": [
+    {
+      "step": 190.0,
+      "loss": 0.8392636179924011,
+      "task_loss": 0.8392510414123535,
+      "z_loss": 1.2562506526592188e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 191.0,
+      "loss": 0.9132381677627563,
+      "task_loss": 0.9132261872291565,
+      "z_loss": 1.1973028449574485e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 192.0,
+      "loss": 0.8991544842720032,
+      "task_loss": 0.8991420865058899,
+      "z_loss": 1.237005926668644e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 193.0,
+      "loss": 0.8808923363685608,
+      "task_loss": 0.880879282951355,
+      "z_loss": 1.3031813068664633e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 194.0,
+      "loss": 0.721821129322052,
+      "task_loss": 0.7218084335327148,
+      "z_loss": 1.2689648428931832e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 195.0,
+      "loss": 0.7287718653678894,
+      "task_loss": 0.7287589311599731,
+      "z_loss": 1.2912871170556173e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 196.0,
+      "loss": 0.9813454747200012,
+      "task_loss": 0.9813321828842163,
+      "z_loss": 1.3262453649076633e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 197.0,
+      "loss": 0.8642745018005371,
+      "task_loss": 0.8642617464065552,
+      "z_loss": 1.2749690540658776e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 198.0,
+      "loss": 0.8632572293281555,
+      "task_loss": 0.8632445335388184,
+      "z_loss": 1.2711282579402905e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 199.0,
+      "loss": 0.9083781838417053,
+      "task_loss": 0.9083654284477234,
+      "z_loss": 1.2743479601340368e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    }
+  ],
+  "refit_history_tail": [
+    {
+      "step": 190.0,
+      "loss": 0.736510694026947,
+      "task_loss": 0.7364978790283203,
+      "z_loss": 1.27925886772573e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 191.0,
+      "loss": 0.5979211926460266,
+      "task_loss": 0.5979087352752686,
+      "z_loss": 1.2472235539462417e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 192.0,
+      "loss": 0.7610375881195068,
+      "task_loss": 0.7610248327255249,
+      "z_loss": 1.2749549568980001e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 193.0,
+      "loss": 0.5777092576026917,
+      "task_loss": 0.5776958465576172,
+      "z_loss": 1.3392226719588507e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 194.0,
+      "loss": 0.5986418128013611,
+      "task_loss": 0.5986286401748657,
+      "z_loss": 1.3168009900255129e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 195.0,
+      "loss": 0.5586317777633667,
+      "task_loss": 0.5586192011833191,
+      "z_loss": 1.2548669474199414e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 196.0,
+      "loss": 0.5086309909820557,
+      "task_loss": 0.5086178183555603,
+      "z_loss": 1.318511840509018e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 197.0,
+      "loss": 0.6173899173736572,
+      "task_loss": 0.6173769235610962,
+      "z_loss": 1.3009444046474528e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 198.0,
+      "loss": 0.6588943004608154,
+      "task_loss": 0.6588813662528992,
+      "z_loss": 1.2950516975251958e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    },
+    {
+      "step": 199.0,
+      "loss": 0.7500271797180176,
+      "task_loss": 0.7500143051147461,
+      "z_loss": 1.2873470041085966e-05,
+      "routing_kl": 0.0,
+      "dense_ewc": 0.0,
+      "rcr": 0.0
+    }
+  ],
+  "interpretation_gate": {
+    "canonical_reference_56C72R_old_mean_gain_pp": 6.575,
+    "prospective_warmup_removed_gain_pp": -0.4624999999999999,
+    "note": "Interpret only after comparing to the prior prospective 56C/72R refit under the same evaluation protocol."
+  },
+  "saved_checkpoints": {
+    "prospective": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_t3_t4_no_warmup_56C72R.pt",
+    "head_refit": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_t3_t4_no_warmup_56C72R_head_refit.pt"
+  }
+}

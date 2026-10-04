@@ -2,3 +2,12 @@ experiments/results/**/*.pt filter=lfs diff=lfs merge=lfs -text
 experiments/results/**/*.pth filter=lfs diff=lfs merge=lfs -text
 experiments/results/**/*.ckpt filter=lfs diff=lfs merge=lfs -text
 experiments/results/**/*.bin filter=lfs diff=lfs merge=lfs -text
+experiments/**/*.pt filter=lfs diff=lfs merge=lfs -text
+experiments/**/*.pth filter=lfs diff=lfs merge=lfs -text
+experiments/**/*.ckpt filter=lfs diff=lfs merge=lfs -text
+experiments/**/*.pkl filter=lfs diff=lfs merge=lfs -text
+experiments/**/*.pickle filter=lfs diff=lfs merge=lfs -text
+experiments/**/*.npz filter=lfs diff=lfs merge=lfs -text
+experiments/**/*.npy filter=lfs diff=lfs merge=lfs -text
+experiments/**/*.bin filter=lfs diff=lfs merge=lfs -text
+experiments/**/*.safetensors filter=lfs diff=lfs merge=lfs -text

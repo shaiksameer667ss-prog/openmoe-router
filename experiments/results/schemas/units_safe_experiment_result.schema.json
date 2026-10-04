@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenMoE-Router Units-Safe Experiment Result",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "schema_version"
+  ],
+  "properties": {
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0-units-safe"
+    }
+  },
+  "patternProperties": {
+    ".*_fraction$": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    ".*_percent$": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 100.0
+    },
+    ".*_pp$": {
+      "type": "number",
+      "minimum": -100.0,
+      "maximum": 100.0
+    },
+    ".*_accuracy_percent$": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "number",
+        "minimum": 0.0,
+        "maximum": 100.0
+      }
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "steps": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "current_batch_size": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "replay_batch_size": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "total_current_examples": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "total_replay_examples": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "replay_capacity": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "reset_moments": {
+      "type": "boolean"
+    },
+    "condition_name": {
+      "type": "string"
+    },
+    "historical_replay_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "replay_content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "accuracy"
+            ]
+          },
+          {
+            "required": [
+              "final_accuracy"
+            ]
+          },
+          {
+            "required": [
+              "phase1_accuracy"
+            ]
+          },
+          {
+            "required": [
+              "phase2_accuracy"
+            ]
+          },
+          {
+            "required": [
+              "old_mean"
+            ]
+          },
+          {
+            "required": [
+              "final_old_mean"
+            ]
+          },
+          {
+            "required": [
+              "T4"
+            ]
+          },
+          {
+            "required": [
+              "final_T4"
+            ]
+          },
+          {
+            "required": [
+              "delta_old"
+            ]
+          },
+          {
+            "required": [
+              "delta_T4"
+            ]
+          },
+          {
+            "required": [
+              "accuracy_percent_fraction"
+            ]
+          },
+          {
+            "required": [
+              "accuracy_fraction_percent"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

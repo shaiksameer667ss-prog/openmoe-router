@@ -1,0 +1,74 @@
+{
+  "experiment": "gradient_geometry_mechanism_diagnostic_available_pair",
+  "seed": 0,
+  "device": "cuda",
+  "sample_count_per_group": 715,
+  "data": {
+    "old": "715 examples from exact reconstructed canonical seed-0 replay identity",
+    "new": "first 715 examples from T4 train dataset, deterministic direct prefix",
+    "same_samples_for_both_encoders": true
+  },
+  "checkpoint_comparison": {
+    "canonical": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+    "prospective": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_t3_t4_replay_identity_canonical_56C72R.pt",
+    "canonical_training_ratio": "64 current / 64 replay",
+    "prospective_training_ratio": "56 current / 72 replay"
+  },
+  "results": {
+    "canonical_arm_A_theta4": {
+      "checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+      "gradient": {
+        "old_ce": 6.496448993682861,
+        "t4_ce": 1.4176071882247925,
+        "old_gradient_norm": 2.800633668899536,
+        "t4_gradient_norm": 0.8144453167915344,
+        "t4_to_old_gradient_norm_ratio": 0.2908075146834743,
+        "gradient_cosine_old_vs_t4": -0.10741446912288666
+      },
+      "geometry": {
+        "old_vs_t4_centroid_distance_squared": 2.3202574253082275,
+        "old_within_dispersion": 362.3955993652344,
+        "t4_within_dispersion": 348.1667785644531,
+        "old_vs_t4_fisher_ratio": 0.006530763511765394,
+        "old_vs_t4_centroid_cosine": 0.9892903566360474,
+        "old_feature_norm_mean": 21.352134704589844,
+        "t4_feature_norm_mean": 21.222623825073242
+      }
+    },
+    "prospective_canonical_replay_theta4": {
+      "checkpoint": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_t3_t4_replay_identity_canonical_56C72R.pt",
+      "gradient": {
+        "old_ce": 0.06882941722869873,
+        "t4_ce": 1.6562227010726929,
+        "old_gradient_norm": 0.1609640121459961,
+        "t4_gradient_norm": 0.9359890818595886,
+        "t4_to_old_gradient_norm_ratio": 5.814896568374777,
+        "gradient_cosine_old_vs_t4": -0.08301042020320892
+      },
+      "geometry": {
+        "old_vs_t4_centroid_distance_squared": 25.676788330078125,
+        "old_within_dispersion": 441.5775451660156,
+        "t4_within_dispersion": 357.2984924316406,
+        "old_vs_t4_fisher_ratio": 0.06428228441371754,
+        "old_vs_t4_centroid_cosine": 0.9373813271522522,
+        "old_feature_norm_mean": 21.760181427001953,
+        "t4_feature_norm_mean": 21.372678756713867
+      }
+    }
+  },
+  "contrast": {
+    "gradient_ratio_canonical": 0.2908075146834743,
+    "gradient_ratio_prospective": 5.814896568374777,
+    "gradient_ratio_multiplier": 19.995688813970045,
+    "fisher_canonical": 0.006530763511765394,
+    "fisher_prospective": 0.06428228441371754,
+    "fisher_multiplier": 9.84299681008366,
+    "gradient_cosine_canonical": -0.10741446912288666,
+    "gradient_cosine_prospective": -0.08301042020320892
+  },
+  "diagnostic_signals": {
+    "prospective_gradient_ratio_ge_2x": true,
+    "prospective_fisher_at_most_half": false,
+    "note": "These thresholds are descriptive diagnostics, not preregistered mechanism gates. The checkpoint training ratios differ (canonical 64/64 vs prospective 56/72), so this comparison identifies state properties but does not isolate replay ratio."
+  }
+}

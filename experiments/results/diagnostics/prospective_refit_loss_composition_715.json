@@ -1,0 +1,113 @@
+{
+  "experiment": "prospective_refit_loss_composition_715",
+  "seed": 0,
+  "encoder": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_200.pt",
+  "head_initialization": "zero",
+  "replay_buffer": "/kaggle/working/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+  "replay_examples": 715,
+  "protocol": {
+    "total_batch_size": 128,
+    "steps": 200,
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "weight_decay": 0.05,
+    "encoder_frozen": true,
+    "experts_frozen": true,
+    "router_frozen": true,
+    "head_trainable": true
+  },
+  "conditions": {
+    "56C/72R baseline": {
+      "label": "56C/72R baseline",
+      "current_batch_size": 56,
+      "replay_batch_size": 72,
+      "replay_fraction": 0.5625,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          3.05,
+          2.6,
+          4.15,
+          6.4
+        ],
+        "old_mean_percent": 4.050000000000001,
+        "T4_percent": 42.699999999999996
+      },
+      "gain": {
+        "old_mean_pp": 2.8000000000000007,
+        "T4_pp": 42.699999999999996
+      }
+    },
+    "32C/96R replay-heavier": {
+      "label": "32C/96R replay-heavier",
+      "current_batch_size": 32,
+      "replay_batch_size": 96,
+      "replay_fraction": 0.75,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          4.7,
+          5.2,
+          6.35,
+          9.700000000000001
+        ],
+        "old_mean_percent": 6.487500000000001,
+        "T4_percent": 38.75
+      },
+      "gain": {
+        "old_mean_pp": 5.237500000000001,
+        "T4_pp": 38.75
+      }
+    },
+    "0C/128R replay-only": {
+      "label": "0C/128R replay-only",
+      "current_batch_size": 0,
+      "replay_batch_size": 128,
+      "replay_fraction": 1.0,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          11.65,
+          13.600000000000001,
+          14.899999999999999,
+          18.35
+        ],
+        "old_mean_percent": 14.625,
+        "T4_percent": 0.0
+      },
+      "gain": {
+        "old_mean_pp": 13.375,
+        "T4_pp": 0.0
+      }
+    }
+  },
+  "probe_old_mean_ceiling_percent": 19.574999809265137,
+  "interpretation_note": "This experiment isolates refit loss composition using the same zero-head prospective encoder state and exact 715-example replay buffer. The replay-only condition uses no current-task examples. Results characterize the prescribed finite 200-step refit; they do not establish a general optimum."
+}

@@ -1,0 +1,101 @@
+{
+  "experiment": "prospective_refit_data_budget_715_vs_20000",
+  "seed": 0,
+  "encoder": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_200.pt",
+  "head_initialization": "zero",
+  "refit_protocol": {
+    "current_batch_size": 56,
+    "replay_batch_size": 72,
+    "ratio": "56C:72R",
+    "steps": 200,
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "weight_decay": 0.05,
+    "encoder_frozen": true,
+    "experts_frozen": true,
+    "router_frozen": true,
+    "head_trainable": true
+  },
+  "small_condition": {
+    "label": "715 replay / 56C72R",
+    "replay_samples": 715,
+    "replay_task_counts": {
+      "0": 179,
+      "1": 179,
+      "2": 179,
+      "3": 178
+    },
+    "pre": {
+      "old_acc_percent": [
+        5.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "old_mean_percent": 1.25,
+      "T4_percent": 0.0
+    },
+    "post": {
+      "old_acc_percent": [
+        2.9499999999999997,
+        2.75,
+        3.95,
+        6.5
+      ],
+      "old_mean_percent": 4.0375,
+      "T4_percent": 42.75
+    },
+    "gain": {
+      "old_mean_pp": 2.7874999999999996,
+      "T4_pp": 42.75
+    }
+  },
+  "large_condition": {
+    "label": "20,000 replay / 56C72R",
+    "replay_samples": 20000,
+    "replay_task_counts": {
+      "0": 5000,
+      "1": 5000,
+      "2": 5000,
+      "3": 5000
+    },
+    "pre": {
+      "old_acc_percent": [
+        5.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "old_mean_percent": 1.25,
+      "T4_percent": 0.0
+    },
+    "post": {
+      "old_acc_percent": [
+        3.9,
+        4.1000000000000005,
+        5.0,
+        7.1499999999999995
+      ],
+      "old_mean_percent": 5.0375,
+      "T4_percent": 43.2
+    },
+    "gain": {
+      "old_mean_pp": 3.7874999999999996,
+      "T4_pp": 43.2
+    }
+  },
+  "probe_old_mean_ceiling_percent": 19.574999809265137,
+  "extraction_fraction": {
+    "715": 0.20625798412978738,
+    "20000": 0.2573435529545025
+  },
+  "old_endpoint_gain_715_to_20000_pp": 1.0,
+  "interpretation": "Large replay does not lift the refit endpoint into the probe-ceiling regime; the extraction deficit remains predominantly encoder/geometry-limited under this protocol.",
+  "dataset_construction": {
+    "large_old_examples_per_task": 5000,
+    "large_old_total": 20000,
+    "large_T4_current_examples": 5000,
+    "large_total_unique_train_examples": 25000,
+    "sampling_note": "The large replay pool contains 5,000 fixed examples from each T0..T3. Current T4 uses a fixed 5,000-example dataset. The minibatch ratio remains 56/72."
+  }
+}

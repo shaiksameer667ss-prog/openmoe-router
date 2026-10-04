@@ -1,0 +1,825 @@
+{
+  "experiment": "head_initialization_2d_56C72R",
+  "seed": 0,
+  "encoder_checkpoint": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_head_state_trajectory_56C72R_final.pt",
+  "theta3_checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_3.pt",
+  "theta4_checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+  "grid": {
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "betas": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "old_rows": "0:80",
+    "new_rows": "80:100",
+    "formula_old": "alpha*theta3_old + (1-alpha)*zero_old",
+    "formula_new": "beta*theta3_new + (1-beta)*zero_new"
+  },
+  "refit_protocol": {
+    "current_batch_size": 56,
+    "replay_batch_size": 72,
+    "steps": 200,
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "weight_decay": 0.05,
+    "encoder_frozen": true,
+    "router_frozen": true,
+    "experts_frozen": true,
+    "head_trainable": true
+  },
+  "grid_results": {
+    "alpha=0.00_beta=0.00": {
+      "alpha": 0.0,
+      "beta": 0.0,
+      "pre": {
+        "old_acc_percent": [
+          5.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 1.25,
+        "T4_acc_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          2.9499999999999997,
+          2.55,
+          4.3,
+          5.1499999999999995
+        ],
+        "old_mean_percent": 3.7375,
+        "T4_acc_percent": 42.05
+      },
+      "gain": {
+        "old_mean_pp": 2.4875,
+        "T3_pp": 5.1499999999999995,
+        "T4_pp": 42.05
+      }
+    },
+    "alpha=0.00_beta=0.25": {
+      "alpha": 0.0,
+      "beta": 0.25,
+      "pre": {
+        "old_acc_percent": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.0,
+        "T4_acc_percent": 41.6
+      },
+      "post": {
+        "old_acc_percent": [
+          2.75,
+          2.35,
+          3.85,
+          4.95
+        ],
+        "old_mean_percent": 3.4749999999999996,
+        "T4_acc_percent": 42.6
+      },
+      "gain": {
+        "old_mean_pp": 3.4749999999999996,
+        "T3_pp": 4.95,
+        "T4_pp": 1.0
+      }
+    },
+    "alpha=0.00_beta=0.50": {
+      "alpha": 0.0,
+      "beta": 0.5,
+      "pre": {
+        "old_acc_percent": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.0,
+        "T4_acc_percent": 41.6
+      },
+      "post": {
+        "old_acc_percent": [
+          2.55,
+          2.25,
+          3.75,
+          4.7
+        ],
+        "old_mean_percent": 3.3125,
+        "T4_acc_percent": 43.15
+      },
+      "gain": {
+        "old_mean_pp": 3.3125,
+        "T3_pp": 4.7,
+        "T4_pp": 1.5499999999999972
+      }
+    },
+    "alpha=0.00_beta=0.75": {
+      "alpha": 0.0,
+      "beta": 0.75,
+      "pre": {
+        "old_acc_percent": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.0,
+        "T4_acc_percent": 41.6
+      },
+      "post": {
+        "old_acc_percent": [
+          2.45,
+          2.35,
+          3.65,
+          4.6
+        ],
+        "old_mean_percent": 3.2625,
+        "T4_acc_percent": 43.0
+      },
+      "gain": {
+        "old_mean_pp": 3.2625,
+        "T3_pp": 4.6,
+        "T4_pp": 1.3999999999999986
+      }
+    },
+    "alpha=0.00_beta=1.00": {
+      "alpha": 0.0,
+      "beta": 1.0,
+      "pre": {
+        "old_acc_percent": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.0,
+        "T4_acc_percent": 41.6
+      },
+      "post": {
+        "old_acc_percent": [
+          2.4,
+          2.15,
+          3.5999999999999996,
+          4.6
+        ],
+        "old_mean_percent": 3.1874999999999996,
+        "T4_acc_percent": 43.0
+      },
+      "gain": {
+        "old_mean_pp": 3.1874999999999996,
+        "T3_pp": 4.6,
+        "T4_pp": 1.3999999999999986
+      }
+    },
+    "alpha=0.25_beta=0.00": {
+      "alpha": 0.25,
+      "beta": 0.0,
+      "pre": {
+        "old_acc_percent": [
+          12.4,
+          11.25,
+          13.100000000000001,
+          16.35
+        ],
+        "old_mean_percent": 13.275,
+        "T4_acc_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          3.05,
+          2.45,
+          3.95,
+          5.2
+        ],
+        "old_mean_percent": 3.6624999999999996,
+        "T4_acc_percent": 42.25
+      },
+      "gain": {
+        "old_mean_pp": -9.6125,
+        "T3_pp": -11.150000000000002,
+        "T4_pp": 42.25
+      }
+    },
+    "alpha=0.25_beta=0.25": {
+      "alpha": 0.25,
+      "beta": 0.25,
+      "pre": {
+        "old_acc_percent": [
+          3.4000000000000004,
+          3.65,
+          4.8,
+          6.800000000000001
+        ],
+        "old_mean_percent": 4.6625000000000005,
+        "T4_acc_percent": 38.550000000000004
+      },
+      "post": {
+        "old_acc_percent": [
+          2.8000000000000003,
+          2.35,
+          3.95,
+          4.95
+        ],
+        "old_mean_percent": 3.5125,
+        "T4_acc_percent": 42.75
+      },
+      "gain": {
+        "old_mean_pp": -1.1500000000000004,
+        "T3_pp": -1.8500000000000005,
+        "T4_pp": 4.199999999999996
+      }
+    },
+    "alpha=0.25_beta=0.50": {
+      "alpha": 0.25,
+      "beta": 0.5,
+      "pre": {
+        "old_acc_percent": [
+          0.2,
+          0.8500000000000001,
+          0.1,
+          0.5499999999999999
+        ],
+        "old_mean_percent": 0.42500000000000004,
+        "T4_acc_percent": 41.5
+      },
+      "post": {
+        "old_acc_percent": [
+          2.65,
+          2.0500000000000003,
+          3.8,
+          4.8
+        ],
+        "old_mean_percent": 3.325,
+        "T4_acc_percent": 43.25
+      },
+      "gain": {
+        "old_mean_pp": 2.9000000000000004,
+        "T3_pp": 4.25,
+        "T4_pp": 1.75
+      }
+    },
+    "alpha=0.25_beta=0.75": {
+      "alpha": 0.25,
+      "beta": 0.75,
+      "pre": {
+        "old_acc_percent": [
+          0.1,
+          0.1,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.05,
+        "T4_acc_percent": 41.6
+      },
+      "post": {
+        "old_acc_percent": [
+          2.5,
+          2.1,
+          3.65,
+          4.7
+        ],
+        "old_mean_percent": 3.2375,
+        "T4_acc_percent": 43.05
+      },
+      "gain": {
+        "old_mean_pp": 3.1875,
+        "T3_pp": 4.7,
+        "T4_pp": 1.4499999999999957
+      }
+    },
+    "alpha=0.25_beta=1.00": {
+      "alpha": 0.25,
+      "beta": 1.0,
+      "pre": {
+        "old_acc_percent": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "old_mean_percent": 0.0,
+        "T4_acc_percent": 41.6
+      },
+      "post": {
+        "old_acc_percent": [
+          2.4,
+          2.0500000000000003,
+          3.5000000000000004,
+          4.55
+        ],
+        "old_mean_percent": 3.125,
+        "T4_acc_percent": 43.1
+      },
+      "gain": {
+        "old_mean_pp": 3.125,
+        "T3_pp": 4.55,
+        "T4_pp": 1.5
+      }
+    },
+    "alpha=0.50_beta=0.00": {
+      "alpha": 0.5,
+      "beta": 0.0,
+      "pre": {
+        "old_acc_percent": [
+          12.4,
+          11.25,
+          13.100000000000001,
+          16.35
+        ],
+        "old_mean_percent": 13.275,
+        "T4_acc_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          3.0,
+          2.15,
+          3.9,
+          5.0
+        ],
+        "old_mean_percent": 3.5125,
+        "T4_acc_percent": 42.4
+      },
+      "gain": {
+        "old_mean_pp": -9.7625,
+        "T3_pp": -11.350000000000001,
+        "T4_pp": 42.4
+      }
+    },
+    "alpha=0.50_beta=0.25": {
+      "alpha": 0.5,
+      "beta": 0.25,
+      "pre": {
+        "old_acc_percent": [
+          11.15,
+          10.25,
+          12.049999999999999,
+          15.35
+        ],
+        "old_mean_percent": 12.2,
+        "T4_acc_percent": 13.15
+      },
+      "post": {
+        "old_acc_percent": [
+          2.85,
+          2.15,
+          3.8,
+          4.9
+        ],
+        "old_mean_percent": 3.4250000000000003,
+        "T4_acc_percent": 42.85
+      },
+      "gain": {
+        "old_mean_pp": -8.774999999999999,
+        "T3_pp": -10.45,
+        "T4_pp": 29.700000000000003
+      }
+    },
+    "alpha=0.50_beta=0.50": {
+      "alpha": 0.5,
+      "beta": 0.5,
+      "pre": {
+        "old_acc_percent": [
+          3.4000000000000004,
+          3.65,
+          4.8,
+          6.800000000000001
+        ],
+        "old_mean_percent": 4.6625000000000005,
+        "T4_acc_percent": 38.550000000000004
+      },
+      "post": {
+        "old_acc_percent": [
+          2.8000000000000003,
+          2.15,
+          3.5999999999999996,
+          4.6
+        ],
+        "old_mean_percent": 3.2875,
+        "T4_acc_percent": 43.4
+      },
+      "gain": {
+        "old_mean_pp": -1.3750000000000004,
+        "T3_pp": -2.200000000000001,
+        "T4_pp": 4.849999999999994
+      }
+    },
+    "alpha=0.50_beta=0.75": {
+      "alpha": 0.5,
+      "beta": 0.75,
+      "pre": {
+        "old_acc_percent": [
+          1.2,
+          1.6500000000000001,
+          1.0999999999999999,
+          1.55
+        ],
+        "old_mean_percent": 1.375,
+        "T4_acc_percent": 41.05
+      },
+      "post": {
+        "old_acc_percent": [
+          2.65,
+          2.0,
+          3.35,
+          4.6
+        ],
+        "old_mean_percent": 3.15,
+        "T4_acc_percent": 43.2
+      },
+      "gain": {
+        "old_mean_pp": 1.775,
+        "T3_pp": 3.05,
+        "T4_pp": 2.1500000000000057
+      }
+    },
+    "alpha=0.50_beta=1.00": {
+      "alpha": 0.5,
+      "beta": 1.0,
+      "pre": {
+        "old_acc_percent": [
+          0.2,
+          0.8500000000000001,
+          0.1,
+          0.5499999999999999
+        ],
+        "old_mean_percent": 0.42500000000000004,
+        "T4_acc_percent": 41.5
+      },
+      "post": {
+        "old_acc_percent": [
+          2.5,
+          1.95,
+          3.25,
+          4.55
+        ],
+        "old_mean_percent": 3.0625,
+        "T4_acc_percent": 43.1
+      },
+      "gain": {
+        "old_mean_pp": 2.6375,
+        "T3_pp": 4.0,
+        "T4_pp": 1.6000000000000014
+      }
+    },
+    "alpha=0.75_beta=0.00": {
+      "alpha": 0.75,
+      "beta": 0.0,
+      "pre": {
+        "old_acc_percent": [
+          12.4,
+          11.25,
+          13.100000000000001,
+          16.35
+        ],
+        "old_mean_percent": 13.275,
+        "T4_acc_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          2.8000000000000003,
+          2.1999999999999997,
+          3.65,
+          5.0
+        ],
+        "old_mean_percent": 3.4125,
+        "T4_acc_percent": 42.25
+      },
+      "gain": {
+        "old_mean_pp": -9.8625,
+        "T3_pp": -11.350000000000001,
+        "T4_pp": 42.25
+      }
+    },
+    "alpha=0.75_beta=0.25": {
+      "alpha": 0.75,
+      "beta": 0.25,
+      "pre": {
+        "old_acc_percent": [
+          12.35,
+          11.25,
+          13.05,
+          16.35
+        ],
+        "old_mean_percent": 13.250000000000002,
+        "T4_acc_percent": 1.15
+      },
+      "post": {
+        "old_acc_percent": [
+          2.65,
+          2.15,
+          3.45,
+          4.9
+        ],
+        "old_mean_percent": 3.2875,
+        "T4_acc_percent": 43.0
+      },
+      "gain": {
+        "old_mean_pp": -9.962500000000002,
+        "T3_pp": -11.450000000000001,
+        "T4_pp": 41.85
+      }
+    },
+    "alpha=0.75_beta=0.50": {
+      "alpha": 0.75,
+      "beta": 0.5,
+      "pre": {
+        "old_acc_percent": [
+          8.4,
+          8.1,
+          9.65,
+          13.200000000000001
+        ],
+        "old_mean_percent": 9.8375,
+        "T4_acc_percent": 26.900000000000002
+      },
+      "post": {
+        "old_acc_percent": [
+          2.5,
+          2.1,
+          3.25,
+          4.55
+        ],
+        "old_mean_percent": 3.0999999999999996,
+        "T4_acc_percent": 43.4
+      },
+      "gain": {
+        "old_mean_pp": -6.737500000000001,
+        "T3_pp": -8.650000000000002,
+        "T4_pp": 16.499999999999996
+      }
+    },
+    "alpha=0.75_beta=0.75": {
+      "alpha": 0.75,
+      "beta": 0.75,
+      "pre": {
+        "old_acc_percent": [
+          3.4000000000000004,
+          3.65,
+          4.8,
+          6.800000000000001
+        ],
+        "old_mean_percent": 4.6625000000000005,
+        "T4_acc_percent": 38.550000000000004
+      },
+      "post": {
+        "old_acc_percent": [
+          2.4,
+          2.0,
+          3.05,
+          4.55
+        ],
+        "old_mean_percent": 3.0,
+        "T4_acc_percent": 43.0
+      },
+      "gain": {
+        "old_mean_pp": -1.6625000000000005,
+        "T3_pp": -2.250000000000001,
+        "T4_pp": 4.449999999999996
+      }
+    },
+    "alpha=0.75_beta=1.00": {
+      "alpha": 0.75,
+      "beta": 1.0,
+      "pre": {
+        "old_acc_percent": [
+          1.7999999999999998,
+          2.1999999999999997,
+          2.0,
+          2.5
+        ],
+        "old_mean_percent": 2.125,
+        "T4_acc_percent": 40.8
+      },
+      "post": {
+        "old_acc_percent": [
+          2.3,
+          1.9,
+          3.05,
+          4.5
+        ],
+        "old_mean_percent": 2.9375,
+        "T4_acc_percent": 43.25
+      },
+      "gain": {
+        "old_mean_pp": 0.8125,
+        "T3_pp": 2.0,
+        "T4_pp": 2.450000000000003
+      }
+    },
+    "alpha=1.00_beta=0.00": {
+      "alpha": 1.0,
+      "beta": 0.0,
+      "pre": {
+        "old_acc_percent": [
+          12.4,
+          11.25,
+          13.100000000000001,
+          16.35
+        ],
+        "old_mean_percent": 13.275,
+        "T4_acc_percent": 0.0
+      },
+      "post": {
+        "old_acc_percent": [
+          2.65,
+          2.25,
+          3.5000000000000004,
+          4.8
+        ],
+        "old_mean_percent": 3.3,
+        "T4_acc_percent": 42.25
+      },
+      "gain": {
+        "old_mean_pp": -9.975000000000001,
+        "T3_pp": -11.55,
+        "T4_pp": 42.25
+      }
+    },
+    "alpha=1.00_beta=0.25": {
+      "alpha": 1.0,
+      "beta": 0.25,
+      "pre": {
+        "old_acc_percent": [
+          12.4,
+          11.25,
+          13.100000000000001,
+          16.35
+        ],
+        "old_mean_percent": 13.275,
+        "T4_acc_percent": 0.15
+      },
+      "post": {
+        "old_acc_percent": [
+          2.6,
+          2.1999999999999997,
+          3.35,
+          4.8500000000000005
+        ],
+        "old_mean_percent": 3.25,
+        "T4_acc_percent": 43.2
+      },
+      "gain": {
+        "old_mean_pp": -10.025,
+        "T3_pp": -11.5,
+        "T4_pp": 43.050000000000004
+      }
+    },
+    "alpha=1.00_beta=0.50": {
+      "alpha": 1.0,
+      "beta": 0.5,
+      "pre": {
+        "old_acc_percent": [
+          11.15,
+          10.25,
+          12.049999999999999,
+          15.35
+        ],
+        "old_mean_percent": 12.2,
+        "T4_acc_percent": 13.15
+      },
+      "post": {
+        "old_acc_percent": [
+          2.55,
+          2.1999999999999997,
+          3.0,
+          4.7
+        ],
+        "old_mean_percent": 3.1125,
+        "T4_acc_percent": 43.5
+      },
+      "gain": {
+        "old_mean_pp": -9.087499999999999,
+        "T3_pp": -10.649999999999999,
+        "T4_pp": 30.35
+      }
+    },
+    "alpha=1.00_beta=0.75": {
+      "alpha": 1.0,
+      "beta": 0.75,
+      "pre": {
+        "old_acc_percent": [
+          6.8500000000000005,
+          6.35,
+          8.05,
+          11.75
+        ],
+        "old_mean_percent": 8.25,
+        "T4_acc_percent": 31.45
+      },
+      "post": {
+        "old_acc_percent": [
+          2.3,
+          1.9,
+          2.9000000000000004,
+          4.25
+        ],
+        "old_mean_percent": 2.8375,
+        "T4_acc_percent": 43.05
+      },
+      "gain": {
+        "old_mean_pp": -5.4125,
+        "T3_pp": -7.5,
+        "T4_pp": 11.599999999999998
+      }
+    },
+    "alpha=1.00_beta=1.00": {
+      "alpha": 1.0,
+      "beta": 1.0,
+      "pre": {
+        "old_acc_percent": [
+          3.4000000000000004,
+          3.65,
+          4.8,
+          6.800000000000001
+        ],
+        "old_mean_percent": 4.6625000000000005,
+        "T4_acc_percent": 38.550000000000004
+      },
+      "post": {
+        "old_acc_percent": [
+          2.1999999999999997,
+          1.7999999999999998,
+          2.85,
+          4.15
+        ],
+        "old_mean_percent": 2.75,
+        "T4_acc_percent": 43.2
+      },
+      "gain": {
+        "old_mean_pp": -1.9125000000000005,
+        "T3_pp": -2.6500000000000004,
+        "T4_pp": 4.649999999999999
+      }
+    }
+  },
+  "same_session_theta4_anchor": {
+    "pre": {
+      "old_acc_percent": [
+        1.9,
+        1.55,
+        1.8499999999999999,
+        2.25
+      ],
+      "old_mean_percent": 1.8875,
+      "T4_acc_percent": 41.349999999999994
+    },
+    "post": {
+      "old_acc_percent": [
+        2.25,
+        1.7999999999999998,
+        2.85,
+        4.3999999999999995
+      ],
+      "old_mean_percent": 2.825,
+      "T4_acc_percent": 43.45
+    },
+    "gain": {
+      "old_mean_pp": 0.9375000000000002,
+      "T3_pp": 2.1499999999999995,
+      "T4_pp": 2.1000000000000085
+    }
+  },
+  "diagnostics": {
+    "row_mean_old_gain_pp": [
+      3.1449999999999996,
+      -0.31000000000000016,
+      -3.1,
+      -5.482500000000001,
+      -7.282500000000001
+    ],
+    "column_mean_old_gain_pp": [
+      -7.345000000000001,
+      -5.2875,
+      -2.1975,
+      0.2299999999999999,
+      1.5699999999999998
+    ],
+    "spearman_alpha": {
+      "rho": -0.9999999999999999,
+      "p": 1.4042654220543672e-24
+    },
+    "spearman_beta": {
+      "rho": 0.9999999999999999,
+      "p": 1.4042654220543672e-24
+    },
+    "max_abs_interaction_residual_pp": 4.5634999999999994,
+    "interaction_residual_min_pp": -4.5634999999999994,
+    "interaction_residual_max_pp": 4.081500000000002
+  },
+  "interpretation_rule": {
+    "stale_commitment": "old-row alpha should dominate; \u0394old should decrease as alpha increases.",
+    "new_row": "new-row beta should dominate; \u0394old should increase as beta increases.",
+    "interaction": "neither one-dimensional axis should adequately describe the grid; interaction structure remains."
+  }
+}

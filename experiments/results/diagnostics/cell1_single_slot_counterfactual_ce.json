@@ -1,0 +1,142 @@
+{
+  "protocol": {
+    "utility_definition": "CE_natural(x) - CE_counterfactual(x)",
+    "natural_top1": "router.indices[...,0]",
+    "slot_replaced": 2,
+    "candidate_gate": "softmax([natural_logit(e1), natural_logit(candidate)])",
+    "l0_downstream_l1_routing": "frozen_natural",
+    "l0_downstream_l1_gates": "frozen_natural",
+    "l1_downstream_routing": "natural",
+    "probe": "full 2,000-image T0-T3 test probe",
+    "accuracy_unit": "images",
+    "replacement_rate_unit": "tokens",
+    "no_training": true,
+    "no_optimizer_update": true,
+    "no_checkpoint_mutation": true
+  },
+  "configuration": {
+    "repo": "/kaggle/working/openmoe-router",
+    "config": "/kaggle/working/openmoe-router/configs/cifar100_milestone6_512.yaml",
+    "checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+    "device": "cuda",
+    "probe_batch_size": 8,
+    "bootstrap_replicates": 5000,
+    "bootstrap_seed": 1000001,
+    "min_replacement_rate": 0.15,
+    "old_mean_gate_pp": 3.0
+  },
+  "layers": {
+    "0": {
+      "replacement_rate": 0.73001171875,
+      "replacement_rate_percent": 73.001171875,
+      "replacement_count": 373766,
+      "token_count": 512000,
+      "mean_best_utility_ce": 0.014776968888472766,
+      "mean_best_utility_ce_replaced_tokens": 0.020241999789712598,
+      "replaced_token_count": 373766,
+      "old_natural_mean_percent": 2.2125000000000004,
+      "old_intervention_mean_percent": 3.5,
+      "old_mean_delta_pp": 1.2874999999999996,
+      "replacement_rate_gate_pass": true,
+      "causal_branch_gate_pass": false,
+      "tasks": [
+        {
+          "task": 0,
+          "natural_accuracy_percent": 1.6500000000000001,
+          "intervention_accuracy_percent": 2.6,
+          "delta_pp": 0.95,
+          "paired_bootstrap_95ci_pp": [
+            0.5499999999999999,
+            1.4500000000000002
+          ]
+        },
+        {
+          "task": 1,
+          "natural_accuracy_percent": 0.8999999999999999,
+          "intervention_accuracy_percent": 1.5,
+          "delta_pp": 0.6000000000000001,
+          "paired_bootstrap_95ci_pp": [
+            0.3,
+            0.95
+          ]
+        },
+        {
+          "task": 2,
+          "natural_accuracy_percent": 2.35,
+          "intervention_accuracy_percent": 3.95,
+          "delta_pp": 1.6,
+          "paired_bootstrap_95ci_pp": [
+            1.05,
+            2.1999999999999997
+          ]
+        },
+        {
+          "task": 3,
+          "natural_accuracy_percent": 3.95,
+          "intervention_accuracy_percent": 5.949999999999999,
+          "delta_pp": 1.9999999999999991,
+          "paired_bootstrap_95ci_pp": [
+            1.4000000000000001,
+            2.65
+          ]
+        }
+      ]
+    },
+    "1": {
+      "replacement_rate": 0.73996875,
+      "replacement_rate_percent": 73.99687499999999,
+      "replacement_count": 378864,
+      "token_count": 512000,
+      "mean_best_utility_ce": 0.00691947538824752,
+      "mean_best_utility_ce_replaced_tokens": 0.009350947992610057,
+      "replaced_token_count": 378864,
+      "old_natural_mean_percent": 2.2125000000000004,
+      "old_intervention_mean_percent": 3.125,
+      "old_mean_delta_pp": 0.9124999999999996,
+      "replacement_rate_gate_pass": true,
+      "causal_branch_gate_pass": false,
+      "tasks": [
+        {
+          "task": 0,
+          "natural_accuracy_percent": 1.6500000000000001,
+          "intervention_accuracy_percent": 2.0500000000000003,
+          "delta_pp": 0.40000000000000013,
+          "paired_bootstrap_95ci_pp": [
+            0.15,
+            0.7000000000000001
+          ]
+        },
+        {
+          "task": 1,
+          "natural_accuracy_percent": 0.8999999999999999,
+          "intervention_accuracy_percent": 1.25,
+          "delta_pp": 0.3500000000000001,
+          "paired_bootstrap_95ci_pp": [
+            0.1,
+            0.6
+          ]
+        },
+        {
+          "task": 2,
+          "natural_accuracy_percent": 2.35,
+          "intervention_accuracy_percent": 3.35,
+          "delta_pp": 1.0,
+          "paired_bootstrap_95ci_pp": [
+            0.6,
+            1.4500000000000002
+          ]
+        },
+        {
+          "task": 3,
+          "natural_accuracy_percent": 3.95,
+          "intervention_accuracy_percent": 5.8500000000000005,
+          "delta_pp": 1.9000000000000004,
+          "paired_bootstrap_95ci_pp": [
+            1.35,
+            2.5
+          ]
+        }
+      ]
+    }
+  }
+}
