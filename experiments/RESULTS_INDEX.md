@@ -24,3 +24,4 @@ The effect is positive in both seed-matched comparisons.
 The experiment supports increased token-interaction capacity as a
 contributor to task-ID separability.
 It does not isolate attention-pair count as the sole causal variable.
+| GWDA L1 exact-715 covariance alignment | covariance ratio 0.2780; cos(cov,b_fixed)=-0.0354; marginal +0.8936; covariance-aware router CLOSED |
