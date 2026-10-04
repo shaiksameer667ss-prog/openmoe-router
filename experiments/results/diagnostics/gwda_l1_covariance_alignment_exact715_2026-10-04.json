@@ -1,0 +1,35 @@
+{
+  "experiment": "GWDA L1 covariance alignment — exact 715 replay",
+  "date": "2026-10-04",
+  "fit_design": {
+    "replay_examples": 715,
+    "task_counts": {"T0": 179, "T1": 179, "T2": 179, "T3": 178},
+    "loo": "held-out replay task",
+    "ridge_alpha": 1.0,
+    "rank": 4,
+    "top_k": 2,
+    "centering": "uncentered",
+    "target": "d_g(h) = sum_e g_e(h) delta_e(h)",
+    "microbatch_images": 4
+  },
+  "estimator_norms": {"T0": 8.221852303, "T1": 8.326368443, "T2": 8.224108014, "T3": 8.083627402},
+  "archived_norms": {"T0": 8.221852, "T1": 8.326368, "T2": 8.224108, "T3": 8.083628},
+  "alignments": {
+    "T0": {"covariance": -0.049602, "marginal": 0.895562, "total": 0.930849},
+    "T1": {"covariance": -0.047233, "marginal": 0.909445, "total": 0.946151},
+    "T2": {"covariance": -0.023936, "marginal": 0.891417, "total": 0.933613},
+    "T3": {"covariance": -0.020704, "marginal": 0.878102, "total": 0.920467}
+  },
+  "means": {"covariance": -0.035369, "marginal": 0.893632, "total": 0.932770},
+  "covariance_norm_ratio": 0.278019034,
+  "reconstruction_error": 0.0,
+  "decision": {
+    "covariance_magnitude": "non-trivial",
+    "covariance_retention_alignment": "null/slightly negative",
+    "marginal_retention_alignment": "strong",
+    "covariance_aware_router": "CLOSED",
+    "router_training": "NOT JUSTIFIED"
+  },
+  "runtime": {"current_model": "cuda:0", "historical_model": "cpu", "fit_pass_seconds": 35.2, "tokens": {"T0": 11456, "T1": 11456, "T2": 11456, "T3": 11392}},
+  "note": "Exact-715 LOO b_fixed norms reproduce the archived L1 causal estimator to <1e-6 per fold. The earlier ~9.00 norm bridge artifact is not the reference estimator for this final alignment."
+}
