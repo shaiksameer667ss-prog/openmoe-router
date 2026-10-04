@@ -125,3 +125,9 @@ experiments/results/test_5_3_task_supcon_seed0/task_id_probe_logistic_4way.json	
 experiments/results/test_5_3_task_supcon_seed0/task_id_probe_logistic_4way_heldout.json	1090
 experiments/results/test_5_3_task_supcon_seed0/task_id_probe_results.json	991
 experiments/results/test_5_3_task_supcon_seed0/task_id_representation_probe.json	893
+
+## 2026-10-04 final exact-715 GWDA covariance alignment
+- experiments/results/diagnostics/gwda_l1_covariance_alignment_exact715_2026-10-04.json
+- experiments/results/diagnostics/gwda_l1_covariance_alignment_exact715_2026-10-04.md
+
+Final result: exact-715 LOO b_fixed norms reproduce the archived estimator to <1e-6 per fold. Covariance norm ratio=0.278019034; mean cos(c_gdelta,b_fixed)=-0.035369; mean cos(mu_marg,b_fixed)=+0.893632; mean cos(mu_g,b_fixed)=+0.932770. Covariance-aware router branch CLOSED; router training NOT JUSTIFIED.
