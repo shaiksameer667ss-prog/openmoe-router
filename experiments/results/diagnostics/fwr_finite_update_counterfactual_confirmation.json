@@ -1,0 +1,330 @@
+{
+  "candidate_pairs": [
+    [
+      4,
+      6
+    ],
+    [
+      4,
+      7
+    ],
+    [
+      1,
+      4
+    ]
+  ],
+  "canonical_files": {
+    "replay": {
+      "bytes": 8800256,
+      "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+      "sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed"
+    },
+    "theta0": {
+      "bytes": 76165345,
+      "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_0.pt",
+      "sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7"
+    },
+    "theta4": {
+      "bytes": 76165345,
+      "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+      "sha256": "9504f80fda16fd56e8bc1e913d57b9713f2224d9285aa78f17f2d237adf79f95"
+    }
+  },
+  "decision": {
+    "best_delta_A_pair": [
+      4,
+      7
+    ],
+    "best_forced_U_pair": [
+      1,
+      4
+    ],
+    "best_loss_drop_pair": [
+      1,
+      4
+    ],
+    "finite_frontier_size": 2,
+    "status": "FIRST_ORDER_TARGET_NOT_CONFIRMED",
+    "target_best_delta_A": false,
+    "target_best_loss_drop": false,
+    "target_dominates_all": false
+  },
+  "environment": {
+    "device": "cuda",
+    "eta": 0.001,
+    "ff_dim": 1024,
+    "hidden_dim": 512,
+    "layer_index": 1,
+    "num_experts": 8,
+    "replay_size": 715,
+    "replay_stream_batch_size": 8,
+    "repo": "/kaggle/working/openmoe-router",
+    "t4_batch_size": 128,
+    "top_k": 2
+  },
+  "experiment": "FWR",
+  "finite_update_pareto_frontier": [
+    {
+      "actual_delta_A": -0.0001780287711881101,
+      "actual_write_cosine_to_mu": -0.28251399715246045,
+      "actual_write_norm": 0.0006301591177163366,
+      "counterfactual_selection": true,
+      "first_order_natural_reference": {
+        "alignment_A": 1.9545890609151684e-05,
+        "damage_D": -1.9545890609151684e-05,
+        "utility_U": 8.347629425037245e-05
+      },
+      "fixed_replay_reference": true,
+      "forced_first_order_utility": 0.00047317549589120353,
+      "forced_pair_gate_change_max": 0.0,
+      "gradient_squared_norm_by_expert": {
+        "1": 0.12658207039338176,
+        "4": 0.34659342549782174
+      },
+      "historical_gap_projection_change": 0.0001780287711881101,
+      "loss_after": 1.7731056213378906,
+      "loss_before": 1.7735786437988281,
+      "loss_drop": 0.0004730224609375,
+      "natural_usage": {
+        "modal_pair_fraction": 0.124267578125,
+        "pair_gate_mass": 0.3482787013053894,
+        "token_union_fraction": 0.124267578125
+      },
+      "pair": [
+        1,
+        4
+      ],
+      "parameter_step_norm": 0.0006878775623831393,
+      "relative_loss_drop": 0.000266705095142741,
+      "router_bias_mutated": false,
+      "router_memory_counts_mutated": false,
+      "router_memory_mutated": false
+    },
+    {
+      "actual_delta_A": -3.2976917282212526e-05,
+      "actual_write_cosine_to_mu": -0.0572342858758681,
+      "actual_write_norm": 0.0005761741721340617,
+      "counterfactual_selection": true,
+      "first_order_natural_reference": {
+        "alignment_A": 2.374683117523091e-05,
+        "damage_D": -2.374683117523091e-05,
+        "utility_U": 0.00010507523305868604
+      },
+      "fixed_replay_reference": true,
+      "forced_first_order_utility": 0.0003959933600810558,
+      "forced_pair_gate_change_max": 0.0,
+      "gradient_squared_norm_by_expert": {
+        "4": 0.26044275252644933,
+        "7": 0.13555060755460643
+      },
+      "historical_gap_projection_change": 3.2976917282212526e-05,
+      "loss_after": 1.718929648399353,
+      "loss_before": 1.7193255424499512,
+      "loss_drop": 0.00039589405059814453,
+      "natural_usage": {
+        "modal_pair_fraction": 0.0364990234375,
+        "pair_gate_mass": 0.37085241079330444,
+        "token_union_fraction": 0.0364990234375
+      },
+      "pair": [
+        4,
+        7
+      ],
+      "parameter_step_norm": 0.0006292800630539357,
+      "relative_loss_drop": 0.00023026125118458702,
+      "router_bias_mutated": false,
+      "router_memory_counts_mutated": false,
+      "router_memory_mutated": false
+    }
+  ],
+  "finite_update_results": [
+    {
+      "actual_delta_A": -0.00011396344052627683,
+      "actual_write_cosine_to_mu": -0.2182240351743081,
+      "actual_write_norm": 0.0005222313868188152,
+      "counterfactual_selection": true,
+      "first_order_natural_reference": {
+        "alignment_A": 5.289430009725038e-05,
+        "damage_D": -5.289430009725038e-05,
+        "utility_U": 0.0001085365655353771
+      },
+      "fixed_replay_reference": true,
+      "forced_first_order_utility": 0.00037145946631972354,
+      "forced_pair_gate_change_max": 0.0,
+      "gradient_squared_norm_by_expert": {
+        "4": 0.22268279580877395,
+        "6": 0.1487766705109496
+      },
+      "historical_gap_projection_change": 0.00011396344052627683,
+      "loss_after": 1.7171939611434937,
+      "loss_before": 1.7175652980804443,
+      "loss_drop": 0.0003713369369506836,
+      "natural_usage": {
+        "modal_pair_fraction": 0.035888671875,
+        "pair_gate_mass": 0.3611235022544861,
+        "token_union_fraction": 0.035888671875
+      },
+      "pair": [
+        4,
+        6
+      ],
+      "parameter_step_norm": 0.0006094747751534273,
+      "relative_loss_drop": 0.00021619960380294756,
+      "router_bias_mutated": false,
+      "router_memory_counts_mutated": false,
+      "router_memory_mutated": false
+    },
+    {
+      "actual_delta_A": -3.2976917282212526e-05,
+      "actual_write_cosine_to_mu": -0.0572342858758681,
+      "actual_write_norm": 0.0005761741721340617,
+      "counterfactual_selection": true,
+      "first_order_natural_reference": {
+        "alignment_A": 2.374683117523091e-05,
+        "damage_D": -2.374683117523091e-05,
+        "utility_U": 0.00010507523305868604
+      },
+      "fixed_replay_reference": true,
+      "forced_first_order_utility": 0.0003959933600810558,
+      "forced_pair_gate_change_max": 0.0,
+      "gradient_squared_norm_by_expert": {
+        "4": 0.26044275252644933,
+        "7": 0.13555060755460643
+      },
+      "historical_gap_projection_change": 3.2976917282212526e-05,
+      "loss_after": 1.718929648399353,
+      "loss_before": 1.7193255424499512,
+      "loss_drop": 0.00039589405059814453,
+      "natural_usage": {
+        "modal_pair_fraction": 0.0364990234375,
+        "pair_gate_mass": 0.37085241079330444,
+        "token_union_fraction": 0.0364990234375
+      },
+      "pair": [
+        4,
+        7
+      ],
+      "parameter_step_norm": 0.0006292800630539357,
+      "relative_loss_drop": 0.00023026125118458702,
+      "router_bias_mutated": false,
+      "router_memory_counts_mutated": false,
+      "router_memory_mutated": false
+    },
+    {
+      "actual_delta_A": -0.0001780287711881101,
+      "actual_write_cosine_to_mu": -0.28251399715246045,
+      "actual_write_norm": 0.0006301591177163366,
+      "counterfactual_selection": true,
+      "first_order_natural_reference": {
+        "alignment_A": 1.9545890609151684e-05,
+        "damage_D": -1.9545890609151684e-05,
+        "utility_U": 8.347629425037245e-05
+      },
+      "fixed_replay_reference": true,
+      "forced_first_order_utility": 0.00047317549589120353,
+      "forced_pair_gate_change_max": 0.0,
+      "gradient_squared_norm_by_expert": {
+        "1": 0.12658207039338176,
+        "4": 0.34659342549782174
+      },
+      "historical_gap_projection_change": 0.0001780287711881101,
+      "loss_after": 1.7731056213378906,
+      "loss_before": 1.7735786437988281,
+      "loss_drop": 0.0004730224609375,
+      "natural_usage": {
+        "modal_pair_fraction": 0.124267578125,
+        "pair_gate_mass": 0.3482787013053894,
+        "token_union_fraction": 0.124267578125
+      },
+      "pair": [
+        1,
+        4
+      ],
+      "parameter_step_norm": 0.0006878775623831393,
+      "relative_loss_drop": 0.000266705095142741,
+      "router_bias_mutated": false,
+      "router_memory_counts_mutated": false,
+      "router_memory_mutated": false
+    }
+  ],
+  "first_order_reference": {
+    "1-4": {
+      "alignment_A": 1.9545890609151684e-05,
+      "damage_D": -1.9545890609151684e-05,
+      "utility_U": 8.347629425037245e-05
+    },
+    "4-6": {
+      "alignment_A": 5.289430009725038e-05,
+      "damage_D": -5.289430009725038e-05,
+      "utility_U": 0.0001085365655353771
+    },
+    "4-7": {
+      "alignment_A": 2.374683117523091e-05,
+      "damage_D": -2.374683117523091e-05,
+      "utility_U": 0.00010507523305868604
+    }
+  },
+  "natural_T4_pair_usage": {
+    "1-4": {
+      "modal_pair_fraction": 0.124267578125,
+      "pair_gate_mass": 0.3482787013053894,
+      "token_union_fraction": 0.124267578125
+    },
+    "4-6": {
+      "modal_pair_fraction": 0.035888671875,
+      "pair_gate_mass": 0.3611235022544861,
+      "token_union_fraction": 0.035888671875
+    },
+    "4-7": {
+      "modal_pair_fraction": 0.0364990234375,
+      "pair_gate_mass": 0.37085241079330444,
+      "token_union_fraction": 0.0364990234375
+    }
+  },
+  "protocol": {
+    "forced_counterfactual_routing": true,
+    "functional_reference": "canonical theta4 replay h and natural theta4 gate mass",
+    "momentum": 0.0,
+    "optimizer": "none",
+    "pair_gate_definition": "softmax of original learned router logits restricted to forced pair",
+    "router_bias_update": false,
+    "router_memory_update": false,
+    "router_parameter_update": false,
+    "selected_expert_update_only": true,
+    "shared_parameter_update": false,
+    "training": false,
+    "update_rule": "single explicit SGD step",
+    "weight_decay": 0.0
+  },
+  "replay": {
+    "gate_cache": "CPU",
+    "mu_hat_norm": 1.0000000000000002,
+    "mu_norm": 8.875405563174251,
+    "representation_cache": "CPU",
+    "size": 715,
+    "task_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ],
+    "tokens": 45760
+  },
+  "scientific_limitations": [
+    "One deterministic T4 minibatch.",
+    "One checkpoint: canonical theta4.",
+    "One explicit SGD step.",
+    "Three candidate pairs only.",
+    "Shared parameters are frozen.",
+    "Router state is frozen.",
+    "The actual finite write is projected using fixed canonical theta4 replay representations and natural replay gates.",
+    "This is a finite-update confirmation of the candidate ordering, not a trajectory-wide causal validation of FWR."
+  ],
+  "stage": "finite_update_counterfactual_confirmation",
+  "status": "completed",
+  "target_pair": [
+    4,
+    6
+  ]
+}

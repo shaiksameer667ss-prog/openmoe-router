@@ -1,0 +1,941 @@
+{
+  "experiment": "Q4B_checkpoint_anchored_cumulative_frame",
+  "status": "diagnostic_only_no_training",
+  "device": "cuda",
+  "endpoint_reference_note": "Prospective trajectory step-200 is not canonical theta4. b_200^cum is therefore not required to reproduce canonical b_fixed.",
+  "canonical_theta4_note": "Q2/Q3 use canonical theta4 task_4.pt (SHA256 9504f80fda16fd56e8bc1e913d57b9713f2224d9285aa78f17f2d237adf79f95).",
+  "prospective_endpoint_note": "Q4/Q4B use prospective trajectory step-200 task_4_step_200.pt (SHA256 f68fab8310d04829626e4eeac1046658cb7a72586bcd75156dd9cb912b980dee).",
+  "definitions": {
+    "b_cum": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+    "qH": "Q4 E_hc[sum_e g_theta3,e(hc) (E_thetap,e(hc)-E_thetac,e(hc))]",
+    "qHG": "Q4 E_hc[sum_e g_c,e(hc) (E_thetap,e(hc)-E_thetac,e(hc))]",
+    "loo": "For held-out task i, exclude all replay images with task_id=i from both q and target.",
+    "bootstrap": "Paired image-level bootstrap; the same resampled image multiplicities are applied to q and target."
+  },
+  "replay": {
+    "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+    "n_images": 715,
+    "task_counts": {
+      "0": 179,
+      "1": 179,
+      "2": 179,
+      "3": 178
+    }
+  },
+  "trajectory": {
+    "directory": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R",
+    "steps": [
+      10,
+      25,
+      50,
+      100,
+      150,
+      200
+    ],
+    "missing_nominal_steps": [
+      75,
+      125,
+      175
+    ],
+    "paths": {
+      "10": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_010.pt",
+      "25": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_025.pt",
+      "50": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_050.pt",
+      "100": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_100.pt",
+      "150": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_150.pt",
+      "200": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_200.pt"
+    },
+    "sha256": {
+      "10": "e69fb593e6b158db1b5db16ffe26c75da0113bcc8ee9fa9d9c8abd8077823041",
+      "25": "bb049b6b2fcdcfd6852f929aa119d8de39610e3920567d847af661a250765739",
+      "50": "e6f9850b2cca63fbe1b002801c95fc4bdef14b89e138c6a45da85c5e17dddd9e",
+      "100": "b52914a73b72da9f7fe08735538447f183b7b5de40ad64eac5a2b3ac40d50c47",
+      "150": "fe59a4b56a8aa210ac66dd275e0575b0349e1871e4273191a5d9c4dd9df6b4cb",
+      "200": "f68fab8310d04829626e4eeac1046658cb7a72586bcd75156dd9cb912b980dee"
+    }
+  },
+  "bridge_reference": {
+    "path": "/kaggle/working/openmoe-router/openmoe-router/experiments/results/diagnostics/gate_weighted_drift_bridge_715_loo.json",
+    "copies": [
+      "/kaggle/working/openmoe-router/openmoe-router/experiments/results/diagnostics/gate_weighted_drift_bridge_715_loo.json",
+      "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/gate_weighted_drift_bridge_715_loo.json"
+    ],
+    "sha256_by_copy": {
+      "/kaggle/working/openmoe-router/openmoe-router/experiments/results/diagnostics/gate_weighted_drift_bridge_715_loo.json": "b098b248046e0d7a5a02d193a7d21c48a8d2ec6236e4e05bf52fd81c77a090fb",
+      "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/gate_weighted_drift_bridge_715_loo.json": "b098b248046e0d7a5a02d193a7d21c48a8d2ec6236e4e05bf52fd81c77a090fb"
+    },
+    "copies_byte_identical": true,
+    "b_fixed_norms": [
+      9.003647804260254,
+      8.91830825805664,
+      9.049149513244629,
+      9.023508071899414
+    ]
+  },
+  "endpoint_descriptive_comparison": [
+    {
+      "task": 0,
+      "cosine_trajectory_b200_vs_canonical_b_fixed": 0.9108618497848511,
+      "trajectory_b200_norm": 6.63786506652832,
+      "canonical_b_fixed_norm": 9.003647804260254,
+      "norm_ratio": 0.7372417503256272
+    },
+    {
+      "task": 1,
+      "cosine_trajectory_b200_vs_canonical_b_fixed": 0.9044111967086792,
+      "trajectory_b200_norm": 6.746009826660156,
+      "canonical_b_fixed_norm": 8.91830825805664,
+      "norm_ratio": 0.7564225895158907
+    },
+    {
+      "task": 2,
+      "cosine_trajectory_b200_vs_canonical_b_fixed": 0.9290775656700134,
+      "trajectory_b200_norm": 6.330155372619629,
+      "canonical_b_fixed_norm": 9.049149513244629,
+      "norm_ratio": 0.6995304214340373
+    },
+    {
+      "task": 3,
+      "cosine_trajectory_b200_vs_canonical_b_fixed": 0.9100651741027832,
+      "trajectory_b200_norm": 6.036319255828857,
+      "canonical_b_fixed_norm": 9.023508071899414,
+      "norm_ratio": 0.668954824191589
+    }
+  ],
+  "results": {
+    "theta3->10": {
+      "qH": {
+        "target_step": 10,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.6181570887565613,
+            "q_norm": 3.4560794830322266,
+            "target_norm": 7.284171104431152,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": 0.6114267706871033,
+            "q_norm": 3.442660093307495,
+            "target_norm": 7.200580596923828,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.6251217126846313,
+            "q_norm": 3.4243409633636475,
+            "target_norm": 7.026058197021484,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.620540976524353,
+            "q_norm": 3.5610928535461426,
+            "target_norm": 6.9991912841796875,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.6188116371631622,
+        "mean_reference": 0.6200125813484192,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.616869330406189,
+            "std": 0.010165834799408913,
+            "q025": 0.5967723727226257,
+            "q975": 0.636100709438324
+          },
+          {
+            "task": 1,
+            "mean": 0.6105679869651794,
+            "std": 0.010353660210967064,
+            "q025": 0.5898551940917969,
+            "q975": 0.6298255920410156
+          },
+          {
+            "task": 2,
+            "mean": 0.6237627267837524,
+            "std": 0.009994711726903915,
+            "q025": 0.6035926342010498,
+            "q975": 0.6429991722106934
+          },
+          {
+            "task": 3,
+            "mean": 0.6194310188293457,
+            "std": 0.009918708354234695,
+            "q025": 0.5993006825447083,
+            "q975": 0.6380470991134644
+          }
+        ],
+        "q_norm": 3.4687283039093018,
+        "target_norm": 7.1135149002075195
+      },
+      "qHG": {
+        "target_step": 10,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.6923924684524536,
+            "q_norm": 3.2084107398986816,
+            "target_norm": 7.284171104431152,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": 0.6867014765739441,
+            "q_norm": 3.200833797454834,
+            "target_norm": 7.200580596923828,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.6892215013504028,
+            "q_norm": 3.148834228515625,
+            "target_norm": 7.026058197021484,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.6932657957077026,
+            "q_norm": 3.331890344619751,
+            "target_norm": 6.9991912841796875,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.6903953105211258,
+        "mean_reference": 0.6917568445205688,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.6917016506195068,
+            "std": 0.00821745116263628,
+            "q025": 0.6752440333366394,
+            "q975": 0.7070677280426025
+          },
+          {
+            "task": 1,
+            "mean": 0.6855313777923584,
+            "std": 0.008134495466947556,
+            "q025": 0.669359564781189,
+            "q975": 0.7015117406845093
+          },
+          {
+            "task": 2,
+            "mean": 0.6880386471748352,
+            "std": 0.008232041262090206,
+            "q025": 0.6716598868370056,
+            "q975": 0.7039453387260437
+          },
+          {
+            "task": 3,
+            "mean": 0.6924484968185425,
+            "std": 0.007530062459409237,
+            "q025": 0.6773876547813416,
+            "q975": 0.7074500918388367
+          }
+        ],
+        "q_norm": 3.2202935218811035,
+        "target_norm": 7.1135149002075195
+      }
+    },
+    "10->25": {
+      "qH": {
+        "target_step": 25,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.3737538456916809,
+            "q_norm": 1.593592643737793,
+            "target_norm": 6.951028823852539,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": 0.3474092185497284,
+            "q_norm": 1.5475754737854004,
+            "target_norm": 6.883274078369141,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.36545076966285706,
+            "q_norm": 1.5740442276000977,
+            "target_norm": 6.640608787536621,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.3306266665458679,
+            "q_norm": 1.605218768119812,
+            "target_norm": 6.531676769256592,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.35431012511253357,
+        "mean_reference": 0.35312917828559875,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.3727125823497772,
+            "std": 0.020963512361049652,
+            "q025": 0.330465704202652,
+            "q975": 0.4116939306259155
+          },
+          {
+            "task": 1,
+            "mean": 0.34689733386039734,
+            "std": 0.021908054128289223,
+            "q025": 0.30211490392684937,
+            "q975": 0.38699981570243835
+          },
+          {
+            "task": 2,
+            "mean": 0.3646843731403351,
+            "std": 0.021935192868113518,
+            "q025": 0.3211522698402405,
+            "q975": 0.4067293405532837
+          },
+          {
+            "task": 3,
+            "mean": 0.33098727464675903,
+            "std": 0.02068571373820305,
+            "q025": 0.2897162139415741,
+            "q975": 0.3711157739162445
+          }
+        ],
+        "q_norm": 1.5729655027389526,
+        "target_norm": 6.723918914794922
+      },
+      "qHG": {
+        "target_step": 25,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.33193013072013855,
+            "q_norm": 1.402261734008789,
+            "target_norm": 6.951028823852539,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": 0.3021462559700012,
+            "q_norm": 1.4141019582748413,
+            "target_norm": 6.883274078369141,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.3095713257789612,
+            "q_norm": 1.4120419025421143,
+            "target_norm": 6.640608787536621,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.27753540873527527,
+            "q_norm": 1.49716317653656,
+            "target_norm": 6.531676769256592,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.30529578030109406,
+        "mean_reference": 0.30286750197410583,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.33131125569343567,
+            "std": 0.02518439292907715,
+            "q025": 0.28231799602508545,
+            "q975": 0.37921082973480225
+          },
+          {
+            "task": 1,
+            "mean": 0.3028137981891632,
+            "std": 0.024724086746573448,
+            "q025": 0.25340092182159424,
+            "q975": 0.35110023617744446
+          },
+          {
+            "task": 2,
+            "mean": 0.30999377369880676,
+            "std": 0.02581736631691456,
+            "q025": 0.259834349155426,
+            "q975": 0.36130136251449585
+          },
+          {
+            "task": 3,
+            "mean": 0.27734678983688354,
+            "std": 0.024057041853666306,
+            "q025": 0.22904714941978455,
+            "q975": 0.3251902461051941
+          }
+        ],
+        "q_norm": 1.4231704473495483,
+        "target_norm": 6.723918914794922
+      }
+    },
+    "25->50": {
+      "qH": {
+        "target_step": 50,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.22172324359416962,
+            "q_norm": 1.5215270519256592,
+            "target_norm": 6.458491802215576,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": 0.21881283819675446,
+            "q_norm": 1.5660566091537476,
+            "target_norm": 6.411136150360107,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.21724694967269897,
+            "q_norm": 1.5920560359954834,
+            "target_norm": 6.05295991897583,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.1416541188955307,
+            "q_norm": 1.5907062292099,
+            "target_norm": 5.812195301055908,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.19985928758978844,
+        "mean_reference": 0.1917448192834854,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.22199271619319916,
+            "std": 0.02157077193260193,
+            "q025": 0.18082892894744873,
+            "q975": 0.26665571331977844
+          },
+          {
+            "task": 1,
+            "mean": 0.21936717629432678,
+            "std": 0.020653728395700455,
+            "q025": 0.18024352192878723,
+            "q975": 0.26129546761512756
+          },
+          {
+            "task": 2,
+            "mean": 0.2183578759431839,
+            "std": 0.01913655363023281,
+            "q025": 0.18115733563899994,
+            "q975": 0.25615769624710083
+          },
+          {
+            "task": 3,
+            "mean": 0.14306947588920593,
+            "std": 0.018956433981657028,
+            "q025": 0.1049717515707016,
+            "q975": 0.18038786947727203
+          }
+        ],
+        "q_norm": 1.5562223196029663,
+        "target_norm": 6.124149322509766
+      },
+      "qHG": {
+        "target_step": 50,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.2194138467311859,
+            "q_norm": 1.5440787076950073,
+            "target_norm": 6.458491802215576,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": 0.22577016055583954,
+            "q_norm": 1.6201634407043457,
+            "target_norm": 6.411136150360107,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.22023379802703857,
+            "q_norm": 1.5634608268737793,
+            "target_norm": 6.05295991897583,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.1243312880396843,
+            "q_norm": 1.6329392194747925,
+            "target_norm": 5.812195301055908,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.19743727333843708,
+        "mean_reference": 0.18776239454746246,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.2221272587776184,
+            "std": 0.021222185343503952,
+            "q025": 0.17990152537822723,
+            "q975": 0.265854150056839
+          },
+          {
+            "task": 1,
+            "mean": 0.2276458442211151,
+            "std": 0.020853815600275993,
+            "q025": 0.18649205565452576,
+            "q975": 0.2674590051174164
+          },
+          {
+            "task": 2,
+            "mean": 0.22137902677059174,
+            "std": 0.021597441285848618,
+            "q025": 0.17849542200565338,
+            "q975": 0.26384490728378296
+          },
+          {
+            "task": 3,
+            "mean": 0.12739400565624237,
+            "std": 0.01963052712380886,
+            "q025": 0.08975674957036972,
+            "q975": 0.16674165427684784
+          }
+        ],
+        "q_norm": 1.575472116470337,
+        "target_norm": 6.124149322509766
+      }
+    },
+    "50->100": {
+      "qH": {
+        "target_step": 100,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.39674317836761475,
+            "q_norm": 1.9775782823562622,
+            "target_norm": 6.812769412994385,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": 0.42444324493408203,
+            "q_norm": 1.9586488008499146,
+            "target_norm": 6.873676300048828,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.38777339458465576,
+            "q_norm": 2.0687334537506104,
+            "target_norm": 6.292938709259033,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.3687388300895691,
+            "q_norm": 2.108888626098633,
+            "target_norm": 5.951026439666748,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.3944246619939804,
+        "mean_reference": 0.38428235054016113,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.3957235813140869,
+            "std": 0.019053326919674873,
+            "q025": 0.3580474853515625,
+            "q975": 0.4326328635215759
+          },
+          {
+            "task": 1,
+            "mean": 0.4229786992073059,
+            "std": 0.018882010132074356,
+            "q025": 0.38652971386909485,
+            "q975": 0.45852383971214294
+          },
+          {
+            "task": 2,
+            "mean": 0.38792330026626587,
+            "std": 0.01781581901013851,
+            "q025": 0.35281217098236084,
+            "q975": 0.42184415459632874
+          },
+          {
+            "task": 3,
+            "mean": 0.3681206703186035,
+            "std": 0.01712920144200325,
+            "q025": 0.33453303575515747,
+            "q975": 0.40073850750923157
+          }
+        ],
+        "q_norm": 2.0080513954162598,
+        "target_norm": 6.364428997039795
+      },
+      "qHG": {
+        "target_step": 100,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.4660569727420807,
+            "q_norm": 1.844289779663086,
+            "target_norm": 6.812769412994385,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": 0.5043809413909912,
+            "q_norm": 1.7965034246444702,
+            "target_norm": 6.873676300048828,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.4439886510372162,
+            "q_norm": 1.8635406494140625,
+            "target_norm": 6.292938709259033,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.4077689051628113,
+            "q_norm": 1.993391990661621,
+            "target_norm": 5.951026439666748,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.45554886758327484,
+        "mean_reference": 0.4420728087425232,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.46572941541671753,
+            "std": 0.01812824234366417,
+            "q025": 0.4298591613769531,
+            "q975": 0.5009205937385559
+          },
+          {
+            "task": 1,
+            "mean": 0.5039014220237732,
+            "std": 0.01815987192094326,
+            "q025": 0.46753397583961487,
+            "q975": 0.5386115908622742
+          },
+          {
+            "task": 2,
+            "mean": 0.4442444145679474,
+            "std": 0.018402371555566788,
+            "q025": 0.4093514084815979,
+            "q975": 0.4794871509075165
+          },
+          {
+            "task": 3,
+            "mean": 0.40752679109573364,
+            "std": 0.01616341806948185,
+            "q025": 0.37587305903434753,
+            "q975": 0.43876951932907104
+          }
+        ],
+        "q_norm": 1.8393505811691284,
+        "target_norm": 6.364428997039795
+      }
+    },
+    "100->150": {
+      "qH": {
+        "target_step": 150,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.39867785573005676,
+            "q_norm": 1.0777627229690552,
+            "target_norm": 6.785679817199707,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": 0.4300306737422943,
+            "q_norm": 1.0825610160827637,
+            "target_norm": 6.944273948669434,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.43450242280960083,
+            "q_norm": 1.1436593532562256,
+            "target_norm": 6.249253273010254,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.441508024930954,
+            "q_norm": 1.145838975906372,
+            "target_norm": 5.9500956535339355,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.42617974430322647,
+        "mean_reference": 0.42775312066078186,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.3969801068305969,
+            "std": 0.01875324733555317,
+            "q025": 0.35927441716194153,
+            "q975": 0.43166106939315796
+          },
+          {
+            "task": 1,
+            "mean": 0.42762377858161926,
+            "std": 0.019563863053917885,
+            "q025": 0.3876957893371582,
+            "q975": 0.46387621760368347
+          },
+          {
+            "task": 2,
+            "mean": 0.43275579810142517,
+            "std": 0.02091013826429844,
+            "q025": 0.3892776370048523,
+            "q975": 0.47177714109420776
+          },
+          {
+            "task": 3,
+            "mean": 0.4384722411632538,
+            "std": 0.01959148235619068,
+            "q025": 0.399493008852005,
+            "q975": 0.4751588702201843
+          }
+        ],
+        "q_norm": 1.1009628772735596,
+        "target_norm": 6.35038948059082
+      },
+      "qHG": {
+        "target_step": 150,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.43594890832901,
+            "q_norm": 1.0183414220809937,
+            "target_norm": 6.785679817199707,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": 0.4817381203174591,
+            "q_norm": 1.052773118019104,
+            "target_norm": 6.944273948669434,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.448251336812973,
+            "q_norm": 1.0663143396377563,
+            "target_norm": 6.249253273010254,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.4687795042991638,
+            "q_norm": 1.0674983263015747,
+            "target_norm": 5.9500956535339355,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.4586794674396515,
+        "mean_reference": 0.46113553643226624,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.4337154030799866,
+            "std": 0.021613389253616333,
+            "q025": 0.3933432400226593,
+            "q975": 0.4756075143814087
+          },
+          {
+            "task": 1,
+            "mean": 0.47964221239089966,
+            "std": 0.020790863782167435,
+            "q025": 0.4373481273651123,
+            "q975": 0.5180084109306335
+          },
+          {
+            "task": 2,
+            "mean": 0.44570520520210266,
+            "std": 0.023564452305436134,
+            "q025": 0.3979155719280243,
+            "q975": 0.4885070025920868
+          },
+          {
+            "task": 3,
+            "mean": 0.46524930000305176,
+            "std": 0.019768783822655678,
+            "q025": 0.42627444863319397,
+            "q975": 0.5025658011436462
+          }
+        ],
+        "q_norm": 1.0337620973587036,
+        "target_norm": 6.35038948059082
+      }
+    },
+    "150->200": {
+      "qH": {
+        "target_step": 200,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.18575100600719452,
+            "q_norm": 1.0175937414169312,
+            "target_norm": 6.63786506652832,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": 0.14342249929904938,
+            "q_norm": 1.0047247409820557,
+            "target_norm": 6.746009826660156,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.2558627426624298,
+            "q_norm": 1.013893723487854,
+            "target_norm": 6.330155372619629,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.33811697363853455,
+            "q_norm": 1.0869159698486328,
+            "target_norm": 6.036319255828857,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.23078830540180206,
+        "mean_reference": 0.22838209569454193,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.18568001687526703,
+            "std": 0.02829003520309925,
+            "q025": 0.12966413795948029,
+            "q975": 0.23942644894123077
+          },
+          {
+            "task": 1,
+            "mean": 0.1436810940504074,
+            "std": 0.028554663062095642,
+            "q025": 0.0865958034992218,
+            "q975": 0.19915150105953217
+          },
+          {
+            "task": 2,
+            "mean": 0.25337815284729004,
+            "std": 0.025213725864887238,
+            "q025": 0.20306655764579773,
+            "q975": 0.30145183205604553
+          },
+          {
+            "task": 3,
+            "mean": 0.3359583020210266,
+            "std": 0.021667994558811188,
+            "q025": 0.2930808961391449,
+            "q975": 0.37996453046798706
+          }
+        ],
+        "q_norm": 1.023672103881836,
+        "target_norm": 6.300228118896484
+      },
+      "qHG": {
+        "target_step": 200,
+        "target_definition": "E_hc[sum_e g_c,e(hc) (E_theta0,e(hc)-E_thetac,e(hc))]",
+        "point_loo": [
+          {
+            "task": 0,
+            "cosine": 0.07551701366901398,
+            "q_norm": 0.9527304768562317,
+            "target_norm": 6.63786506652832,
+            "n_images": 536
+          },
+          {
+            "task": 1,
+            "cosine": -0.021499399095773697,
+            "q_norm": 0.9140762090682983,
+            "target_norm": 6.746009826660156,
+            "n_images": 536
+          },
+          {
+            "task": 2,
+            "cosine": 0.1473807692527771,
+            "q_norm": 0.8899997472763062,
+            "target_norm": 6.330155372619629,
+            "n_images": 536
+          },
+          {
+            "task": 3,
+            "cosine": 0.19826266169548035,
+            "q_norm": 1.0150543451309204,
+            "target_norm": 6.036319255828857,
+            "n_images": 537
+          }
+        ],
+        "mean_loo": 0.09991526138037443,
+        "mean_reference": 0.09408972412347794,
+        "bootstrap_loo": [
+          {
+            "task": 0,
+            "mean": 0.07761087268590927,
+            "std": 0.03074481151998043,
+            "q025": 0.018211564049124718,
+            "q975": 0.13796383142471313
+          },
+          {
+            "task": 1,
+            "mean": -0.018707850947976112,
+            "std": 0.030672641471028328,
+            "q025": -0.07714064419269562,
+            "q975": 0.04197343438863754
+          },
+          {
+            "task": 2,
+            "mean": 0.1474270522594452,
+            "std": 0.027774570509791374,
+            "q025": 0.09172122925519943,
+            "q975": 0.19980387389659882
+          },
+          {
+            "task": 3,
+            "mean": 0.1986662894487381,
+            "std": 0.025441203266382217,
+            "q025": 0.147089421749115,
+            "q975": 0.24591901898384094
+          }
+        ],
+        "q_norm": 0.9277782440185547,
+        "target_norm": 6.300228118896484
+      }
+    }
+  },
+  "limitations": {
+    "endpoint_identity": "Prospective step-200 is not canonical theta4. Canonical b_fixed and prospective b_200^cum therefore need not coincide.",
+    "endpoint_comparison": "Canonical-vs-prospective endpoint comparison is descriptive and is not used as a Q4B validity criterion.",
+    "gate_contrast": "qHG versus qH is descriptive under the matched checkpoint-local cumulative target and is not treated as a causal gate-mechanism result.",
+    "training": "No training decision is made from Q4B."
+  }
+}

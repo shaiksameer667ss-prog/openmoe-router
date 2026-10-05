@@ -1,0 +1,485 @@
+{
+  "diagnostic": "FWR step10 finite-update confirmation",
+  "protocol_version": "corrected_functional_write_sign_v2",
+  "checkpoint": {
+    "name": "task_4_step_010.pt",
+    "sha256": "e69fb593e6b158db1b5db16ffe26c75da0113bcc8ee9fa9d9c8abd8077823041"
+  },
+  "theta0": {
+    "name": "task_0.pt",
+    "sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7"
+  },
+  "replay": {
+    "name": "canonical_seed0_replay715_exact_reconstruction.pt",
+    "sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "examples": 715,
+    "tokens": 45760,
+    "task_counts": {
+      "0": 179,
+      "1": 179,
+      "2": 179,
+      "3": 178,
+      "4": 0
+    },
+    "loader_batch_size": 8,
+    "shuffle": false
+  },
+  "t4_training_batch": {
+    "task_id": 4,
+    "examples": 128,
+    "selection": "first_128_T4_training_examples_in_original_CIFAR100_order",
+    "shuffle": false,
+    "label_min": 80,
+    "label_max": 99
+  },
+  "mu_definition": {
+    "formula": "normalize(E_R[sum_e g_current_e(h) * (E_theta0,e(h) - E_current,e(h))])",
+    "input_distribution": "exact_replay_715",
+    "h_source": "step10_model_L1_pre_MoE",
+    "gate_source": "step10_model_natural_replay_gates",
+    "checkpoint_dependent": true,
+    "norm": 7.1135148003101625
+  },
+  "functional_write_definition": {
+    "scalar": "E_R[sum_e g_e(h) <E_theta,e(h), mu_hat_10>]",
+    "finite_change": "<E_after - E_before, mu_hat_10>",
+    "sgd_direction": "Delta_theta = -eta * grad_theta L^(S)",
+    "first_order_change": "-eta * <grad_theta q_S, grad_theta L^(S)>",
+    "sign_correction": "positive current-expert functional projection; no leading minus in s_e"
+  },
+  "eta": 0.001,
+  "forced_routing": {
+    "layer": "L1",
+    "method": "router.forward_patch",
+    "selection": "forced_pair",
+    "gates": "softmax(original learned logits restricted to forced pair)"
+  },
+  "candidates": [
+    [
+      3,
+      4
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      0,
+      6
+    ],
+    [
+      0,
+      4
+    ]
+  ],
+  "results": [
+    {
+      "pair": [
+        3,
+        4
+      ],
+      "loss_before": 3.632120370864868,
+      "loss_after": 3.5582892894744873,
+      "loss_drop_finite": 0.07383108139038086,
+      "U_1st": 0.07468719502469888,
+      "functional_write_projection_delta_A_1st": 0.0002514987564490696,
+      "functional_write_projection_delta_A_finite": 0.0002514130012555556,
+      "write_norm_finite": 1.0931090030567174,
+      "first_order_sign": "positive",
+      "finite_sign": "positive",
+      "sign_match": true,
+      "expert_first_order": [
+        {
+          "expert": 0,
+          "grad_s_norm": 0.995655285142987,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 1,
+          "grad_s_norm": 3.0331127146956436,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 2,
+          "grad_s_norm": 1.2713636512808684,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 3,
+          "grad_s_norm": 2.4070923479888418,
+          "grad_loss_dot_grad_s": -0.3343605788573205
+        },
+        {
+          "expert": 4,
+          "grad_s_norm": 1.7159760927249381,
+          "grad_loss_dot_grad_s": 0.08286182240825091
+        },
+        {
+          "expert": 5,
+          "grad_s_norm": 0.20505074844835353,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 6,
+          "grad_s_norm": 2.860574250735246,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 7,
+          "grad_s_norm": 2.7647815480763356,
+          "grad_loss_dot_grad_s": 0.0
+        }
+      ]
+    },
+    {
+      "pair": [
+        3,
+        6
+      ],
+      "loss_before": 3.4937891960144043,
+      "loss_after": 3.438628673553467,
+      "loss_drop_finite": 0.0551605224609375,
+      "U_1st": 0.0563894609802356,
+      "functional_write_projection_delta_A_1st": 0.00018602942397128385,
+      "functional_write_projection_delta_A_finite": 0.00018594558839197758,
+      "write_norm_finite": 1.1234282418481614,
+      "first_order_sign": "positive",
+      "finite_sign": "positive",
+      "sign_match": true,
+      "expert_first_order": [
+        {
+          "expert": 0,
+          "grad_s_norm": 0.995655285142987,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 1,
+          "grad_s_norm": 3.0331127146956436,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 2,
+          "grad_s_norm": 1.2713636512808684,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 3,
+          "grad_s_norm": 2.4070923479888418,
+          "grad_loss_dot_grad_s": -0.34754477762166924
+        },
+        {
+          "expert": 4,
+          "grad_s_norm": 1.7159760927249381,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 5,
+          "grad_s_norm": 0.20505074844835353,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 6,
+          "grad_s_norm": 2.860574250735246,
+          "grad_loss_dot_grad_s": 0.16151535365038538
+        },
+        {
+          "expert": 7,
+          "grad_s_norm": 2.7647815480763356,
+          "grad_loss_dot_grad_s": 0.0
+        }
+      ]
+    },
+    {
+      "pair": [
+        4,
+        6
+      ],
+      "loss_before": 3.4444432258605957,
+      "loss_after": 3.3948068618774414,
+      "loss_drop_finite": 0.0496363639831543,
+      "U_1st": 0.05054719085630699,
+      "functional_write_projection_delta_A_1st": 6.049882693875116e-06,
+      "functional_write_projection_delta_A_finite": 5.988438021052967e-06,
+      "write_norm_finite": 0.918826164523492,
+      "first_order_sign": "positive",
+      "finite_sign": "positive",
+      "sign_match": true,
+      "expert_first_order": [
+        {
+          "expert": 0,
+          "grad_s_norm": 0.995655285142987,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 1,
+          "grad_s_norm": 3.0331127146956436,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 2,
+          "grad_s_norm": 1.2713636512808684,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 3,
+          "grad_s_norm": 2.4070923479888418,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 4,
+          "grad_s_norm": 1.7159760927249381,
+          "grad_loss_dot_grad_s": -0.09296005699373475
+        },
+        {
+          "expert": 5,
+          "grad_s_norm": 0.20505074844835353,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 6,
+          "grad_s_norm": 2.860574250735246,
+          "grad_loss_dot_grad_s": 0.08691017429985963
+        },
+        {
+          "expert": 7,
+          "grad_s_norm": 2.7647815480763356,
+          "grad_loss_dot_grad_s": 0.0
+        }
+      ]
+    },
+    {
+      "pair": [
+        0,
+        3
+      ],
+      "loss_before": 3.648387908935547,
+      "loss_after": 3.556774854660034,
+      "loss_drop_finite": 0.0916130542755127,
+      "U_1st": 0.09087210215253082,
+      "functional_write_projection_delta_A_1st": 0.00024911067611370835,
+      "functional_write_projection_delta_A_finite": 0.0002490616318854419,
+      "write_norm_finite": 1.1551846706200384,
+      "first_order_sign": "positive",
+      "finite_sign": "positive",
+      "sign_match": true,
+      "expert_first_order": [
+        {
+          "expert": 0,
+          "grad_s_norm": 0.995655285142987,
+          "grad_loss_dot_grad_s": 0.032486289878967595
+        },
+        {
+          "expert": 1,
+          "grad_s_norm": 3.0331127146956436,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 2,
+          "grad_s_norm": 1.2713636512808684,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 3,
+          "grad_s_norm": 2.4070923479888418,
+          "grad_loss_dot_grad_s": -0.2815969659926759
+        },
+        {
+          "expert": 4,
+          "grad_s_norm": 1.7159760927249381,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 5,
+          "grad_s_norm": 0.20505074844835353,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 6,
+          "grad_s_norm": 2.860574250735246,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 7,
+          "grad_s_norm": 2.7647815480763356,
+          "grad_loss_dot_grad_s": 0.0
+        }
+      ]
+    },
+    {
+      "pair": [
+        0,
+        6
+      ],
+      "loss_before": 3.2779858112335205,
+      "loss_after": 3.23948073387146,
+      "loss_drop_finite": 0.03850507736206055,
+      "U_1st": 0.03905220772997152,
+      "functional_write_projection_delta_A_1st": 5.953502333388471e-05,
+      "functional_write_projection_delta_A_finite": 5.949740981930619e-05,
+      "write_norm_finite": 0.7748331728183797,
+      "first_order_sign": "positive",
+      "finite_sign": "positive",
+      "sign_match": true,
+      "expert_first_order": [
+        {
+          "expert": 0,
+          "grad_s_norm": 0.995655285142987,
+          "grad_loss_dot_grad_s": -0.06722024207433143
+        },
+        {
+          "expert": 1,
+          "grad_s_norm": 3.0331127146956436,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 2,
+          "grad_s_norm": 1.2713636512808684,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 3,
+          "grad_s_norm": 2.4070923479888418,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 4,
+          "grad_s_norm": 1.7159760927249381,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 5,
+          "grad_s_norm": 0.20505074844835353,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 6,
+          "grad_s_norm": 2.860574250735246,
+          "grad_loss_dot_grad_s": 0.007685218740446721
+        },
+        {
+          "expert": 7,
+          "grad_s_norm": 2.7647815480763356,
+          "grad_loss_dot_grad_s": 0.0
+        }
+      ]
+    },
+    {
+      "pair": [
+        0,
+        4
+      ],
+      "loss_before": 3.4180397987365723,
+      "loss_after": 3.3670074939727783,
+      "loss_drop_finite": 0.051032304763793945,
+      "U_1st": 0.05234172577133391,
+      "functional_write_projection_delta_A_1st": 5.315729547187058e-06,
+      "functional_write_projection_delta_A_finite": 5.268800508725893e-06,
+      "write_norm_finite": 0.7207982579239002,
+      "first_order_sign": "positive",
+      "finite_sign": "positive",
+      "sign_match": true,
+      "expert_first_order": [
+        {
+          "expert": 0,
+          "grad_s_norm": 0.995655285142987,
+          "grad_loss_dot_grad_s": -0.02026012402643716
+        },
+        {
+          "expert": 1,
+          "grad_s_norm": 3.0331127146956436,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 2,
+          "grad_s_norm": 1.2713636512808684,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 3,
+          "grad_s_norm": 2.4070923479888418,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 4,
+          "grad_s_norm": 1.7159760927249381,
+          "grad_loss_dot_grad_s": 0.014944394479250101
+        },
+        {
+          "expert": 5,
+          "grad_s_norm": 0.20505074844835353,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 6,
+          "grad_s_norm": 2.860574250735246,
+          "grad_loss_dot_grad_s": 0.0
+        },
+        {
+          "expert": 7,
+          "grad_s_norm": 2.7647815480763356,
+          "grad_loss_dot_grad_s": 0.0
+        }
+      ]
+    }
+  ],
+  "sign_agreement": {
+    "matches": 6,
+    "total": 6,
+    "fraction": 1.0
+  },
+  "metrics": {
+    "functional_write_projection_delta_A": {
+      "name": "Spearman rho",
+      "value": 1.0,
+      "gate": 0.9,
+      "pass": true
+    },
+    "utility": {
+      "name": "Spearman rho",
+      "value": 1.0,
+      "gate": 0.9,
+      "pass": true
+    }
+  },
+  "positive_finite_pairs": [
+    [
+      3,
+      4
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      0,
+      6
+    ],
+    [
+      0,
+      4
+    ]
+  ],
+  "sanity_assertions": {
+    "pair_3_4_sign_match": true,
+    "pair_3_4_hard_assertion": true
+  },
+  "decision": "STEP10_FWR_FINITE_CONFIRMATION_PASS",
+  "no_training": true,
+  "no_canonical_mutation": true
+}

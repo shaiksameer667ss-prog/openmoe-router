@@ -1,0 +1,52 @@
+OpenMoE-Router Research Checkpoint
+Date: 2026-10-05
+
+Purpose:
+Freeze the validated research state before the next FWR robustness/generalization experiment.
+
+Exact artifact identities:
+
+theta0 SHA256:
+66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7
+
+prospective task-4 step10 SHA256:
+e69fb593e6b158db1b5db16ffe26c75da0113bcc8ee9fa9d9c8abd8077823041
+
+exact replay file SHA256:
+de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed
+
+exact replay payload SHA256:
+ac54b7af81500046ef1472d2236eb6eb7aa3e738aa17903e6d4ed7976bdc4963
+
+Replay:
+715 examples
+Task counts = [179,179,179,178,0]
+Tokens = 45,760
+
+FWR Cell 2:
+forced pair = (3,4)
+eta = 0.001
+K = 20
+router observation = disabled
+mode = eval
+optimizer = none
+
+FWR Cell 2 result:
+Spearman rho = +1.000000
+sign agreement = 20/20
+median relative error = 4.113310e-4
+maximum relative error = 7.337738e-3
+cumulative residual = -1.346006e-6
+
+Scientific status:
+FWR multi-step predictor validity = PASS
+
+Current decision:
+DO NOT TRAIN THE ROUTER YET.
+
+Next research gate:
+FWR robustness/generalization
+- additional expert pairs
+- independent T4 batch
+- task-level retention causality
+- intervention width

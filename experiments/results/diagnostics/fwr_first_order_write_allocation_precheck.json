@@ -1,0 +1,628 @@
+{
+  "T4_gradient_batch": {
+    "class_max": 99,
+    "class_min": 80,
+    "loss": 1.4805227518081665,
+    "size": 128,
+    "task_id": 4
+  },
+  "T4_routing_usage": {
+    "assignment_fraction": [
+      0.08453369140625,
+      0.14874267578125,
+      0.118896484375,
+      0.108642578125,
+      0.1925048828125,
+      0.12615966796875,
+      0.1102294921875,
+      0.11029052734375
+    ],
+    "assignment_fraction_sum": 1.0,
+    "mean_gate_mass": [
+      0.07890088856220245,
+      0.12240836024284363,
+      0.09929900616407394,
+      0.10203303396701813,
+      0.22587034106254578,
+      0.09125316143035889,
+      0.13525313138961792,
+      0.14498208463191986
+    ],
+    "mean_gate_mass_sum": 1.0000000074505806,
+    "token_fraction": [
+      0.1690673828125,
+      0.2974853515625,
+      0.23779296875,
+      0.21728515625,
+      0.385009765625,
+      0.2523193359375,
+      0.220458984375,
+      0.2205810546875
+    ],
+    "token_fraction_sum": 2.0
+  },
+  "canonical_files": {
+    "replay": {
+      "bytes": 8800256,
+      "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+      "sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed"
+    },
+    "theta0": {
+      "bytes": 76165345,
+      "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_0.pt",
+      "sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7"
+    },
+    "theta4": {
+      "bytes": 76165345,
+      "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+      "sha256": "9504f80fda16fd56e8bc1e913d57b9713f2224d9285aa78f17f2d237adf79f95"
+    }
+  },
+  "correlations": {
+    "expert_spearman_U_A": 0.40476190476190477,
+    "expert_spearman_U_D": -0.40476190476190477,
+    "pair_spearman_U_A": 0.5845648604269295,
+    "pair_spearman_U_D": -0.5845648604269295
+  },
+  "definitions": {
+    "A_e": "<w_e, mu_hat>",
+    "A_pair": "sum of member expert A values",
+    "D_e": "-A_e",
+    "D_pair": "-A_pair",
+    "U_e": "eta * ||grad_e L_T4||_2^2",
+    "U_pair": "sum of member expert U values",
+    "delta_e": "J_e(h)[eta * grad_e L_T4]",
+    "w_e": "E_h[g_e(h) * delta_e(h)]"
+  },
+  "environment": {
+    "device": "cuda",
+    "eta": 0.001,
+    "ff_dim": 1024,
+    "hidden_dim": 512,
+    "layer_index": 1,
+    "num_experts": 8,
+    "repo": "/kaggle/working/openmoe-router",
+    "top_k": 2
+  },
+  "experiment": "FWR",
+  "expert_results": [
+    {
+      "alignment_A": 3.971878868469503e-06,
+      "assignment_fraction": 0.08453369140625,
+      "damage_D": -3.971878868469503e-06,
+      "expert": 0,
+      "gradient_norm": 0.10040005128404426,
+      "mean_gate_mass": 0.07890088856220245,
+      "raw_write_norm": 0.00041961891939913085,
+      "token_fraction": 0.1690673828125,
+      "utility_U": 1.0080170297838719e-05,
+      "weighted_write_norm": 4.095237042699892e-05
+    },
+    {
+      "alignment_A": -4.958628778695129e-06,
+      "assignment_fraction": 0.14874267578125,
+      "damage_D": 4.958628778695129e-06,
+      "expert": 1,
+      "gradient_norm": 0.13252185988367654,
+      "mean_gate_mass": 0.12240836024284363,
+      "raw_write_norm": 0.0003663617248347814,
+      "token_fraction": 0.2974853515625,
+      "utility_U": 1.7562043347028795e-05,
+      "weighted_write_norm": 5.64114296449689e-05
+    },
+    {
+      "alignment_A": 5.688272722181864e-06,
+      "assignment_fraction": 0.118896484375,
+      "damage_D": -5.688272722181864e-06,
+      "expert": 2,
+      "gradient_norm": 0.12007937477573881,
+      "mean_gate_mass": 0.09929900616407394,
+      "raw_write_norm": 0.0004377018339799911,
+      "token_fraction": 0.23779296875,
+      "utility_U": 1.441905624653234e-05,
+      "weighted_write_norm": 4.810164626707071e-05
+    },
+    {
+      "alignment_A": 1.9708309991983697e-05,
+      "assignment_fraction": 0.108642578125,
+      "damage_D": -1.9708309991983697e-05,
+      "expert": 3,
+      "gradient_norm": 0.12875117331367356,
+      "mean_gate_mass": 0.10203303396701813,
+      "raw_write_norm": 0.0005605673314806128,
+      "token_fraction": 0.21728515625,
+      "utility_U": 1.657686462964761e-05,
+      "weighted_write_norm": 6.194837341424099e-05
+    },
+    {
+      "alignment_A": 2.4504519387846813e-05,
+      "assignment_fraction": 0.1925048828125,
+      "damage_D": -2.4504519387846813e-05,
+      "expert": 4,
+      "gradient_norm": 0.2567377083783052,
+      "mean_gate_mass": 0.22587034106254578,
+      "raw_write_norm": 0.0008796480740997475,
+      "token_fraction": 0.385009765625,
+      "utility_U": 6.591425090334365e-05,
+      "weighted_write_norm": 0.0002352074391919931
+    },
+    {
+      "alignment_A": 7.276796623045811e-07,
+      "assignment_fraction": 0.12615966796875,
+      "damage_D": -7.276796623045811e-07,
+      "expert": 5,
+      "gradient_norm": 0.09534932244536105,
+      "mean_gate_mass": 0.09125316143035889,
+      "raw_write_norm": 0.00023441022626115968,
+      "token_fraction": 0.2523193359375,
+      "utility_U": 9.091493290789433e-06,
+      "weighted_write_norm": 1.8858578870628703e-05
+    },
+    {
+      "alignment_A": 2.8389780709403567e-05,
+      "assignment_fraction": 0.1102294921875,
+      "damage_D": -2.8389780709403567e-05,
+      "expert": 6,
+      "gradient_norm": 0.20645172470103865,
+      "mean_gate_mass": 0.13525313138961792,
+      "raw_write_norm": 0.000803981795448379,
+      "token_fraction": 0.220458984375,
+      "utility_U": 4.2622314632033446e-05,
+      "weighted_write_norm": 0.00013453891417654088
+    },
+    {
+      "alignment_A": -7.576882126159035e-07,
+      "assignment_fraction": 0.11029052734375,
+      "damage_D": 7.576882126159035e-07,
+      "expert": 7,
+      "gradient_norm": 0.1978913392630976,
+      "mean_gate_mass": 0.14498208463191986,
+      "raw_write_norm": 0.0005194457072053417,
+      "token_fraction": 0.2205810546875,
+      "utility_U": 3.916098215534239e-05,
+      "weighted_write_norm": 9.452570982307354e-05
+    }
+  ],
+  "exploratory_rule": {
+    "close_flag": true,
+    "frontier_utility_ratio_threshold": 0.1,
+    "interpretation": "Exploratory pre-check only; not a causal closure criterion.",
+    "rho_close_threshold": 0.9
+  },
+  "historical_retention_direction": {
+    "definition": "E_h[sum_e g_e(h) * (E_theta0,e(h)-E_theta4,e(h))]",
+    "mu_hat_norm": 1.0,
+    "mu_norm": 8.875405527842124
+  },
+  "name": "functional_write_routing_first_order_write_allocation_precheck",
+  "pair_results": [
+    {
+      "alignment_A": -9.86749910225626e-07,
+      "assignment_fraction": 0.2332763671875,
+      "damage_D": 9.86749910225626e-07,
+      "mean_gate_mass": 0.20130924880504608,
+      "pair": [
+        0,
+        1
+      ],
+      "token_fraction": 0.466552734375,
+      "utility_U": 2.7642213644867514e-05
+    },
+    {
+      "alignment_A": 9.660151590651367e-06,
+      "assignment_fraction": 0.20343017578125,
+      "damage_D": -9.660151590651367e-06,
+      "mean_gate_mass": 0.1781998947262764,
+      "pair": [
+        0,
+        2
+      ],
+      "token_fraction": 0.4068603515625,
+      "utility_U": 2.449922654437106e-05
+    },
+    {
+      "alignment_A": 2.36801888604532e-05,
+      "assignment_fraction": 0.19317626953125,
+      "damage_D": -2.36801888604532e-05,
+      "mean_gate_mass": 0.18093392252922058,
+      "pair": [
+        0,
+        3
+      ],
+      "token_fraction": 0.3863525390625,
+      "utility_U": 2.6657034927486327e-05
+    },
+    {
+      "alignment_A": 2.8476398256316315e-05,
+      "assignment_fraction": 0.27703857421875,
+      "damage_D": -2.8476398256316315e-05,
+      "mean_gate_mass": 0.30477122962474823,
+      "pair": [
+        0,
+        4
+      ],
+      "token_fraction": 0.5540771484375,
+      "utility_U": 7.599442120118238e-05
+    },
+    {
+      "alignment_A": 4.699558530774084e-06,
+      "assignment_fraction": 0.210693359375,
+      "damage_D": -4.699558530774084e-06,
+      "mean_gate_mass": 0.17015404999256134,
+      "pair": [
+        0,
+        5
+      ],
+      "token_fraction": 0.42138671875,
+      "utility_U": 1.9171663588628152e-05
+    },
+    {
+      "alignment_A": 3.236165957787307e-05,
+      "assignment_fraction": 0.19476318359375,
+      "damage_D": -3.236165957787307e-05,
+      "mean_gate_mass": 0.21415401995182037,
+      "pair": [
+        0,
+        6
+      ],
+      "token_fraction": 0.3895263671875,
+      "utility_U": 5.270248492987216e-05
+    },
+    {
+      "alignment_A": 3.2141906558535993e-06,
+      "assignment_fraction": 0.19482421875,
+      "damage_D": -3.2141906558535993e-06,
+      "mean_gate_mass": 0.22388297319412231,
+      "pair": [
+        0,
+        7
+      ],
+      "token_fraction": 0.3896484375,
+      "utility_U": 4.924115245318111e-05
+    },
+    {
+      "alignment_A": 7.296439434867352e-07,
+      "assignment_fraction": 0.26763916015625,
+      "damage_D": -7.296439434867352e-07,
+      "mean_gate_mass": 0.22170736640691757,
+      "pair": [
+        1,
+        2
+      ],
+      "token_fraction": 0.5352783203125,
+      "utility_U": 3.198109959356113e-05
+    },
+    {
+      "alignment_A": 1.4749681213288568e-05,
+      "assignment_fraction": 0.25738525390625,
+      "damage_D": -1.4749681213288568e-05,
+      "mean_gate_mass": 0.22444139420986176,
+      "pair": [
+        1,
+        3
+      ],
+      "token_fraction": 0.5147705078125,
+      "utility_U": 3.413890797667641e-05
+    },
+    {
+      "alignment_A": 1.9545890609151684e-05,
+      "assignment_fraction": 0.34124755859375,
+      "damage_D": -1.9545890609151684e-05,
+      "mean_gate_mass": 0.3482787013053894,
+      "pair": [
+        1,
+        4
+      ],
+      "token_fraction": 0.6824951171875,
+      "utility_U": 8.347629425037245e-05
+    },
+    {
+      "alignment_A": -4.230949116390548e-06,
+      "assignment_fraction": 0.27490234375,
+      "damage_D": 4.230949116390548e-06,
+      "mean_gate_mass": 0.21366152167320251,
+      "pair": [
+        1,
+        5
+      ],
+      "token_fraction": 0.5498046875,
+      "utility_U": 2.665353663781823e-05
+    },
+    {
+      "alignment_A": 2.3431151930708438e-05,
+      "assignment_fraction": 0.25897216796875,
+      "damage_D": -2.3431151930708438e-05,
+      "mean_gate_mass": 0.25766149163246155,
+      "pair": [
+        1,
+        6
+      ],
+      "token_fraction": 0.5179443359375,
+      "utility_U": 6.018435797906224e-05
+    },
+    {
+      "alignment_A": -5.716316991311032e-06,
+      "assignment_fraction": 0.259033203125,
+      "damage_D": 5.716316991311032e-06,
+      "mean_gate_mass": 0.2673904448747635,
+      "pair": [
+        1,
+        7
+      ],
+      "token_fraction": 0.51806640625,
+      "utility_U": 5.672302550237119e-05
+    },
+    {
+      "alignment_A": 2.539658271416556e-05,
+      "assignment_fraction": 0.2275390625,
+      "damage_D": -2.539658271416556e-05,
+      "mean_gate_mass": 0.20133204013109207,
+      "pair": [
+        2,
+        3
+      ],
+      "token_fraction": 0.455078125,
+      "utility_U": 3.099592087617995e-05
+    },
+    {
+      "alignment_A": 3.0192792110028677e-05,
+      "assignment_fraction": 0.3114013671875,
+      "damage_D": -3.0192792110028677e-05,
+      "mean_gate_mass": 0.3251693472266197,
+      "pair": [
+        2,
+        4
+      ],
+      "token_fraction": 0.622802734375,
+      "utility_U": 8.033330714987599e-05
+    },
+    {
+      "alignment_A": 6.415952384486445e-06,
+      "assignment_fraction": 0.24505615234375,
+      "damage_D": -6.415952384486445e-06,
+      "mean_gate_mass": 0.19055216759443283,
+      "pair": [
+        2,
+        5
+      ],
+      "token_fraction": 0.4901123046875,
+      "utility_U": 2.3510549537321773e-05
+    },
+    {
+      "alignment_A": 3.407805343158543e-05,
+      "assignment_fraction": 0.2291259765625,
+      "damage_D": -3.407805343158543e-05,
+      "mean_gate_mass": 0.23455213755369186,
+      "pair": [
+        2,
+        6
+      ],
+      "token_fraction": 0.458251953125,
+      "utility_U": 5.7041370878565785e-05
+    },
+    {
+      "alignment_A": 4.930584509565961e-06,
+      "assignment_fraction": 0.22918701171875,
+      "damage_D": -4.930584509565961e-06,
+      "mean_gate_mass": 0.2442810907959938,
+      "pair": [
+        2,
+        7
+      ],
+      "token_fraction": 0.4583740234375,
+      "utility_U": 5.358003840187473e-05
+    },
+    {
+      "alignment_A": 4.421282937983051e-05,
+      "assignment_fraction": 0.3011474609375,
+      "damage_D": -4.421282937983051e-05,
+      "mean_gate_mass": 0.3279033750295639,
+      "pair": [
+        3,
+        4
+      ],
+      "token_fraction": 0.602294921875,
+      "utility_U": 8.249111553299126e-05
+    },
+    {
+      "alignment_A": 2.0435989654288278e-05,
+      "assignment_fraction": 0.23480224609375,
+      "damage_D": -2.0435989654288278e-05,
+      "mean_gate_mass": 0.19328619539737701,
+      "pair": [
+        3,
+        5
+      ],
+      "token_fraction": 0.4696044921875,
+      "utility_U": 2.566835792043704e-05
+    },
+    {
+      "alignment_A": 4.8098090701387264e-05,
+      "assignment_fraction": 0.2188720703125,
+      "damage_D": -4.8098090701387264e-05,
+      "mean_gate_mass": 0.23728616535663605,
+      "pair": [
+        3,
+        6
+      ],
+      "token_fraction": 0.437744140625,
+      "utility_U": 5.9199179261681054e-05
+    },
+    {
+      "alignment_A": 1.8950621779367793e-05,
+      "assignment_fraction": 0.21893310546875,
+      "damage_D": -1.8950621779367793e-05,
+      "mean_gate_mass": 0.247015118598938,
+      "pair": [
+        3,
+        7
+      ],
+      "token_fraction": 0.4378662109375,
+      "utility_U": 5.573784678499e-05
+    },
+    {
+      "alignment_A": 2.5232199050151394e-05,
+      "assignment_fraction": 0.31866455078125,
+      "damage_D": -2.5232199050151394e-05,
+      "mean_gate_mass": 0.31712350249290466,
+      "pair": [
+        4,
+        5
+      ],
+      "token_fraction": 0.6373291015625,
+      "utility_U": 7.500574419413308e-05
+    },
+    {
+      "alignment_A": 5.289430009725038e-05,
+      "assignment_fraction": 0.302734375,
+      "damage_D": -5.289430009725038e-05,
+      "mean_gate_mass": 0.3611234724521637,
+      "pair": [
+        4,
+        6
+      ],
+      "token_fraction": 0.60546875,
+      "utility_U": 0.0001085365655353771
+    },
+    {
+      "alignment_A": 2.374683117523091e-05,
+      "assignment_fraction": 0.30279541015625,
+      "damage_D": -2.374683117523091e-05,
+      "mean_gate_mass": 0.37085242569446564,
+      "pair": [
+        4,
+        7
+      ],
+      "token_fraction": 0.6055908203125,
+      "utility_U": 0.00010507523305868604
+    },
+    {
+      "alignment_A": 2.9117460371708148e-05,
+      "assignment_fraction": 0.23638916015625,
+      "damage_D": -2.9117460371708148e-05,
+      "mean_gate_mass": 0.2265062928199768,
+      "pair": [
+        5,
+        6
+      ],
+      "token_fraction": 0.4727783203125,
+      "utility_U": 5.171380792282288e-05
+    },
+    {
+      "alignment_A": -3.0008550311322324e-08,
+      "assignment_fraction": 0.2364501953125,
+      "damage_D": 3.0008550311322324e-08,
+      "mean_gate_mass": 0.23623524606227875,
+      "pair": [
+        5,
+        7
+      ],
+      "token_fraction": 0.472900390625,
+      "utility_U": 4.8252475446131824e-05
+    },
+    {
+      "alignment_A": 2.7632092496787664e-05,
+      "assignment_fraction": 0.22052001953125,
+      "damage_D": -2.7632092496787664e-05,
+      "mean_gate_mass": 0.2802352160215378,
+      "pair": [
+        6,
+        7
+      ],
+      "token_fraction": 0.4410400390625,
+      "utility_U": 8.178329678737583e-05
+    }
+  ],
+  "pareto": {
+    "best_A_pair": {
+      "alignment_A": 5.289430009725038e-05,
+      "assignment_fraction": 0.302734375,
+      "damage_D": -5.289430009725038e-05,
+      "mean_gate_mass": 0.3611234724521637,
+      "pair": [
+        4,
+        6
+      ],
+      "token_fraction": 0.60546875,
+      "utility_U": 0.0001085365655353771
+    },
+    "best_D_pair": {
+      "alignment_A": 5.289430009725038e-05,
+      "assignment_fraction": 0.302734375,
+      "damage_D": -5.289430009725038e-05,
+      "mean_gate_mass": 0.3611234724521637,
+      "pair": [
+        4,
+        6
+      ],
+      "token_fraction": 0.60546875,
+      "utility_U": 0.0001085365655353771
+    },
+    "best_D_vs_best_U_gap_normalized": 0.0,
+    "best_U_pair": {
+      "alignment_A": 5.289430009725038e-05,
+      "assignment_fraction": 0.302734375,
+      "damage_D": -5.289430009725038e-05,
+      "mean_gate_mass": 0.3611234724521637,
+      "pair": [
+        4,
+        6
+      ],
+      "token_fraction": 0.60546875,
+      "utility_U": 0.0001085365655353771
+    },
+    "frontier_U_range": 0.0,
+    "frontier_U_range_ratio": 0.0,
+    "frontier_cardinality": 1,
+    "frontier_pairs": [
+      {
+        "alignment_A": 5.289430009725038e-05,
+        "assignment_fraction": 0.302734375,
+        "damage_D": -5.289430009725038e-05,
+        "mean_gate_mass": 0.3611234724521637,
+        "pair": [
+          4,
+          6
+        ],
+        "token_fraction": 0.60546875,
+        "utility_U": 0.0001085365655353771
+      }
+    ],
+    "max_normalized_dominance_slack": 0.9162772756842681,
+    "objective": "maximize utility U and minimize damage D",
+    "overall_U_range": 8.936490194674896e-05
+  },
+  "replay": {
+    "shape": [
+      715,
+      3,
+      32,
+      32
+    ],
+    "size": 715,
+    "task_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ]
+  },
+  "scientific_contract": {
+    "MoE_weighting": "natural theta4 replay gate mass",
+    "alignment": "<weighted_write_e, mu_hat>",
+    "current_task_utility": "eta * ||grad_e(L_T4)||_2^2",
+    "damage": "-alignment",
+    "exact_counterfactual_pair_gradient": false,
+    "first_order_functional_write": "J_e(h)[eta * grad_e(L_T4)]",
+    "historical_direction": "E_h[sum_e g_e(h) * (E_theta0,e(h)-E_theta4,e(h))]",
+    "model_parameter_update": false,
+    "optimizer_step": false,
+    "pairwise_first_order_proxy": "sum of member expert quantities",
+    "router_mutation": false,
+    "training": false
+  },
+  "scientific_limitation": "The first-order write uses natural current theta4 routing gates on replay and natural current-task expert gradients. It is not the exact counterfactual gradient produced by forcibly routing the T4 batch to an arbitrary expert pair. A structured result requires finite-update counterfactual confirmation before router training.",
+  "scientific_stage": "precheck",
+  "status": "completed"
+}

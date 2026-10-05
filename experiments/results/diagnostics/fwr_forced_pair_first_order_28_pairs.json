@@ -1,0 +1,938 @@
+{
+  "all_pair_results": [
+    {
+      "first_order_forced_utility": 0.000518212904571129,
+      "forced_loss": 1.7916829586029053,
+      "gradient_squared_norm_by_expert": {
+        "0": 0.2318234668988663,
+        "1": 0.28638943767226266
+      },
+      "pair": [
+        0,
+        1
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -0.0001258596166735515,
+      "predicted_write_cosine_to_mu": -0.30532884049384545,
+      "predicted_write_norm": 0.0004122100502198988
+    },
+    {
+      "first_order_forced_utility": 0.000503067726495327,
+      "forced_loss": 1.8163552284240723,
+      "gradient_squared_norm_by_expert": {
+        "0": 0.26252082810688265,
+        "2": 0.2405468983884443
+      },
+      "pair": [
+        0,
+        2
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -3.60049307346344e-05,
+      "predicted_write_cosine_to_mu": -0.09988965183409776,
+      "predicted_write_norm": 0.0003604470540595474
+    },
+    {
+      "first_order_forced_utility": 0.0004297695388045031,
+      "forced_loss": 1.7061853408813477,
+      "gradient_squared_norm_by_expert": {
+        "0": 0.19778897432368278,
+        "3": 0.23198056448082033
+      },
+      "pair": [
+        0,
+        3
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -4.597265797201544e-05,
+      "predicted_write_cosine_to_mu": -0.14094947133606467,
+      "predicted_write_norm": 0.00032616410360563334
+    },
+    {
+      "first_order_forced_utility": 0.0004739224160541357,
+      "forced_loss": 1.7062139511108398,
+      "gradient_squared_norm_by_expert": {
+        "0": 0.1359765744514239,
+        "4": 0.33794584160271174
+      },
+      "pair": [
+        0,
+        4
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -6.337298691505566e-05,
+      "predicted_write_cosine_to_mu": -0.10895680796787836,
+      "predicted_write_norm": 0.0005816340263358183
+    },
+    {
+      "first_order_forced_utility": 0.0005293411182164861,
+      "forced_loss": 1.853239893913269,
+      "gradient_squared_norm_by_expert": {
+        "0": 0.21566958633594976,
+        "5": 0.31367153188053637
+      },
+      "pair": [
+        0,
+        5
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -6.677742931060493e-05,
+      "predicted_write_cosine_to_mu": -0.21555900222583202,
+      "predicted_write_norm": 0.0003097872444252876
+    },
+    {
+      "first_order_forced_utility": 0.0005872683424500079,
+      "forced_loss": 1.801637887954712,
+      "gradient_squared_norm_by_expert": {
+        "0": 0.3347820365586823,
+        "6": 0.2524863058913254
+      },
+      "pair": [
+        0,
+        6
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -0.0001603285491000861,
+      "predicted_write_cosine_to_mu": -0.32111075385551885,
+      "predicted_write_norm": 0.0004992936149756747
+    },
+    {
+      "first_order_forced_utility": 0.0004687899838770582,
+      "forced_loss": 1.7573518753051758,
+      "gradient_squared_norm_by_expert": {
+        "0": 0.20603237585481043,
+        "7": 0.2627576080222478
+      },
+      "pair": [
+        0,
+        7
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -5.515645170817152e-05,
+      "predicted_write_cosine_to_mu": -0.119765571763336,
+      "predicted_write_norm": 0.0004605367877937743
+    },
+    {
+      "first_order_forced_utility": 0.0004716012119964598,
+      "forced_loss": 1.8451757431030273,
+      "gradient_squared_norm_by_expert": {
+        "1": 0.22840943696434146,
+        "2": 0.24319177503211836
+      },
+      "pair": [
+        1,
+        2
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -9.586784290149808e-05,
+      "predicted_write_cosine_to_mu": -0.24939186641749725,
+      "predicted_write_norm": 0.0003844064535008108
+    },
+    {
+      "first_order_forced_utility": 0.0003460810220974098,
+      "forced_loss": 1.6554481983184814,
+      "gradient_squared_norm_by_expert": {
+        "1": 0.17707636937419838,
+        "3": 0.16900465272321144
+      },
+      "pair": [
+        1,
+        3
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -9.371289343107492e-05,
+      "predicted_write_cosine_to_mu": -0.30693229079553086,
+      "predicted_write_norm": 0.0003053210634442619
+    },
+    {
+      "first_order_forced_utility": 0.00047317549589120353,
+      "forced_loss": 1.7735786437988281,
+      "gradient_squared_norm_by_expert": {
+        "1": 0.12658207039338176,
+        "4": 0.34659342549782174
+      },
+      "pair": [
+        1,
+        4
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -0.00017802134971134365,
+      "predicted_write_cosine_to_mu": -0.282505772933856,
+      "predicted_write_norm": 0.0006301511925316457
+    },
+    {
+      "first_order_forced_utility": 0.0005169171708640517,
+      "forced_loss": 1.8784797191619873,
+      "gradient_squared_norm_by_expert": {
+        "1": 0.24656962575183233,
+        "5": 0.2703475451122194
+      },
+      "pair": [
+        1,
+        5
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -9.763259731698781e-05,
+      "predicted_write_cosine_to_mu": -0.2936578328260609,
+      "predicted_write_norm": 0.0003324706049125461
+    },
+    {
+      "first_order_forced_utility": 0.00048180885965875273,
+      "forced_loss": 1.8077276945114136,
+      "gradient_squared_norm_by_expert": {
+        "1": 0.20679568660273034,
+        "6": 0.27501317305602235
+      },
+      "pair": [
+        1,
+        6
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -0.00023544396390207112,
+      "predicted_write_cosine_to_mu": -0.4463885789174421,
+      "predicted_write_norm": 0.000527441729071692
+    },
+    {
+      "first_order_forced_utility": 0.00046666586322645506,
+      "forced_loss": 1.822898268699646,
+      "gradient_squared_norm_by_expert": {
+        "1": 0.23232287679434144,
+        "7": 0.2343429864321136
+      },
+      "pair": [
+        1,
+        7
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -0.00012658376363106072,
+      "predicted_write_cosine_to_mu": -0.2506461462168589,
+      "predicted_write_norm": 0.0005050297622431447
+    },
+    {
+      "first_order_forced_utility": 0.0004072535785269903,
+      "forced_loss": 1.7294156551361084,
+      "gradient_squared_norm_by_expert": {
+        "2": 0.21458596933062019,
+        "3": 0.19266760919637008
+      },
+      "pair": [
+        2,
+        3
+      ],
+      "pair_gate_sum_mean": 4095.999755859375,
+      "predicted_DeltaA_SGD": 6.395079253707081e-06,
+      "predicted_write_cosine_to_mu": 0.021742326307886754,
+      "predicted_write_norm": 0.00029413040551172975
+    },
+    {
+      "first_order_forced_utility": 0.00040279065286556856,
+      "forced_loss": 1.7546770572662354,
+      "gradient_squared_norm_by_expert": {
+        "2": 0.14867854653892398,
+        "4": 0.25411210632664455
+      },
+      "pair": [
+        2,
+        4
+      ],
+      "pair_gate_sum_mean": 4095.999755859375,
+      "predicted_DeltaA_SGD": -2.909760587499477e-05,
+      "predicted_write_cosine_to_mu": -0.057125532025854825,
+      "predicted_write_norm": 0.0005093625362092959
+    },
+    {
+      "first_order_forced_utility": 0.00047551772182869426,
+      "forced_loss": 1.869982123374939,
+      "gradient_squared_norm_by_expert": {
+        "2": 0.25241408940681676,
+        "5": 0.22310363242187745
+      },
+      "pair": [
+        2,
+        5
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -4.528286081040278e-05,
+      "predicted_write_cosine_to_mu": -0.15702215418952709,
+      "predicted_write_norm": 0.0002883851711507281
+    },
+    {
+      "first_order_forced_utility": 0.0005350198137632938,
+      "forced_loss": 1.8128247261047363,
+      "gradient_squared_norm_by_expert": {
+        "2": 0.3125432426642967,
+        "6": 0.22247657109899707
+      },
+      "pair": [
+        2,
+        6
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -0.00010757934069260955,
+      "predicted_write_cosine_to_mu": -0.2619378507509122,
+      "predicted_write_norm": 0.00041070559441564364
+    },
+    {
+      "first_order_forced_utility": 0.0004799260764719896,
+      "forced_loss": 1.812586784362793,
+      "gradient_squared_norm_by_expert": {
+        "2": 0.2220518299089361,
+        "7": 0.25787424656305347
+      },
+      "pair": [
+        2,
+        7
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -1.6134941688505933e-05,
+      "predicted_write_cosine_to_mu": -0.037610062267864265,
+      "predicted_write_norm": 0.00042900598179260006
+    },
+    {
+      "first_order_forced_utility": 0.0003497621535389694,
+      "forced_loss": 1.6729246377944946,
+      "gradient_squared_norm_by_expert": {
+        "3": 0.11157973011279622,
+        "4": 0.23818242342617318
+      },
+      "pair": [
+        3,
+        4
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -3.4954566217493266e-05,
+      "predicted_write_cosine_to_mu": -0.08060992879936729,
+      "predicted_write_norm": 0.00043362606490439707
+    },
+    {
+      "first_order_forced_utility": 0.00035630452333516394,
+      "forced_loss": 1.7131030559539795,
+      "gradient_squared_norm_by_expert": {
+        "3": 0.18796266412346022,
+        "5": 0.1683418592117037
+      },
+      "pair": [
+        3,
+        5
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -3.910358645953238e-05,
+      "predicted_write_cosine_to_mu": -0.1515741767758838,
+      "predicted_write_norm": 0.0002579831689757457
+    },
+    {
+      "first_order_forced_utility": 0.000498223021219981,
+      "forced_loss": 1.7983806133270264,
+      "gradient_squared_norm_by_expert": {
+        "3": 0.3252965509657765,
+        "6": 0.17292647025420443
+      },
+      "pair": [
+        3,
+        6
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -4.9564689106773585e-05,
+      "predicted_write_cosine_to_mu": -0.1330779607032006,
+      "predicted_write_norm": 0.00037244851698108055
+    },
+    {
+      "first_order_forced_utility": 0.00036856584299859043,
+      "forced_loss": 1.6462535858154297,
+      "gradient_squared_norm_by_expert": {
+        "3": 0.16729615144474028,
+        "7": 0.20126969155385013
+      },
+      "pair": [
+        3,
+        7
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": 2.0810966816497967e-05,
+      "predicted_write_cosine_to_mu": 0.05325443567549917,
+      "predicted_write_norm": 0.0003907837263229604
+    },
+    {
+      "first_order_forced_utility": 0.0004278620683588325,
+      "forced_loss": 1.7450053691864014,
+      "gradient_squared_norm_by_expert": {
+        "4": 0.29441639608561826,
+        "5": 0.1334456722732142
+      },
+      "pair": [
+        4,
+        5
+      ],
+      "pair_gate_sum_mean": 4095.999755859375,
+      "predicted_DeltaA_SGD": -0.00010394243872724473,
+      "predicted_write_cosine_to_mu": -0.18854211841589738,
+      "predicted_write_norm": 0.0005512955916723198
+    },
+    {
+      "first_order_forced_utility": 0.00037145946631972354,
+      "forced_loss": 1.7175652980804443,
+      "gradient_squared_norm_by_expert": {
+        "4": 0.22268279580877395,
+        "6": 0.1487766705109496
+      },
+      "pair": [
+        4,
+        6
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -0.00011396022455301136,
+      "predicted_write_cosine_to_mu": -0.21821944876688454,
+      "predicted_write_norm": 0.0005222276254338388
+    },
+    {
+      "first_order_forced_utility": 0.0003959933600810558,
+      "forced_loss": 1.7193255424499512,
+      "gradient_squared_norm_by_expert": {
+        "4": 0.26044275252644933,
+        "7": 0.13555060755460643
+      },
+      "pair": [
+        4,
+        7
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -3.296647992101498e-05,
+      "predicted_write_cosine_to_mu": -0.05721631367800733,
+      "predicted_write_norm": 0.000576172734694835
+    },
+    {
+      "first_order_forced_utility": 0.0004169416515487593,
+      "forced_loss": 1.7582707405090332,
+      "gradient_squared_norm_by_expert": {
+        "5": 0.16746024910519167,
+        "6": 0.24948140244356767
+      },
+      "pair": [
+        5,
+        6
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -0.000139424460940063,
+      "predicted_write_cosine_to_mu": -0.3552608181551486,
+      "predicted_write_norm": 0.00039245662289494
+    },
+    {
+      "first_order_forced_utility": 0.0004939204959334757,
+      "forced_loss": 1.8499417304992676,
+      "gradient_squared_norm_by_expert": {
+        "5": 0.2423499793123848,
+        "7": 0.251570516621091
+      },
+      "pair": [
+        5,
+        7
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -6.578836473636329e-05,
+      "predicted_write_cosine_to_mu": -0.15597600651940421,
+      "predicted_write_norm": 0.00042178515916920135
+    },
+    {
+      "first_order_forced_utility": 0.0005177606035689127,
+      "forced_loss": 1.7757318019866943,
+      "gradient_squared_norm_by_expert": {
+        "6": 0.24802006689512374,
+        "7": 0.2697405366737889
+      },
+      "pair": [
+        6,
+        7
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -0.0001715413818601519,
+      "predicted_write_cosine_to_mu": -0.30942978482675076,
+      "predicted_write_norm": 0.0005543790231964826
+    }
+  ],
+  "canonical_files": {
+    "replay": {
+      "bytes": 8800256,
+      "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+      "sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed"
+    },
+    "theta0": {
+      "bytes": 76165345,
+      "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_0.pt",
+      "sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7"
+    },
+    "theta4": {
+      "bytes": 76165345,
+      "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+      "sha256": "9504f80fda16fd56e8bc1e913d57b9713f2224d9285aa78f17f2d237adf79f95"
+    }
+  },
+  "correlations": {
+    "forced_first_order_DeltaA_vs_finite_actual_DeltaA": 0.9999999999999998,
+    "forced_first_order_U_vs_finite_loss_drop": 0.9999999999999998
+  },
+  "environment": {
+    "device": "cuda",
+    "eta": 0.001,
+    "hidden_dim": 512,
+    "layer": 1,
+    "num_experts": 8,
+    "replay_size": 715,
+    "repo": "/kaggle/working/openmoe-router",
+    "t4_batch_size": 128,
+    "top_k": 2
+  },
+  "experiment": "FWR",
+  "known_finite_update_comparison": [
+    {
+      "finite_actual_DeltaA": -0.0001780287711881101,
+      "finite_loss_drop": 0.0004730224609375,
+      "first_order_vs_finite_DeltaA_ratio": 1.000041688689466,
+      "forced_first_order_DeltaA": -0.00017802134971134365,
+      "forced_first_order_U": 0.00047317549589120353,
+      "forced_loss": 1.7735786437988281,
+      "pair": [
+        1,
+        4
+      ]
+    },
+    {
+      "finite_actual_DeltaA": -0.00011396344052627683,
+      "finite_loss_drop": 0.0003713369369506836,
+      "first_order_vs_finite_DeltaA_ratio": 1.0000282201380182,
+      "forced_first_order_DeltaA": -0.00011396022455301136,
+      "forced_first_order_U": 0.00037145946631972354,
+      "forced_loss": 1.7175652980804443,
+      "pair": [
+        4,
+        6
+      ]
+    },
+    {
+      "finite_actual_DeltaA": -3.2976917282212526e-05,
+      "finite_loss_drop": 0.00039589405059814453,
+      "first_order_vs_finite_DeltaA_ratio": 1.0003166052676098,
+      "forced_first_order_DeltaA": -3.296647992101498e-05,
+      "forced_first_order_U": 0.0003959933600810558,
+      "forced_loss": 1.7193255424499512,
+      "pair": [
+        4,
+        7
+      ]
+    }
+  ],
+  "pareto_frontier": [
+    {
+      "first_order_forced_utility": 0.0005872683424500079,
+      "forced_loss": 1.801637887954712,
+      "gradient_squared_norm_by_expert": {
+        "0": 0.3347820365586823,
+        "6": 0.2524863058913254
+      },
+      "pair": [
+        0,
+        6
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -0.0001603285491000861,
+      "predicted_write_cosine_to_mu": -0.32111075385551885,
+      "predicted_write_norm": 0.0004992936149756747
+    },
+    {
+      "first_order_forced_utility": 0.0005350198137632938,
+      "forced_loss": 1.8128247261047363,
+      "gradient_squared_norm_by_expert": {
+        "2": 0.3125432426642967,
+        "6": 0.22247657109899707
+      },
+      "pair": [
+        2,
+        6
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -0.00010757934069260955,
+      "predicted_write_cosine_to_mu": -0.2619378507509122,
+      "predicted_write_norm": 0.00041070559441564364
+    },
+    {
+      "first_order_forced_utility": 0.0005293411182164861,
+      "forced_loss": 1.853239893913269,
+      "gradient_squared_norm_by_expert": {
+        "0": 0.21566958633594976,
+        "5": 0.31367153188053637
+      },
+      "pair": [
+        0,
+        5
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -6.677742931060493e-05,
+      "predicted_write_cosine_to_mu": -0.21555900222583202,
+      "predicted_write_norm": 0.0003097872444252876
+    },
+    {
+      "first_order_forced_utility": 0.000503067726495327,
+      "forced_loss": 1.8163552284240723,
+      "gradient_squared_norm_by_expert": {
+        "0": 0.26252082810688265,
+        "2": 0.2405468983884443
+      },
+      "pair": [
+        0,
+        2
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -3.60049307346344e-05,
+      "predicted_write_cosine_to_mu": -0.09988965183409776,
+      "predicted_write_norm": 0.0003604470540595474
+    },
+    {
+      "first_order_forced_utility": 0.0004799260764719896,
+      "forced_loss": 1.812586784362793,
+      "gradient_squared_norm_by_expert": {
+        "2": 0.2220518299089361,
+        "7": 0.25787424656305347
+      },
+      "pair": [
+        2,
+        7
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": -1.6134941688505933e-05,
+      "predicted_write_cosine_to_mu": -0.037610062267864265,
+      "predicted_write_norm": 0.00042900598179260006
+    },
+    {
+      "first_order_forced_utility": 0.0004072535785269903,
+      "forced_loss": 1.7294156551361084,
+      "gradient_squared_norm_by_expert": {
+        "2": 0.21458596933062019,
+        "3": 0.19266760919637008
+      },
+      "pair": [
+        2,
+        3
+      ],
+      "pair_gate_sum_mean": 4095.999755859375,
+      "predicted_DeltaA_SGD": 6.395079253707081e-06,
+      "predicted_write_cosine_to_mu": 0.021742326307886754,
+      "predicted_write_norm": 0.00029413040551172975
+    },
+    {
+      "first_order_forced_utility": 0.00036856584299859043,
+      "forced_loss": 1.6462535858154297,
+      "gradient_squared_norm_by_expert": {
+        "3": 0.16729615144474028,
+        "7": 0.20126969155385013
+      },
+      "pair": [
+        3,
+        7
+      ],
+      "pair_gate_sum_mean": 4096.0,
+      "predicted_DeltaA_SGD": 2.0810966816497967e-05,
+      "predicted_write_cosine_to_mu": 0.05325443567549917,
+      "predicted_write_norm": 0.0003907837263229604
+    }
+  ],
+  "protocol": {
+    "gradient_sign": "SGD: -eta * grad",
+    "historical_reference": "canonical theta4 replay h with natural theta4 gate mass and theta0-theta4 expert functional gap",
+    "model_parameter_update": false,
+    "optimizer": "none",
+    "pair_gate": "softmax of original learned router logits restricted to candidate pair",
+    "pair_gradient": "forced-pair counterfactual gradient grad L^(S)",
+    "pair_selection": "all tokens forced to candidate pair",
+    "router_bias_update": false,
+    "router_memory_update": false,
+    "router_parameter_update": false,
+    "training": false
+  },
+  "rankings": {
+    "all_28_by_forced_first_order_U": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "all_28_by_predicted_DeltaA": [
+      [
+        3,
+        7
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        6
+      ]
+    ],
+    "known_finite_3_by_actual_DeltaA": [
+      [
+        4,
+        7
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        1,
+        4
+      ]
+    ],
+    "known_finite_3_by_actual_loss_drop": [
+      [
+        1,
+        4
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        4,
+        6
+      ]
+    ]
+  },
+  "replay": {
+    "cache_location": "CPU",
+    "examples": 715,
+    "mu_hat_norm": 1.0000000000000002,
+    "mu_norm": 8.875405563174251,
+    "task_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ],
+    "tokens": 45760
+  },
+  "scientific_limit": "This screen uses forced-pair gradients, but remains a first-order approximation. It uses the fixed canonical theta4 replay representation and natural replay gates to project the expert functional write. It is not a finite-update trajectory test over all 28 pairs.",
+  "sign_corrected_provenance": {
+    "corrected_SGD_interpretation": "actual first-order SGD functional change is -J_e(h)[eta grad_e L]",
+    "corrected_reference_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_first_order_sign_corrected_reference.json",
+    "original_alignment_interpretation": "stored values correspond to +J_e(h)[eta grad_e L]",
+    "original_first_order_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_first_order_write_allocation_precheck.json",
+    "original_json_overwritten": false
+  },
+  "stage": "corrected_forced_pair_first_order_screen",
+  "status": "completed",
+  "target_pair_46": {
+    "DeltaA_rank_1_to_28": 21,
+    "U_rank_1_to_28": 24,
+    "forced_first_order_U": 0.00037145946631972354,
+    "predicted_DeltaA": -0.00011396022455301136
+  }
+}

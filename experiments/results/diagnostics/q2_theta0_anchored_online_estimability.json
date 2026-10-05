@@ -1,0 +1,461 @@
+{
+  "diagnostic": "Q2_theta0_anchored_online_estimability",
+  "protocol": {
+    "anchor": "theta0",
+    "L0_index": 0,
+    "L1_index": 1,
+    "hidden_dim": 512,
+    "ff_dim": 1024,
+    "num_experts": 8,
+    "top_k": 2,
+    "num_heads": 4,
+    "depth": 2,
+    "replay_images": 715,
+    "replay_tokens": 45760,
+    "training_performed": false,
+    "checkpoint_modified": false,
+    "l1_capture_method": "actual_model_forward_pre_moe_hook",
+    "reference_source": "gate_weighted_drift_bridge_715_loo.json"
+  },
+  "canonical_checkpoints": {
+    "0": {
+      "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_0.pt",
+      "sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7"
+    },
+    "1": {
+      "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_1.pt",
+      "sha256": "9de3853eab02d95d77143864fa45a692304d268b2f7c9cb437ad8fcf639818b7"
+    },
+    "2": {
+      "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_2.pt",
+      "sha256": "c02d343af7bd8ed466cd0535616b3278ce2cfe3dea91b12594969ae0045e0909"
+    },
+    "3": {
+      "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_3.pt",
+      "sha256": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc"
+    },
+    "4": {
+      "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+      "sha256": "9504f80fda16fd56e8bc1e913d57b9713f2224d9285aa78f17f2d237adf79f95"
+    }
+  },
+  "sha_provenance": {
+    "theta3_repository_lfs_sha": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc",
+    "theta3_archival_text_sha": "26f0c00bce53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc",
+    "repository_lfs_is_executable_source": true,
+    "archival_text_sha_is_executable_gate": false
+  },
+  "replay": {
+    "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+    "bytes": 8800256,
+    "sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "shape": [
+      715,
+      3,
+      32,
+      32
+    ],
+    "labels_shape": [
+      715
+    ],
+    "task_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ]
+  },
+  "b_fixed_reference": {
+    "source": "gate_weighted_drift_bridge_715_loo.json",
+    "source_path": "/kaggle/working/openmoe-router/openmoe-router/experiments/results/diagnostics/gate_weighted_drift_bridge_715_loo.json",
+    "source_sha256": "b098b248046e0d7a5a02d193a7d21c48a8d2ec6236e4e05bf52fd81c77a090fb",
+    "vectors": [
+      {
+        "task_id": 0,
+        "source": "/kaggle/working/openmoe-router/openmoe-router/experiments/results/diagnostics/gate_weighted_drift_bridge_715_loo.json",
+        "source_sha256": "b098b248046e0d7a5a02d193a7d21c48a8d2ec6236e4e05bf52fd81c77a090fb",
+        "json_path": "vectors/0/b_fixed",
+        "norm": 9.003647804260254,
+        "expected_norm": 9.003648,
+        "norm_error": 1.9573974618936063e-07
+      },
+      {
+        "task_id": 1,
+        "source": "/kaggle/working/openmoe-router/openmoe-router/experiments/results/diagnostics/gate_weighted_drift_bridge_715_loo.json",
+        "source_sha256": "b098b248046e0d7a5a02d193a7d21c48a8d2ec6236e4e05bf52fd81c77a090fb",
+        "json_path": "vectors/1/b_fixed",
+        "norm": 8.91830825805664,
+        "expected_norm": 8.918308,
+        "norm_error": 2.5805664094491476e-07
+      },
+      {
+        "task_id": 2,
+        "source": "/kaggle/working/openmoe-router/openmoe-router/experiments/results/diagnostics/gate_weighted_drift_bridge_715_loo.json",
+        "source_sha256": "b098b248046e0d7a5a02d193a7d21c48a8d2ec6236e4e05bf52fd81c77a090fb",
+        "json_path": "vectors/2/b_fixed",
+        "norm": 9.049149513244629,
+        "expected_norm": 9.04915,
+        "norm_error": 4.867553702325722e-07
+      },
+      {
+        "task_id": 3,
+        "source": "/kaggle/working/openmoe-router/openmoe-router/experiments/results/diagnostics/gate_weighted_drift_bridge_715_loo.json",
+        "source_sha256": "b098b248046e0d7a5a02d193a7d21c48a8d2ec6236e4e05bf52fd81c77a090fb",
+        "json_path": "vectors/3/b_fixed",
+        "norm": 9.023508071899414,
+        "expected_norm": 9.023508,
+        "norm_error": 7.189941442220515e-08
+      }
+    ]
+  },
+  "trajectory": {
+    "directory": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R",
+    "preregistered_steps": [
+      10,
+      25,
+      50,
+      75,
+      100,
+      125,
+      150,
+      175
+    ],
+    "observed_steps": [
+      10,
+      25,
+      50,
+      100,
+      150,
+      200
+    ],
+    "missing_steps": [
+      75,
+      125,
+      175
+    ],
+    "checkpoint_paths": {
+      "10": {
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_010.pt",
+        "sha256": "e69fb593e6b158db1b5db16ffe26c75da0113bcc8ee9fa9d9c8abd8077823041"
+      },
+      "25": {
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_025.pt",
+        "sha256": "bb049b6b2fcdcfd6852f929aa119d8de39610e3920567d847af661a250765739"
+      },
+      "50": {
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_050.pt",
+        "sha256": "e6f9850b2cca63fbe1b002801c95fc4bdef14b89e138c6a45da85c5e17dddd9e"
+      },
+      "100": {
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_100.pt",
+        "sha256": "b52914a73b72da9f7fe08735538447f183b7b5de40ad64eac5a2b3ac40d50c47"
+      },
+      "150": {
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_150.pt",
+        "sha256": "fe59a4b56a8aa210ac66dd275e0575b0349e1871e4273191a5d9c4dd9df6b4cb"
+      },
+      "200": {
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_200.pt",
+        "sha256": "f68fab8310d04829626e4eeac1046658cb7a72586bcd75156dd9cb912b980dee"
+      }
+    },
+    "evaluation_status": "exploratory_partial",
+    "results": [
+      {
+        "checkpoint": "theta4_step_010",
+        "tokens": 45760,
+        "mu_g_norm": 7.1135149002075195,
+        "mu_uniform_norm": 6.757531642913818,
+        "cos_mu_g_by_reference": [
+          0.6805074214935303,
+          0.6709725856781006,
+          0.6772862076759338,
+          0.6703219413757324
+        ],
+        "cos_mu_uniform_by_reference": [
+          0.6073606014251709,
+          0.5994694828987122,
+          0.6083201766014099,
+          0.5937452912330627
+        ],
+        "cos_tokenwise_by_reference": [
+          0.37319034344687757,
+          0.36802123394703484,
+          0.3712080938719381,
+          0.3680564505219361
+        ],
+        "mean_cos_mu_g": 0.6747720241546631,
+        "mean_cos_mu_uniform": 0.6022238731384277,
+        "mean_cos_tokenwise": 0.37011903044694666,
+        "gate_weighting_margin": 0.07254815101623535,
+        "population_vs_tokenwise_margin": 0.3046529937077164,
+        "gate_mass_max_error": 1.1920928955078125e-07,
+        "step": 10,
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_010.pt",
+        "sha256": "e69fb593e6b158db1b5db16ffe26c75da0113bcc8ee9fa9d9c8abd8077823041",
+        "evaluation_status": "exploratory_partial",
+        "elapsed_sec": 1.2661101818084717
+      },
+      {
+        "checkpoint": "theta4_step_025",
+        "tokens": 45760,
+        "mu_g_norm": 6.723918914794922,
+        "mu_uniform_norm": 6.547557353973389,
+        "cos_mu_g_by_reference": [
+          0.7159751057624817,
+          0.7104701995849609,
+          0.7158065438270569,
+          0.7094259262084961
+        ],
+        "cos_mu_uniform_by_reference": [
+          0.6592648029327393,
+          0.6551854014396667,
+          0.661139726638794,
+          0.6502504348754883
+        ],
+        "cos_tokenwise_by_reference": [
+          0.33991222310914265,
+          0.33719707541180965,
+          0.33974038465093037,
+          0.33690503033597397
+        ],
+        "mean_cos_mu_g": 0.7129194736480713,
+        "mean_cos_mu_uniform": 0.6564601063728333,
+        "mean_cos_tokenwise": 0.3384386783769642,
+        "gate_weighting_margin": 0.05645936727523804,
+        "population_vs_tokenwise_margin": 0.3744807952711071,
+        "gate_mass_max_error": 1.1920928955078125e-07,
+        "step": 25,
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_025.pt",
+        "sha256": "bb049b6b2fcdcfd6852f929aa119d8de39610e3920567d847af661a250765739",
+        "evaluation_status": "exploratory_partial",
+        "elapsed_sec": 1.1299693584442139
+      },
+      {
+        "checkpoint": "theta4_step_050",
+        "tokens": 45760,
+        "mu_g_norm": 6.124149322509766,
+        "mu_uniform_norm": 6.190680027008057,
+        "cos_mu_g_by_reference": [
+          0.8173481225967407,
+          0.8131292462348938,
+          0.8189574480056763,
+          0.8125483393669128
+        ],
+        "cos_mu_uniform_by_reference": [
+          0.7560383081436157,
+          0.753183126449585,
+          0.7608988285064697,
+          0.7487118244171143
+        ],
+        "cos_tokenwise_by_reference": [
+          0.3351365849699022,
+          0.33316250150441246,
+          0.3358997222741535,
+          0.33288903666786224
+        ],
+        "mean_cos_mu_g": 0.8154957890510559,
+        "mean_cos_mu_uniform": 0.7547080516815186,
+        "mean_cos_tokenwise": 0.3342719613540826,
+        "gate_weighting_margin": 0.060787737369537354,
+        "population_vs_tokenwise_margin": 0.4812238276969733,
+        "gate_mass_max_error": 1.1920928955078125e-07,
+        "step": 50,
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_050.pt",
+        "sha256": "e6f9850b2cca63fbe1b002801c95fc4bdef14b89e138c6a45da85c5e17dddd9e",
+        "evaluation_status": "exploratory_partial",
+        "elapsed_sec": 1.1581356525421143
+      },
+      {
+        "checkpoint": "theta4_step_100",
+        "tokens": 45760,
+        "mu_g_norm": 6.364428997039795,
+        "mu_uniform_norm": 6.5306572914123535,
+        "cos_mu_g_by_reference": [
+          0.8974646925926208,
+          0.8942145109176636,
+          0.8967794179916382,
+          0.8931048512458801
+        ],
+        "cos_mu_uniform_by_reference": [
+          0.8664012551307678,
+          0.8644163608551025,
+          0.8688774108886719,
+          0.8599053025245667
+        ],
+        "cos_tokenwise_by_reference": [
+          0.35209879809984673,
+          0.35071023494139836,
+          0.3520866436648738,
+          0.35028777399367844
+        ],
+        "mean_cos_mu_g": 0.8953908681869507,
+        "mean_cos_mu_uniform": 0.8649000525474548,
+        "mean_cos_tokenwise": 0.35129586267494933,
+        "gate_weighting_margin": 0.03049081563949585,
+        "population_vs_tokenwise_margin": 0.5440950055120013,
+        "gate_mass_max_error": 1.1920928955078125e-07,
+        "step": 100,
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_100.pt",
+        "sha256": "b52914a73b72da9f7fe08735538447f183b7b5de40ad64eac5a2b3ac40d50c47",
+        "evaluation_status": "exploratory_partial",
+        "elapsed_sec": 1.1654043197631836
+      },
+      {
+        "checkpoint": "theta4_step_150",
+        "tokens": 45760,
+        "mu_g_norm": 6.35038948059082,
+        "mu_uniform_norm": 6.598320007324219,
+        "cos_mu_g_by_reference": [
+          0.9081100225448608,
+          0.9055348038673401,
+          0.908034086227417,
+          0.9072965979576111
+        ],
+        "cos_mu_uniform_by_reference": [
+          0.8898777961730957,
+          0.8904165029525757,
+          0.8917032480239868,
+          0.8867374062538147
+        ],
+        "cos_tokenwise_by_reference": [
+          0.347533832004021,
+          0.34633228417224526,
+          0.34769334861419565,
+          0.34696172338555403
+        ],
+        "mean_cos_mu_g": 0.9072438478469849,
+        "mean_cos_mu_uniform": 0.889683723449707,
+        "mean_cos_tokenwise": 0.347130297044004,
+        "gate_weighting_margin": 0.017560124397277832,
+        "population_vs_tokenwise_margin": 0.5601135508029809,
+        "gate_mass_max_error": 1.1920928955078125e-07,
+        "step": 150,
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_150.pt",
+        "sha256": "fe59a4b56a8aa210ac66dd275e0575b0349e1871e4273191a5d9c4dd9df6b4cb",
+        "evaluation_status": "exploratory_partial",
+        "elapsed_sec": 1.1555678844451904
+      },
+      {
+        "checkpoint": "theta4_step_200",
+        "tokens": 45760,
+        "mu_g_norm": 6.300227642059326,
+        "mu_uniform_norm": 6.696939945220947,
+        "cos_mu_g_by_reference": [
+          0.9306511878967285,
+          0.9283693432807922,
+          0.9310588240623474,
+          0.9303984642028809
+        ],
+        "cos_mu_uniform_by_reference": [
+          0.8957011699676514,
+          0.8947446346282959,
+          0.8982536196708679,
+          0.8939691185951233
+        ],
+        "cos_tokenwise_by_reference": [
+          0.34648685002824103,
+          0.34545038579741816,
+          0.34673711440173954,
+          0.3461599836090048
+        ],
+        "mean_cos_mu_g": 0.9301194548606873,
+        "mean_cos_mu_uniform": 0.8956671357154846,
+        "mean_cos_tokenwise": 0.3462085834591009,
+        "gate_weighting_margin": 0.03445231914520264,
+        "population_vs_tokenwise_margin": 0.5839108714015864,
+        "gate_mass_max_error": 1.1920928955078125e-07,
+        "step": 200,
+        "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_200.pt",
+        "sha256": "f68fab8310d04829626e4eeac1046658cb7a72586bcd75156dd9cb912b980dee",
+        "evaluation_status": "exploratory_partial",
+        "elapsed_sec": 1.176795482635498
+      }
+    ]
+  },
+  "Q2_A": {
+    "criterion": "cross 0.90 by step 100",
+    "threshold": 0.9,
+    "status": "BLOCKED",
+    "decidable": false,
+    "step_100_alignment": 0.8953908681869507,
+    "first_crossing": null,
+    "missing_checkpoint_75": true,
+    "missing_checkpoints": [
+      75,
+      125,
+      175
+    ],
+    "reason": "Step 100 is below 0.90, but step 75 is unavailable. The estimator could have crossed 0.90 between steps 50 and 100 and then fallen below it, so the 'by step 100' criterion cannot be determined from the available checkpoints."
+  },
+  "Q2_B": {
+    "criterion": "gate weighting beats uniform expert weighting by > 0.10",
+    "threshold": 0.1,
+    "status": "FAIL",
+    "margin": 0.03500169515609741,
+    "endpoint": {
+      "mean_cos_mu_g": 0.9975972771644592,
+      "mean_cos_mu_uniform": 0.9625955820083618
+    }
+  },
+  "Q2_C": {
+    "criterion": "population averaging beats tokenwise averaging by > 0.10",
+    "threshold": 0.1,
+    "status": "PASS",
+    "margin": 0.43705708769119955,
+    "endpoint": {
+      "mean_cos_mu_g": 0.9975972771644592,
+      "mean_tokenwise_cos": 0.5605401894732597
+    }
+  },
+  "endpoint_construction": {
+    "observed_alignment": 0.9975972771644592,
+    "L1_causal_target": 0.93277,
+    "L1_causal_error": 0.06482727716445924,
+    "bridge_target": 0.984757,
+    "bridge_error": 0.012840277164459235,
+    "matched_reference": "gwda_bridge",
+    "selected_target": 0.984757,
+    "selected_error": 0.012840277164459235,
+    "pass": true
+  },
+  "theta4_endpoint": {
+    "checkpoint": "theta4_canonical_step_200",
+    "tokens": 45760,
+    "mu_g_norm": 8.875405311584473,
+    "mu_uniform_norm": 9.213715553283691,
+    "cos_mu_g_by_reference": [
+      0.9981890916824341,
+      0.9974411129951477,
+      0.9971939921379089,
+      0.9975650310516357
+    ],
+    "cos_mu_uniform_by_reference": [
+      0.9609262943267822,
+      0.9638561010360718,
+      0.9627476930618286,
+      0.962852418422699
+    ],
+    "cos_tokenwise_by_reference": [
+      0.5610465636468733,
+      0.5602412353266499,
+      0.5602834593122044,
+      0.560589499607311
+    ],
+    "mean_cos_mu_g": 0.9975972771644592,
+    "mean_cos_mu_uniform": 0.9625955820083618,
+    "mean_cos_tokenwise": 0.5605401894732597,
+    "gate_weighting_margin": 0.03500169515609741,
+    "population_vs_tokenwise_margin": 0.43705708769119955,
+    "gate_mass_max_error": 1.1920928955078125e-07,
+    "step": 200,
+    "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+    "sha256": "9504f80fda16fd56e8bc1e913d57b9713f2224d9285aa78f17f2d237adf79f95",
+    "elapsed_sec": 1.3653686046600342
+  },
+  "combined": {
+    "status": "BLOCKED",
+    "reason": "Q2-A cannot be resolved because step 100 is below 0.90 and step 75 is unavailable."
+  }
+}

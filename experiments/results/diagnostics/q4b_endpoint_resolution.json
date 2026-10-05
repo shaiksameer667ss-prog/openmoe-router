@@ -1,0 +1,72 @@
+{
+  "experiment": "Q4B_endpoint_resolution",
+  "canonical_theta4": {
+    "path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_4.pt",
+    "sha256": "9504f80fda16fd56e8bc1e913d57b9713f2224d9285aa78f17f2d237adf79f95",
+    "expected_sha256": "9504f80fda16fd56e8bc1e913d57b9713f2224d9285aa78f17f2d237adf79f95",
+    "hash_pass": true
+  },
+  "trajectory_step200": {
+    "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_200.pt": {
+      "sha256": "f68fab8310d04829626e4eeac1046658cb7a72586bcd75156dd9cb912b980dee",
+      "same_file_as_canonical": false,
+      "bridge_loo_rows": [
+        {
+          "task": 0,
+          "cosine": 0.9108618497848511,
+          "trajectory_norm": 6.63786506652832,
+          "bridge_norm": 9.003647804260254
+        },
+        {
+          "task": 1,
+          "cosine": 0.9044111967086792,
+          "trajectory_norm": 6.746009826660156,
+          "bridge_norm": 8.91830825805664
+        },
+        {
+          "task": 2,
+          "cosine": 0.9290775656700134,
+          "trajectory_norm": 6.330155372619629,
+          "bridge_norm": 9.049149513244629
+        },
+        {
+          "task": 3,
+          "cosine": 0.9100651741027832,
+          "trajectory_norm": 6.036319255828857,
+          "bridge_norm": 9.023508071899414
+        }
+      ]
+    }
+  },
+  "canonical_theta4_vs_bridge": [
+    {
+      "task": 0,
+      "cosine": 0.997269868850708,
+      "canonical_norm": 8.924906730651855,
+      "bridge_norm": 9.003647804260254
+    },
+    {
+      "task": 1,
+      "cosine": 0.9977431297302246,
+      "canonical_norm": 8.869943618774414,
+      "bridge_norm": 8.91830825805664
+    },
+    {
+      "task": 2,
+      "cosine": 0.9974600076675415,
+      "canonical_norm": 8.899145126342773,
+      "bridge_norm": 9.049149513244629
+    },
+    {
+      "task": 3,
+      "cosine": 0.9973986744880676,
+      "canonical_norm": 8.847596168518066,
+      "bridge_norm": 9.023508071899414
+    }
+  ],
+  "canonical_theta4_mean_norm": 8.875405311584473,
+  "trajectory_mean_norms": {
+    "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_200.pt": 6.300228118896484
+  },
+  "conclusion_guard": "Resolve checkpoint identity versus evaluator definition before interpreting Q4B."
+}

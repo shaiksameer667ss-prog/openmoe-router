@@ -1,0 +1,287 @@
+{
+  "original_json_not_overwritten": true,
+  "records": [
+    {
+      "corrected_predicted_SGD_DeltaA": 9.86749910225626e-07,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": -9.86749910225626e-07,
+      "old_natural_gradient_utility": 2.7642213644867514e-05,
+      "pair": [
+        0,
+        1
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -9.660151590651367e-06,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 9.660151590651367e-06,
+      "old_natural_gradient_utility": 2.449922654437106e-05,
+      "pair": [
+        0,
+        2
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -2.36801888604532e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 2.36801888604532e-05,
+      "old_natural_gradient_utility": 2.6657034927486327e-05,
+      "pair": [
+        0,
+        3
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -2.8476398256316315e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 2.8476398256316315e-05,
+      "old_natural_gradient_utility": 7.599442120118238e-05,
+      "pair": [
+        0,
+        4
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -4.699558530774084e-06,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 4.699558530774084e-06,
+      "old_natural_gradient_utility": 1.9171663588628152e-05,
+      "pair": [
+        0,
+        5
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -3.236165957787307e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 3.236165957787307e-05,
+      "old_natural_gradient_utility": 5.270248492987216e-05,
+      "pair": [
+        0,
+        6
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -3.2141906558535993e-06,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 3.2141906558535993e-06,
+      "old_natural_gradient_utility": 4.924115245318111e-05,
+      "pair": [
+        0,
+        7
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -7.296439434867352e-07,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 7.296439434867352e-07,
+      "old_natural_gradient_utility": 3.198109959356113e-05,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -1.4749681213288568e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 1.4749681213288568e-05,
+      "old_natural_gradient_utility": 3.413890797667641e-05,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -1.9545890609151684e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 1.9545890609151684e-05,
+      "old_natural_gradient_utility": 8.347629425037245e-05,
+      "pair": [
+        1,
+        4
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": 4.230949116390548e-06,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": -4.230949116390548e-06,
+      "old_natural_gradient_utility": 2.665353663781823e-05,
+      "pair": [
+        1,
+        5
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -2.3431151930708438e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 2.3431151930708438e-05,
+      "old_natural_gradient_utility": 6.018435797906224e-05,
+      "pair": [
+        1,
+        6
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": 5.716316991311032e-06,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": -5.716316991311032e-06,
+      "old_natural_gradient_utility": 5.672302550237119e-05,
+      "pair": [
+        1,
+        7
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -2.539658271416556e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 2.539658271416556e-05,
+      "old_natural_gradient_utility": 3.099592087617995e-05,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -3.0192792110028677e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 3.0192792110028677e-05,
+      "old_natural_gradient_utility": 8.033330714987599e-05,
+      "pair": [
+        2,
+        4
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -6.415952384486445e-06,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 6.415952384486445e-06,
+      "old_natural_gradient_utility": 2.3510549537321773e-05,
+      "pair": [
+        2,
+        5
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -3.407805343158543e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 3.407805343158543e-05,
+      "old_natural_gradient_utility": 5.7041370878565785e-05,
+      "pair": [
+        2,
+        6
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -4.930584509565961e-06,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 4.930584509565961e-06,
+      "old_natural_gradient_utility": 5.358003840187473e-05,
+      "pair": [
+        2,
+        7
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -4.421282937983051e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 4.421282937983051e-05,
+      "old_natural_gradient_utility": 8.249111553299126e-05,
+      "pair": [
+        3,
+        4
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -2.0435989654288278e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 2.0435989654288278e-05,
+      "old_natural_gradient_utility": 2.566835792043704e-05,
+      "pair": [
+        3,
+        5
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -4.8098090701387264e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 4.8098090701387264e-05,
+      "old_natural_gradient_utility": 5.9199179261681054e-05,
+      "pair": [
+        3,
+        6
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -1.8950621779367793e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 1.8950621779367793e-05,
+      "old_natural_gradient_utility": 5.573784678499e-05,
+      "pair": [
+        3,
+        7
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -2.5232199050151394e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 2.5232199050151394e-05,
+      "old_natural_gradient_utility": 7.500574419413308e-05,
+      "pair": [
+        4,
+        5
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -5.289430009725038e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 5.289430009725038e-05,
+      "old_natural_gradient_utility": 0.0001085365655353771,
+      "pair": [
+        4,
+        6
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -2.374683117523091e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 2.374683117523091e-05,
+      "old_natural_gradient_utility": 0.00010507523305868604,
+      "pair": [
+        4,
+        7
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -2.9117460371708148e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 2.9117460371708148e-05,
+      "old_natural_gradient_utility": 5.171380792282288e-05,
+      "pair": [
+        5,
+        6
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": 3.0008550311322324e-08,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": -3.0008550311322324e-08,
+      "old_natural_gradient_utility": 4.8252475446131824e-05,
+      "pair": [
+        5,
+        7
+      ]
+    },
+    {
+      "corrected_predicted_SGD_DeltaA": -2.7632092496787664e-05,
+      "interpretation": "Original cell computed +eta*gradient tangent; actual SGD functional prediction has the opposite sign.",
+      "old_alignment_A_as_implemented": 2.7632092496787664e-05,
+      "old_natural_gradient_utility": 8.178329678737583e-05,
+      "pair": [
+        6,
+        7
+      ]
+    }
+  ],
+  "source": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_first_order_write_allocation_precheck.json",
+  "status": "provenance_only_sign_corrected"
+}

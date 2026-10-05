@@ -1,0 +1,310 @@
+{
+  "experiment": "Q3_local_inter_boundary_drift_alignment",
+  "device": "cuda",
+  "replay": {
+    "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+    "size": 715,
+    "task_counts": {
+      "0": 179,
+      "1": 179,
+      "2": 179,
+      "3": 178
+    },
+    "tokens": 45760
+  },
+  "trajectory": {
+    "directory": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R",
+    "available_steps": [
+      10,
+      25,
+      50,
+      100,
+      150,
+      200
+    ],
+    "missing_nominal_steps": [
+      75,
+      125,
+      175
+    ],
+    "paths": {
+      "10": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_010.pt",
+      "25": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_025.pt",
+      "50": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_050.pt",
+      "100": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_100.pt",
+      "150": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_150.pt",
+      "200": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_200.pt"
+    }
+  },
+  "definition": {
+    "local": "E_h_current[sum_e g_current,e(h) * (E_previous,e(h) - E_current,e(h))]",
+    "cumulative": "E_h_current[sum_e g_current,e(h) * (E_theta0,e(h) - E_current,e(h))]",
+    "representation": "current checkpoint L1 pre-MoE h",
+    "gates": "current checkpoint natural Top-K gates"
+  },
+  "bridge_reference": {
+    "path": "/kaggle/working/openmoe-router/openmoe-router/experiments/results/diagnostics/gate_weighted_drift_bridge_715_loo.json",
+    "norms": [
+      9.003647804260254,
+      8.91830825805664,
+      9.049149513244629,
+      9.023508071899414
+    ]
+  },
+  "local_results": [
+    {
+      "previous": "theta3",
+      "current": "theta4_step_010",
+      "previous_step": null,
+      "current_step": 10,
+      "interval": "theta3->10",
+      "local_norm": 3.2202935218811035,
+      "local_mean_cos_to_loo": 0.8014617264270782,
+      "local_cos_to_mean_b_fixed": 0.801891565322876,
+      "local_per_loo": [
+        0.8018924593925476,
+        0.8003412485122681,
+        0.8017996549606323,
+        0.801813542842865
+      ],
+      "descriptive_gt_0p5": true
+    },
+    {
+      "previous": "theta4_step_010",
+      "current": "theta4_step_025",
+      "previous_step": 10,
+      "current_step": 25,
+      "interval": "10->25",
+      "local_norm": 1.423170566558838,
+      "local_mean_cos_to_loo": 0.16653787344694138,
+      "local_cos_to_mean_b_fixed": 0.16662584245204926,
+      "local_per_loo": [
+        0.16517068445682526,
+        0.1670587658882141,
+        0.16668973863124847,
+        0.16723230481147766
+      ],
+      "descriptive_gt_0p5": false
+    },
+    {
+      "previous": "theta4_step_025",
+      "current": "theta4_step_050",
+      "previous_step": 25,
+      "current_step": 50,
+      "interval": "25->50",
+      "local_norm": 1.575472116470337,
+      "local_mean_cos_to_loo": 0.36307579278945923,
+      "local_cos_to_mean_b_fixed": 0.36326709389686584,
+      "local_per_loo": [
+        0.35899531841278076,
+        0.36489778757095337,
+        0.3646729290485382,
+        0.3637371361255646
+      ],
+      "descriptive_gt_0p5": false
+    },
+    {
+      "previous": "theta4_step_050",
+      "current": "theta4_step_100",
+      "previous_step": 50,
+      "current_step": 100,
+      "interval": "50->100",
+      "local_norm": 1.8393505811691284,
+      "local_mean_cos_to_loo": 0.5447741597890854,
+      "local_cos_to_mean_b_fixed": 0.5450564026832581,
+      "local_per_loo": [
+        0.5421244502067566,
+        0.547071635723114,
+        0.5414301753044128,
+        0.5484703779220581
+      ],
+      "descriptive_gt_0p5": true
+    },
+    {
+      "previous": "theta4_step_100",
+      "current": "theta4_step_150",
+      "previous_step": 100,
+      "current_step": 150,
+      "interval": "100->150",
+      "local_norm": 1.0337620973587036,
+      "local_mean_cos_to_loo": 0.46810266375541687,
+      "local_cos_to_mean_b_fixed": 0.4683530032634735,
+      "local_per_loo": [
+        0.46704185009002686,
+        0.4672223925590515,
+        0.4654203951358795,
+        0.4727260172367096
+      ],
+      "descriptive_gt_0p5": false
+    },
+    {
+      "previous": "theta4_step_150",
+      "current": "theta4_step_200",
+      "previous_step": 150,
+      "current_step": 200,
+      "interval": "150->200",
+      "local_norm": 0.9277782440185547,
+      "local_mean_cos_to_loo": 0.14112888649106026,
+      "local_cos_to_mean_b_fixed": 0.1412109136581421,
+      "local_per_loo": [
+        0.13634523749351501,
+        0.1394234150648117,
+        0.14010198414325714,
+        0.14864490926265717
+      ],
+      "descriptive_gt_0p5": false
+    }
+  ],
+  "cumulative_results": [
+    {
+      "current_step": 10,
+      "cumulative_norm": 7.1135149002075195,
+      "cumulative_mean_cos_to_loo": 0.6747719943523407,
+      "cumulative_cos_to_mean_b_fixed": 0.675140917301178,
+      "cumulative_per_loo": [
+        0.6805073618888855,
+        0.6709725856781006,
+        0.6772861480712891,
+        0.6703218817710876
+      ]
+    },
+    {
+      "current_step": 25,
+      "cumulative_norm": 6.723918914794922,
+      "cumulative_mean_cos_to_loo": 0.7129194587469101,
+      "cumulative_cos_to_mean_b_fixed": 0.7133063673973083,
+      "cumulative_per_loo": [
+        0.7159751653671265,
+        0.7104701995849609,
+        0.7158066034317017,
+        0.7094258666038513
+      ]
+    },
+    {
+      "current_step": 50,
+      "cumulative_norm": 6.124149322509766,
+      "cumulative_mean_cos_to_loo": 0.8154957741498947,
+      "cumulative_cos_to_mean_b_fixed": 0.8159381151199341,
+      "cumulative_per_loo": [
+        0.817348062992096,
+        0.8131292462348938,
+        0.8189573884010315,
+        0.8125483989715576
+      ]
+    },
+    {
+      "current_step": 100,
+      "cumulative_norm": 6.364428997039795,
+      "cumulative_mean_cos_to_loo": 0.8953908532857895,
+      "cumulative_cos_to_mean_b_fixed": 0.8958707451820374,
+      "cumulative_per_loo": [
+        0.8974646925926208,
+        0.8942145109176636,
+        0.8967794179916382,
+        0.8931047916412354
+      ]
+    },
+    {
+      "current_step": 150,
+      "cumulative_norm": 6.35038948059082,
+      "cumulative_mean_cos_to_loo": 0.9072438478469849,
+      "cumulative_cos_to_mean_b_fixed": 0.9077317118644714,
+      "cumulative_per_loo": [
+        0.9081100225448608,
+        0.9055347442626953,
+        0.9080340266227722,
+        0.9072965979576111
+      ]
+    },
+    {
+      "current_step": 200,
+      "cumulative_norm": 6.300228118896484,
+      "cumulative_mean_cos_to_loo": 0.9301194250583649,
+      "cumulative_cos_to_mean_b_fixed": 0.9306198954582214,
+      "cumulative_per_loo": [
+        0.9306511282920837,
+        0.9283693432807922,
+        0.9310587048530579,
+        0.9303985238075256
+      ]
+    }
+  ],
+  "q2_validation": {
+    "max_abs_error": 4.587469101258179e-07,
+    "status": "PASS"
+  },
+  "focal_intervals": [
+    {
+      "interval": "50->100",
+      "norm": 1.8393505811691284,
+      "mean_cos_to_loo": 0.5447741597890854,
+      "cos_to_mean_b_fixed": 0.5450564026832581,
+      "per_loo": [
+        0.5421244502067566,
+        0.547071635723114,
+        0.5414301753044128,
+        0.5484703779220581
+      ],
+      "descriptive_gt_0p5": true
+    },
+    {
+      "interval": "100->150",
+      "norm": 1.0337620973587036,
+      "mean_cos_to_loo": 0.46810266375541687,
+      "cos_to_mean_b_fixed": 0.4683530032634735,
+      "per_loo": [
+        0.46704185009002686,
+        0.4672223925590515,
+        0.4654203951358795,
+        0.4727260172367096
+      ],
+      "descriptive_gt_0p5": false
+    },
+    {
+      "interval": "150->200",
+      "norm": 0.9277782440185547,
+      "mean_cos_to_loo": 0.14112888649106026,
+      "cos_to_mean_b_fixed": 0.1412109136581421,
+      "per_loo": [
+        0.13634523749351501,
+        0.1394234150648117,
+        0.14010198414325714,
+        0.14864490926265717
+      ],
+      "descriptive_gt_0p5": false
+    }
+  ],
+  "chain_sanity": {
+    "forward_norm": 6.206010818481445,
+    "reverse_norm": 6.206010818481445,
+    "order_absolute_error": 0.0,
+    "order_relative_error": 0.0,
+    "forward_mean_cos_to_loo": 0.8067732155323029,
+    "reverse_mean_cos_to_loo": 0.8067732155323029,
+    "forward_per_loo": [
+      0.8039700984954834,
+      0.8070532083511353,
+      0.8057973980903625,
+      0.8102721571922302
+    ],
+    "reverse_per_loo": [
+      0.8039700984954834,
+      0.8070532083511353,
+      0.8057973980903625,
+      0.8102721571922302
+    ],
+    "q2_step200_mean_cos_to_loo": 0.9301194250583649,
+    "q2_step200_per_loo": [
+      0.9306511282920837,
+      0.9283693432807922,
+      0.9310587048530579,
+      0.9303985238075256
+    ],
+    "interpretation": "Non-telescoping local aggregate; order-invariance sanity only."
+  },
+  "descriptive_threshold": 0.5,
+  "all_focal_above_threshold": false,
+  "interpretation": "At least one focal interval does not exceed the descriptive 0.5 alignment level. Strong cumulative alignment therefore cannot be treated as uniformly strong per-boundary evidence.",
+  "training_performed": false,
+  "checkpoint_modified": false
+}
