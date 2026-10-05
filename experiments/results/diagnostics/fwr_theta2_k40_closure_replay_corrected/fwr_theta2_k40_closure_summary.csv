@@ -1,0 +1,3 @@
+state,incoming_task,batch,crossed_pairs_n,censored_pairs_n,censor_fraction,W_mean,W_median,W_min,W_max,power_floor,interpretable
+theta2,T3,batch1_0_127,3,25,0.8928571428571429,27.0,28.0,23,30,15,False
+theta2,T3,batch2_128_255,3,25,0.8928571428571429,31.0,29.0,27,37,15,False

@@ -1,0 +1,158 @@
+{
+  "checkpoint_sha_task3": {
+    "pass": true,
+    "detail": ""
+  },
+  "checkpoint_sha_theta0": {
+    "pass": true,
+    "detail": ""
+  },
+  "replay_sha": {
+    "pass": true,
+    "detail": ""
+  },
+  "replay_counts": {
+    "pass": true,
+    "detail": ""
+  },
+  "replay_tokens": {
+    "pass": true,
+    "detail": ""
+  },
+  "model_state_key_count": {
+    "pass": true,
+    "detail": ""
+  },
+  "l1_router_continual": {
+    "pass": true,
+    "detail": ""
+  },
+  "l1_experts_8": {
+    "pass": true,
+    "detail": ""
+  },
+  "top_k_2": {
+    "pass": true,
+    "detail": ""
+  },
+  "router_trainable": {
+    "pass": true,
+    "detail": ""
+  },
+  "router_observation_disabled": {
+    "pass": true,
+    "detail": ""
+  },
+  "all_28_pairs": {
+    "pass": true,
+    "detail": ""
+  },
+  "both_batches": {
+    "pass": true,
+    "detail": ""
+  },
+  "K_equals_40": {
+    "pass": true,
+    "detail": ""
+  },
+  "eta_equals_1e3": {
+    "pass": true,
+    "detail": ""
+  },
+  "optimizer_none": {
+    "pass": true,
+    "detail": "No optimizer instantiated."
+  },
+  "momentum_zero": {
+    "pass": true,
+    "detail": "No optimizer/momentum state exists."
+  },
+  "weight_decay_zero": {
+    "pass": true,
+    "detail": "No optimizer/weight decay exists."
+  },
+  "forward_without_labels": {
+    "pass": true,
+    "detail": "Training forward is work(X); labels enter CE separately."
+  },
+  "fwr_training_false": {
+    "pass": true,
+    "detail": "Diagnostic forced-pair trajectory only."
+  },
+  "probe_synced_every_step": {
+    "pass": true,
+    "detail": ""
+  },
+  "finite_same_preupdate_frame": {
+    "pass": true,
+    "detail": ""
+  },
+  "mu_l1_interface": {
+    "pass": true,
+    "detail": "compute_mu receives theta0/current L1 SparseMoE objects."
+  },
+  "pair_local_cumulative_logged": {
+    "pass": true,
+    "detail": ""
+  },
+  "pair_local_step_logged": {
+    "pass": true,
+    "detail": ""
+  },
+  "full_model_cumulative_logged": {
+    "pass": true,
+    "detail": ""
+  },
+  "full_model_step_logged": {
+    "pass": true,
+    "detail": ""
+  },
+  "K20_near_crossing_archive_written": {
+    "pass": true,
+    "detail": ""
+  },
+  "K20_conditioned_QA_written": {
+    "pass": true,
+    "detail": ""
+  },
+  "K40_conditioned_QA_written": {
+    "pass": true,
+    "detail": ""
+  },
+  "all_pair_trajectories_40_steps": {
+    "pass": true,
+    "detail": ""
+  },
+  "pair_summary_rows_56": {
+    "pass": true,
+    "detail": ""
+  },
+  "DeltaA_first_finite": {
+    "pass": true,
+    "detail": ""
+  },
+  "DeltaA_finite_finite": {
+    "pass": true,
+    "detail": ""
+  },
+  "named_counterexample_present": {
+    "pass": true,
+    "detail": ""
+  },
+  "expert7_enrichment_artifact_written": {
+    "pass": true,
+    "detail": ""
+  },
+  "hazard_artifact_written": {
+    "pass": true,
+    "detail": ""
+  },
+  "partial_models_artifact_written": {
+    "pass": true,
+    "detail": ""
+  },
+  "prereg_written": {
+    "pass": true,
+    "detail": ""
+  }
+}

@@ -1,0 +1,3 @@
+batch,crossed_pairs_n,crossed_with_expert7_n,observed_expert7_fraction,null_probability,one_sided_exact_hypergeom_p,alpha,enriched_above_null,batch_expert7_enrichment_pass,hard_batch_consistency_pass
+batch1_0_127,24,7,0.2916666666666667,0.25,0.2923076923076923,0.05,1,0,0
+batch2_128_255,22,7,0.3181818181818182,0.25,0.1440356744704571,0.05,1,0,0

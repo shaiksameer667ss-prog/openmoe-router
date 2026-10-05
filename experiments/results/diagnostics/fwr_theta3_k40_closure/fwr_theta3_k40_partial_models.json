@@ -1,0 +1,65 @@
+{
+  "Model_A_contains7": {
+    "formula": "event ~ contains_7 + time_scaled + time2 + batch2",
+    "family": "Binomial",
+    "covariance": "GEE independence covariance structure with robust trajectory-clustered covariance",
+    "n_person_period_rows": 1532,
+    "n_trajectories": 56,
+    "terms": {
+      "contains_7": {
+        "coef": 3.4026881722637805,
+        "standard_error": 0.5965401006612749,
+        "z": 5.704039290052491,
+        "p_value": 1.1700108939866172e-08,
+        "ci95_low": 2.233491059633783,
+        "ci95_high": 4.571885284893778
+      }
+    }
+  },
+  "Model_B_pair_delta_theta": {
+    "formula": "event ~ pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+    "family": "Binomial",
+    "covariance": "GEE independence covariance structure with robust trajectory-clustered covariance",
+    "n_person_period_rows": 1532,
+    "n_trajectories": 56,
+    "terms": {
+      "pair_delta_theta_cum_pre": {
+        "coef": -71.5233250678626,
+        "standard_error": 85.6004845483716,
+        "z": -0.8355481332286828,
+        "p_value": 0.403409157848169,
+        "ci95_low": -239.29719184184833,
+        "ci95_high": 96.25054170612313
+      }
+    }
+  },
+  "Model_C_contains7_plus_pair_delta_theta": {
+    "formula": "event ~ contains_7 + pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+    "family": "Binomial",
+    "covariance": "GEE independence covariance structure with robust trajectory-clustered covariance",
+    "n_person_period_rows": 1532,
+    "n_trajectories": 56,
+    "terms": {
+      "contains_7": {
+        "coef": 3.417619655050737,
+        "standard_error": 0.5974844636292183,
+        "z": 5.720014264959388,
+        "p_value": 1.0651511020221009e-08,
+        "ci95_low": 2.246571625015237,
+        "ci95_high": 4.588667685086237
+      },
+      "pair_delta_theta_cum_pre": {
+        "coef": -98.81797331339637,
+        "standard_error": 94.74914610870222,
+        "z": -1.0429431543375192,
+        "p_value": 0.2969746213047374,
+        "ci95_low": -284.5228872523761,
+        "ci95_high": 86.88694062558339
+      }
+    }
+  },
+  "pre_registered_decision": {
+    "Model_C_expert7_partial_support": true,
+    "rule": "Model C beta_contains_7 must be positive and its two-sided 95% CI must exclude zero."
+  }
+}

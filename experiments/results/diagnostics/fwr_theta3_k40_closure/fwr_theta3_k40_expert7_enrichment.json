@@ -1,0 +1,32 @@
+{
+  "protocol": "FWR_theta3_K40_expert7_enrichment",
+  "null_probability": 0.25,
+  "test": "one-sided exact hypergeometric",
+  "alpha": 0.05,
+  "batch_consistency_required": true,
+  "results": [
+    {
+      "batch": "batch1_0_127",
+      "crossed_pairs_n": 24,
+      "crossed_with_expert7_n": 7,
+      "observed_expert7_fraction": 0.2916666666666667,
+      "null_probability": 0.25,
+      "one_sided_exact_hypergeom_p": 0.2923076923076923,
+      "alpha": 0.05,
+      "enriched_above_null": 1,
+      "batch_expert7_enrichment_pass": 0
+    },
+    {
+      "batch": "batch2_128_255",
+      "crossed_pairs_n": 22,
+      "crossed_with_expert7_n": 7,
+      "observed_expert7_fraction": 0.3181818181818182,
+      "null_probability": 0.25,
+      "one_sided_exact_hypergeom_p": 0.1440356744704571,
+      "alpha": 0.05,
+      "enriched_above_null": 1,
+      "batch_expert7_enrichment_pass": 0
+    }
+  ],
+  "hard_batch_consistency_pass": false
+}

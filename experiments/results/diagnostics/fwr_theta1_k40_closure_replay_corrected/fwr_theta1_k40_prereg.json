@@ -1,0 +1,66 @@
+{
+  "experiment": "FWR theta1 K=40 closure replication",
+  "status": "LOCKED_BEFORE_TRAJECTORIES",
+  "created_utc": "2026-10-05T21:20:29.327389+00:00",
+  "state": "theta1",
+  "incoming_task": "T2",
+  "incoming_task_id": 2,
+  "checkpoint": "/kaggle/working/openmoe-router-archive/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_1.pt",
+  "checkpoint_sha": "9de3853eab02d95d77143864fa45a692304d268b2f7c9cb437ad8fcf639818b7",
+  "theta0_anchor": {
+    "path": "/kaggle/working/openmoe-router-archive/experiments/results/replication/arm_A_seed0_679/checkpoints/task_0.pt",
+    "sha": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7"
+  },
+  "replay": {
+    "path": "/kaggle/working/openmoe-router-archive/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+    "sha": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "images": 715,
+    "tokens": 45760,
+    "task_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ]
+  },
+  "protocol": {
+    "K": 40,
+    "eta": 0.001,
+    "optimizer": null,
+    "momentum": 0.0,
+    "weight_decay": 0.0,
+    "router_trainable": true,
+    "router_observation_disabled": true,
+    "model_eval": true,
+    "l1_target": "blocks.1.moe",
+    "num_experts": 8,
+    "top_k": 2,
+    "num_pairs": 28,
+    "h_g_source": "EXACT_REPLAY_715",
+    "incoming_task_source": "LOSS_ONLY",
+    "mu_definition": "theta0_output - current_output",
+    "q_gate_definition": "natural replay gate matrix g[:, pair]",
+    "forced_write_definition": "forced pair softmax for the actual training/write path only",
+    "closure_definition": "first k where DeltaA_finite <= 0",
+    "pair_delta_definition": "L2 current pair parameters minus trajectory-start pair parameters",
+    "pair_delta_row_timing": "POST_UPDATE_AT_RECORDED_K",
+    "hazard_model": "trajectory-clustered GEE, Binomial, Independence, robust covariance",
+    "trajectory_id": "state|batch|pair"
+  },
+  "power_floor": {
+    "minimum_crossings_per_batch": 15,
+    "below_floor": "NOT_INTERPRETABLE"
+  },
+  "counterexample": {
+    "pair": [
+      1,
+      4
+    ],
+    "required": true
+  },
+  "theta0_anchor_limitation": "theta0 is the task-0 checkpoint and is used as the historical functional anchor for theta1 and theta2. At theta2, theta0 does not encode the post-task-1 state; therefore the quantity is an anchor-to-theta0 retention direction rather than a complete all-old-tasks direction.",
+  "state_task_confound": "theta1 uses incoming task T2 while theta2 uses incoming task T3. Therefore contains_7 \u00d7 C(state) cannot isolate a pure checkpoint-state effect from an incoming-task effect.",
+  "rerivation_note": "Re-derivation from the trajectory log agreed to 11 digits on Model A contains_7 and on both expert-7 hypergeometric p-values, and differed on Model B and Model C pair_delta coefficients by ~10\u201313%, most likely due to a difference in person-period row retention near the event step. The JSON is authoritative.",
+  "json_authoritative": true
+}

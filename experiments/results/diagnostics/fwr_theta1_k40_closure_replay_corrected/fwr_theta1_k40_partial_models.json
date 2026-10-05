@@ -1,0 +1,17 @@
+{
+  "state": "theta1",
+  "incoming_task": "T2",
+  "state_interpretable": false,
+  "model_family": "GEE",
+  "cov_struct": "Independence",
+  "cluster": "trajectory_id",
+  "covariance": "robust",
+  "models": {
+    "state_status": "NOT_INTERPRETABLE",
+    "reason": "At least one batch has fewer than 15 observed crossings.",
+    "models": {}
+  },
+  "rerivation_note": "Re-derivation from the trajectory log agreed to 11 digits on Model A contains_7 and on both expert-7 hypergeometric p-values, and differed on Model B and Model C pair_delta coefficients by ~10\u201313%, most likely due to a difference in person-period row retention near the event step. The JSON is authoritative.",
+  "theta0_anchor_limitation": "theta0 is the task-0 checkpoint and is used as the historical functional anchor for theta1 and theta2. At theta2, theta0 does not encode the post-task-1 state; therefore the quantity is an anchor-to-theta0 retention direction rather than a complete all-old-tasks direction.",
+  "state_task_confound": "theta1 uses incoming task T2 while theta2 uses incoming task T3. Therefore contains_7 \u00d7 C(state) cannot isolate a pure checkpoint-state effect from an incoming-task effect."
+}

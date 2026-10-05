@@ -1,0 +1,207 @@
+{
+  "pre_registration": {
+    "diagnostic": "FWR Cell 5 \u2014 state generalization",
+    "status": "pre-registered before trajectory execution",
+    "state_selection": "Three exact available prospective checkpoints only: step10, step25, step50. Step11/12/13 are not used. Step75/125/175 are unavailable in the archive. Step100/150/200 are intentionally reserved for a later extension rather than included here.",
+    "one_sentence_spec": "Test whether the 28-pair FWR ordering persists across exact prospective step10, step25, and step50 states on both fixed T4 batches.",
+    "locked_protocol": {
+      "states": [
+        10,
+        25,
+        50
+      ],
+      "checkpoint_filenames": {
+        "10": "task_4_step_010.pt",
+        "25": "task_4_step_025.pt",
+        "50": "task_4_step_050.pt"
+      },
+      "batches": {
+        "batch1_0_127": {
+          "start": 0,
+          "end_exclusive": 128,
+          "positions": [
+            0,
+            127
+          ]
+        },
+        "batch2_128_255": {
+          "start": 128,
+          "end_exclusive": 256,
+          "positions": [
+            128,
+            255
+          ]
+        }
+      },
+      "num_pairs": 28,
+      "pairs": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "K": 5,
+      "eta": 0.001,
+      "router_parameters_trainable": true,
+      "router_observation_enabled": false,
+      "router_state_updates_enabled": false,
+      "full_model_direct_sgd": true,
+      "optimizer": null,
+      "momentum": 0.0,
+      "weight_decay": 0.0,
+      "FWR_training": false,
+      "model_forward_receives_labels": false,
+      "finite_uses_same_preupdate_frame": true,
+      "fwr_sign_convention": "DeltaA_1st = -eta <grad q, grad L>",
+      "finite_definition": "DeltaA_finite = A(theta') - A(theta)"
+    },
+    "primary_endpoint": "For each state and batch, accumulate DeltaA_1st and DeltaA_finite over K=5 steps for each of the 28 pairs. Primary endpoint is Spearman across the 28 pairs of cumulative DeltaA_1st versus cumulative DeltaA_finite.",
+    "cross_state_endpoint": "For each batch, compare the 28-pair cumulative finite-write rankings between step10/step25, step10/step50, and step25/step50.",
+    "secondary_endpoints": {
+      "prefix_spearman": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "pair_level_sign_agreement": "At each step k, count matching first-order and finite signs across all 28 pairs.",
+      "positive_pair_counts": "At each state/batch/step report the count and identities of positive first-order and finite DeltaA pairs.",
+      "state_write_range": "Report max-min cumulative finite DeltaA across the 28 pairs and the corresponding per-step ranges.",
+      "gate_mass": "Report mean natural replay gate mass g_i + g_j for every pair.",
+      "gate_mass_filtered": "Repeat primary pair-ranking Spearman after excluding pairs below descriptive gate-mass floors.",
+      "tracked_pairs": [
+        "(0,3)",
+        "(3,4)"
+      ]
+    },
+    "numerical_resolution_floor": {
+      "cumulative_finite_write_range": 1e-05,
+      "interpretation": "If a state's 28-pair cumulative finite-write range is below this floor, the pair ranking is reported but not interpreted.",
+      "this_is_not": "a predictor pass/fail threshold"
+    },
+    "prior_single_step_expectation": {
+      "source_scope": "historical single-step screen, first-128 T4 batch",
+      "step10_positive_pairs_expected": 6,
+      "step25_positive_pairs_expected": 0,
+      "step50_positive_pairs_expected": 0,
+      "interpretation": "These are prior single-step observations, not Cell-5 pass/fail criteria. Cell 5 explicitly records whether the multi-step trajectories diverge from them."
+    },
+    "outcome_space": {
+      "strong_state_generalization": "Within-state rho_pair >= 0.9 at all three states AND cross-state finite ranking rho >= 0.8 for adjacent state pairs (10/25 and 25/50) AND >= 0.6 for 10/50, with all state ranking ranges above the numerical-resolution floor.",
+      "sign_flip_with_preserved_ordering": "Within-state rho_pair >= 0.9 at all three states, adjacent cross-state ranking rho >= 0.7, but the signed positive/negative structure differs across states.",
+      "state_specific_ordering": "Within-state rho_pair >= 0.9 at all three states but at least one cross-state finite ranking rho < 0.5.",
+      "predictor_fails_at_later_state": "Within-state rho_pair drops below 0.9 at step25 or step50.",
+      "numerically_unresolved": "A state's cumulative finite-write range is below 1e-5; that state's pair ranking is not interpreted regardless of rho.",
+      "no_numeric_threshold_created": "No additional preregistered numerical pass/fail criterion is introduced."
+    },
+    "scientific_boundary": "Cell 5 tests state generalization of the FWR instrument. It does not test retention benefit, causal intervention, or end-to-end continual-learning improvement."
+  }
+}

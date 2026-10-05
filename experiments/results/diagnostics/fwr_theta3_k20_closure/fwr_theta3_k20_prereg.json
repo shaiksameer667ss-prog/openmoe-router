@@ -1,0 +1,91 @@
+{
+  "experiment": "FWR theta3 K=20 closure-time measurement",
+  "created_before_execution": true,
+  "state": "theta3",
+  "incoming_task": "T4",
+  "incoming_classes": [
+    80,
+    99
+  ],
+  "checkpoint": {
+    "task3_sha256": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc",
+    "theta0_sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7"
+  },
+  "replay": {
+    "sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "examples": 715,
+    "tokens": 45760,
+    "task_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ]
+  },
+  "pairs": 28,
+  "batches": [
+    {
+      "name": "batch1_0_127",
+      "source": "canonical CIFAR100 train T4 classes 80-99; filtered order; first256 positions 0:127"
+    },
+    {
+      "name": "batch2_128_255",
+      "source": "canonical CIFAR100 train T4 classes 80-99; filtered order; first256 positions 128:255"
+    }
+  ],
+  "K": 20,
+  "eta": 0.001,
+  "optimizer": null,
+  "momentum": 0.0,
+  "weight_decay": 0.0,
+  "router_trainable": true,
+  "router_observation_enabled": false,
+  "forward_with_labels": false,
+  "fwr_training": false,
+  "probe_synced_every_step": true,
+  "natural_h_g_source": "exact replay + natural routing + synchronized probe",
+  "finite_frame": "same pre-update h/g/mu_hat",
+  "primary_metric": {
+    "name": "W_first_nonpositive",
+    "definition": "first k in 0..19 with DeltaA_finite(k) <= 0",
+    "right_censored_if_all_positive_through_k19": true,
+    "crossing_tolerance": 0.0
+  },
+  "secondary_metrics": [
+    "first_positive_step",
+    "last_positive_step",
+    "permanent_nonpositive_from_k",
+    "positive_step_count",
+    "per_pair_finite_trajectory",
+    "cumulative_finite_through_first_crossing",
+    "cumulative_finite_K20",
+    "cumulative_first_order_K20",
+    "mu_norm_each_k",
+    "stepwise_prediction_residual",
+    "relative_abs_error"
+  ],
+  "trajectory_distinction_footnote": "The FWR-trajectory closure measured here is a separate quantity from the prior natural-trajectory persistence sweep. The FWR trajectory starts from theta3 and repeatedly applies a forced expert-pair update. The natural reference follows canonical natural routing/training. Their closure times must not be collapsed into one number.",
+  "natural_reference": {
+    "trajectory_type": "natural T4 training",
+    "theta3_positive_pairs": 28,
+    "step10_positive_pairs": 6,
+    "step25_positive_pairs": 0,
+    "step50_positive_pairs": 0,
+    "population_closure_bracket": "(10,25)"
+  },
+  "preregistered_comparisons": [
+    {
+      "name": "fwr_k10_vs_natural_step10",
+      "description": "Descriptively compare FWR positive-pair population at k=10 with the prior natural step10 population. These are not the same trajectory."
+    },
+    {
+      "name": "fwr_k20_vs_natural_step25",
+      "description": "Descriptively compare FWR positive-pair population at k=20 with the prior natural step25 population. The natural reference is at step25 and follows a different routing trajectory."
+    },
+    {
+      "name": "trajectory_window_direction",
+      "description": "A longer forced-trajectory positive regime indicates persistence under repeated forced updates. A shorter forced-trajectory regime indicates earlier loss of the positive state under forced updating."
+    }
+  ]
+}

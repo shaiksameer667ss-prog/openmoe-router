@@ -1,0 +1,424 @@
+{
+  "experiment": "FWR theta3 K=20 closure-time measurement",
+  "state": "theta3",
+  "incoming_task": "T4",
+  "K": 20,
+  "eta": 0.001,
+  "checkpoint_sha": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc",
+  "theta0_sha": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+  "replay_sha": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+  "pairs": 28,
+  "batches": 2,
+  "step_rows": 1120,
+  "pair_rows": 56,
+  "closure_definition": "first nonpositive DeltaA_finite on each independently forced pair-specific theta3 trajectory",
+  "right_censoring_definition": "None at W_first_nonpositive means all k=0..19 remain positive; this is right-censored at 20.",
+  "permanent_closure_definition": "permanent_nonpositive_from_k is the earliest k for which all subsequent DeltaA_finite values through k=19 are <= 0.",
+  "trajectory_distinction": "FWR-trajectory closure is separate from natural-trajectory step10/step25/step50 persistence.",
+  "closure_summary": [
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "pairs_total": 28,
+      "first_nonpositive_observed_pairs": 8,
+      "right_censored_pairs": 20,
+      "W_first_nonpositive_mean_observed": 16.75,
+      "W_first_nonpositive_median_observed": 17.0,
+      "W_first_nonpositive_min_observed": 14,
+      "W_first_nonpositive_max_observed": 19,
+      "right_censored_fraction": 0.7142857142857143
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "pairs_total": 28,
+      "first_nonpositive_observed_pairs": 7,
+      "right_censored_pairs": 21,
+      "W_first_nonpositive_mean_observed": 17.0,
+      "W_first_nonpositive_median_observed": 17.0,
+      "W_first_nonpositive_min_observed": 15,
+      "W_first_nonpositive_max_observed": 19,
+      "right_censored_fraction": 0.75
+    }
+  ],
+  "positive_population": [
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 0,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 1,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 2,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 3,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 4,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 5,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 6,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 7,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 8,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 9,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 10,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 11,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 12,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 13,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 14,
+      "positive_pairs": 26,
+      "n_pairs": 28,
+      "positive_fraction": 0.9285714285714286
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 15,
+      "positive_pairs": 26,
+      "n_pairs": 28,
+      "positive_fraction": 0.9285714285714286
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 16,
+      "positive_pairs": 25,
+      "n_pairs": 28,
+      "positive_fraction": 0.8928571428571429
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 17,
+      "positive_pairs": 23,
+      "n_pairs": 28,
+      "positive_fraction": 0.8214285714285714
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 18,
+      "positive_pairs": 22,
+      "n_pairs": 28,
+      "positive_fraction": 0.7857142857142857
+    },
+    {
+      "state": "theta3",
+      "batch": "batch1_0_127",
+      "k": 19,
+      "positive_pairs": 20,
+      "n_pairs": 28,
+      "positive_fraction": 0.7142857142857143
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 0,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 1,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 2,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 3,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 4,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 5,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 6,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 7,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 8,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 9,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 10,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 11,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 12,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 13,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 14,
+      "positive_pairs": 28,
+      "n_pairs": 28,
+      "positive_fraction": 1.0
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 15,
+      "positive_pairs": 26,
+      "n_pairs": 28,
+      "positive_fraction": 0.9285714285714286
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 16,
+      "positive_pairs": 26,
+      "n_pairs": 28,
+      "positive_fraction": 0.9285714285714286
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 17,
+      "positive_pairs": 24,
+      "n_pairs": 28,
+      "positive_fraction": 0.8571428571428571
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 18,
+      "positive_pairs": 22,
+      "n_pairs": 28,
+      "positive_fraction": 0.7857142857142857
+    },
+    {
+      "state": "theta3",
+      "batch": "batch2_128_255",
+      "k": 19,
+      "positive_pairs": 21,
+      "n_pairs": 28,
+      "positive_fraction": 0.75
+    }
+  ],
+  "mu_k0": {
+    "batch1": 8.241800308227539,
+    "batch2": 8.241800308227539,
+    "absolute_difference": 0.0
+  },
+  "natural_reference": {
+    "trajectory_type": "canonical natural T4 training",
+    "not_same_as_fwr_trajectory": true,
+    "theta3_boundary_positive_pairs": 28,
+    "natural_step10_positive_pairs": 6,
+    "natural_step25_positive_pairs": 0,
+    "natural_step50_positive_pairs": 0,
+    "natural_population_closure_bracket": "(10,25)",
+    "note": "Natural step10/25/50 are checkpoints on the canonical natural-routing trajectory. They are not the same states as FWR k=10/k=20 because the FWR trajectory repeatedly applies forced expert-pair SGD updates."
+  },
+  "guardrails": {
+    "checkpoint_sha_task3": true,
+    "checkpoint_sha_theta0": true,
+    "replay_sha": true,
+    "replay_counts": true,
+    "replay_tokens": true,
+    "model_state_key_count": true,
+    "l1_router_continual": true,
+    "l1_experts_8": true,
+    "top_k_2": true,
+    "router_trainable": true,
+    "router_observation_disabled": true,
+    "all_28_pairs": true,
+    "both_batches_each_state": true,
+    "K_equals_20": true,
+    "eta_equals_1e3": true,
+    "optimizer_none": true,
+    "momentum_zero": true,
+    "weight_decay_zero": true,
+    "forward_without_labels": true,
+    "fwr_training_false": true,
+    "probe_synced_every_step": true,
+    "step_rows": 1120,
+    "step_rows_expected": 1120,
+    "step_rows_pass": true,
+    "pair_rows": 56,
+    "pair_rows_expected": 56,
+    "pair_rows_pass": true,
+    "all_pair_trajectories_20_steps": true,
+    "mu_k0_cross_batch_abs_diff": 0.0,
+    "mu_k0_cross_batch_pass": true
+  },
+  "artifacts": {
+    "preregistration": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k20_closure/fwr_theta3_k20_prereg.json",
+    "step_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k20_closure/fwr_theta3_k20_step_results.csv",
+    "pair_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k20_closure/fwr_theta3_k20_pair_results.csv",
+    "closure_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k20_closure/fwr_theta3_k20_closure_summary.csv",
+    "comparison_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k20_closure/fwr_theta3_k20_vs_natural_closure.json",
+    "guardrail_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k20_closure/fwr_theta3_k20_guardrails.json",
+    "predictor_qa_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k20_closure/fwr_theta3_k20_predictor_qa.csv",
+    "positive_population_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k20_closure/fwr_theta3_k20_positive_pair_population.csv",
+    "mu_summary_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k20_closure/fwr_theta3_k20_mu_trajectory_summary.csv"
+  }
+}

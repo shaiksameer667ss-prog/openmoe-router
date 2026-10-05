@@ -1,0 +1,144 @@
+{
+  "experiment": "FWR_Design_B_Task_Boundary_Reopening",
+  "status": "No trajectory has been executed yet",
+  "states": {
+    "1": {
+      "name": "theta1",
+      "task_id": 1,
+      "checkpoint": "task_1.pt",
+      "incoming_task": "T2",
+      "incoming_task_id": 2,
+      "class_start": 40,
+      "class_end": 59,
+      "position": "before T2 training"
+    },
+    "2": {
+      "name": "theta2",
+      "task_id": 2,
+      "checkpoint": "task_2.pt",
+      "incoming_task": "T3",
+      "incoming_task_id": 3,
+      "class_start": 60,
+      "class_end": 79,
+      "position": "before T3 training"
+    },
+    "3": {
+      "name": "theta3",
+      "task_id": 3,
+      "checkpoint": "task_3.pt",
+      "incoming_task": "T4",
+      "incoming_task_id": 4,
+      "class_start": 80,
+      "class_end": 99,
+      "position": "before T4 training"
+    }
+  },
+  "excluded_states": {
+    "theta0": "Not a state endpoint; retained only as the functional-drift reference.",
+    "theta4": "Excluded because there is no subsequent incoming task."
+  },
+  "checkpoint_sha256": {
+    "0": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+    "1": "9de3853eab02d95d77143864fa45a692304d268b2f7c9cb437ad8fcf639818b7",
+    "2": "c02d343af7bd8ed466cd0535616b3278ce2cfe3dea91b12594969ae0045e0909",
+    "3": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc",
+    "4": "9504f80fda16fd56e8bc1e913d57b9713f2224d9285aa78f17f2d237adf79f95"
+  },
+  "replay": {
+    "sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "examples": 715,
+    "tokens": 45760,
+    "task_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ]
+  },
+  "model": {
+    "hidden_dim": 512,
+    "ff_dim": 1024,
+    "num_heads": 4,
+    "num_experts": 8,
+    "top_k": 2,
+    "depth": 2,
+    "image_size": 32,
+    "patch_size": 4
+  },
+  "fwr": {
+    "eta": 0.001,
+    "K": 5,
+    "formula": "DeltaA_1st = -eta <grad q, grad L>",
+    "finite": "A(theta') - A(theta) on the same pre-update h/g/mu_hat frame"
+  },
+  "protocol": {
+    "router_parameters_trainable": true,
+    "router_observation_enabled": false,
+    "full_model_direct_sgd": true,
+    "optimizer": null,
+    "momentum": 0.0,
+    "weight_decay": 0.0,
+    "forward_receives_labels": false,
+    "model_mode": "eval",
+    "probe_sync_after_each_step": true,
+    "fresh_theta3_rerun": true,
+    "fwr_training": false
+  },
+  "batch_protocol": "Canonical CIFAR100 train order; class-filtered task stream; first 256 filtered samples; batch1=0:127; batch2=128:255; ToTensor.",
+  "hypotheses": {
+    "H1": {
+      "threshold": ">=10/28 positive pairs at k=0",
+      "reference": {
+        "batch1_0_127": "Cell4 K=5 step10: 6/28",
+        "batch2_128_255": "Cell4 K=5 step10: 5/28"
+      }
+    },
+    "H2": {
+      "threshold": ">=8/28 pairs with W>=3"
+    },
+    "H3": {
+      "threshold": "cross-boundary Spearman >=0.7"
+    },
+    "H4": {
+      "threshold": "within-cell predictor Spearman >=0.9"
+    }
+  },
+  "interpretation_guardrails": {
+    "boundary_plus_gradient": "Interpret as boundary state + incoming task gradient; not a pure boundary-state effect.",
+    "theta3_only": "Cannot distinguish last-task from last-state explanations.",
+    "no_training_claim": "Design B does not authorize FWR training or end-to-end routing intervention."
+  },
+  "cell4_reference": {
+    "path": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_cell4_pair_ranking_28pairs_2batches_k5/fwr_cell4_pair_ranking_step_results.csv",
+    "finite_column": "DeltaA_finite",
+    "reference": {
+      "batch1_0_127": {
+        "k0_positive_count": 6,
+        "cumulative_positive_count": 2,
+        "window_ge3_count": 2,
+        "window_histogram": {
+          "0": 22,
+          "1": 2,
+          "2": 2,
+          "3": 1,
+          "4": 0,
+          "5": 1
+        }
+      },
+      "batch2_128_255": {
+        "k0_positive_count": 5,
+        "cumulative_positive_count": 1,
+        "window_ge3_count": 1,
+        "window_histogram": {
+          "0": 23,
+          "1": 4,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 1
+        }
+      }
+    }
+  }
+}

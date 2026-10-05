@@ -1,0 +1,56 @@
+{
+  "overall_classification": "NOT_INTERPRETABLE",
+  "states": [
+    {
+      "state": "theta1",
+      "state_interpretable": false,
+      "beta_contains7": null,
+      "ci_low": null,
+      "ci_high": null,
+      "p_value": null,
+      "positive_ci_excludes_zero": null,
+      "within_20pct_theta3": null,
+      "ci_overlaps_theta3": null
+    },
+    {
+      "state": "theta2",
+      "state_interpretable": false,
+      "beta_contains7": null,
+      "ci_low": null,
+      "ci_high": null,
+      "p_value": null,
+      "positive_ci_excludes_zero": null,
+      "within_20pct_theta3": null,
+      "ci_overlaps_theta3": null
+    }
+  ],
+  "theta3_reference": {
+    "contains7_beta_model_C": 3.72651877038,
+    "contains7_ci_model_C": [
+      2.56652389521,
+      4.88651364554
+    ]
+  },
+  "interaction": {
+    "formula": "event ~ contains_7 * C(state) + pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+    "status": "NOT_INTERPRETABLE",
+    "terms": {},
+    "model_family": "GEE",
+    "cov_struct": "Independence",
+    "cluster": "trajectory_id",
+    "covariance": "robust",
+    "state_task_confound": "theta1 corresponds to incoming T2 and theta2 corresponds to incoming T3. State and incoming task are therefore perfectly confounded in this comparison.",
+    "interpretation": "The interaction tests heterogeneity of the expert-7 timing association between the two checkpoint/task conditions. It does not isolate a pure checkpoint-state effect and does not establish causality.",
+    "reason": "At least one state was below the 15-crossing-per-batch floor."
+  },
+  "power_floor": 15,
+  "scientific_constraints": {
+    "theta0_anchor_limitation": "theta0 is task-0 state and is used as the common historical functional anchor. At theta2 this does not encode the task-1 state.",
+    "state_task_confound": "theta1/T2 and theta2/T3 move together, so state \u00d7 contains_7 cannot distinguish checkpoint state from incoming task.",
+    "causality": "The closure/hazard association is not a causality test."
+  },
+  "model_family": "GEE",
+  "cov_struct": "Independence",
+  "cluster": "trajectory_id",
+  "covariance": "robust"
+}

@@ -1,0 +1,3 @@
+batch,n_pairs,first_crossing_observed,right_censored,right_censored_fraction,W_mean_observed,W_median_observed,W_min_observed,W_max_observed
+batch1_0_127,28,24,4,0.14285714285714285,23.333333333333332,24.0,14,36
+batch2_128_255,28,22,6,0.21428571428571427,23.90909090909091,24.0,16,31

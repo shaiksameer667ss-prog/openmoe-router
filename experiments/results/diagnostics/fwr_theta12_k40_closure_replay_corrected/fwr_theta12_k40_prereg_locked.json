@@ -1,0 +1,92 @@
+{
+  "experiment": "FWR theta1/theta2 K=40 closure replication",
+  "created_utc": "2026-10-05T20:53:35.758459+00:00",
+  "status": "LOCKED_BEFORE_TRAJECTORIES",
+  "archival_theta3_reference": {
+    "state": "theta3",
+    "incoming_task": "T4",
+    "K": 40,
+    "eta": 0.001,
+    "checkpoint_sha": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc"
+  },
+  "states": {
+    "theta1": {
+      "incoming_task": "T2",
+      "classes": "40-59",
+      "checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_1.pt",
+      "checkpoint_sha": "9de3853eab02d95d77143864fa45a692304d268b2f7c9cb437ad8fcf639818b7",
+      "batch1_positions": "0:127",
+      "batch2_positions": "128:255"
+    },
+    "theta2": {
+      "incoming_task": "T3",
+      "classes": "60-79",
+      "checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_2.pt",
+      "checkpoint_sha": "c02d343af7bd8ed466cd0535616b3278ce2cfe3dea91b12594969ae0045e0909",
+      "batch1_positions": "0:127",
+      "batch2_positions": "128:255"
+    }
+  },
+  "theta0_anchor": {
+    "checkpoint": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_679/checkpoints/task_0.pt",
+    "sha": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7"
+  },
+  "replay": {
+    "path": "/kaggle/working/openmoe-router/openmoe-router/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+    "sha": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "images": 715,
+    "tokens": 45760,
+    "task_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ]
+  },
+  "protocol": {
+    "K": 40,
+    "eta": 0.001,
+    "optimizer": null,
+    "momentum": 0.0,
+    "weight_decay": 0.0,
+    "pairs": 28,
+    "experts": 8,
+    "top_k": 2,
+    "l1_target": "blocks.1.moe",
+    "router_trainable": true,
+    "router_observation_disabled": true,
+    "forward_without_labels": true,
+    "fwr_training": false,
+    "probe_sync_every_step": true,
+    "hg_source": "EXACT_REPLAY_715",
+    "incoming_task_source": "LOSS_ONLY"
+  },
+  "power_floor": {
+    "minimum_crossings_per_batch": 15,
+    "below_floor_classification": "NOT_INTERPRETABLE",
+    "not_fail": true
+  },
+  "models": {
+    "A": "event ~ contains_7 + time_scaled + time2 + batch2",
+    "B": "event ~ pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+    "C": "event ~ contains_7 + pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+    "interaction": "event ~ contains_7 * C(state) + pair_delta_theta_cum_pre + time_scaled + time2 + batch2"
+  },
+  "expert7_test": {
+    "method": "one-sided exact hypergeometric",
+    "null_probability": 0.25,
+    "hard_batch_consistency_required": true
+  },
+  "counterexample": {
+    "pair": [
+      1,
+      4
+    ],
+    "track_every_state_and_batch": true
+  },
+  "analysis_authority": {
+    "pipeline_json": "AUTHORITATIVE",
+    "trajectory_log_rerivation": "QA_ONLY"
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "state": "theta1",
+  "incoming_task": "T2",
+  "checkpoint_sha": "9de3853eab02d95d77143864fa45a692304d268b2f7c9cb437ad8fcf639818b7",
+  "theta0_sha": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+  "replay_sha": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+  "protocol": {
+    "K": 40,
+    "eta": 0.001,
+    "optimizer": null,
+    "momentum": 0.0,
+    "weight_decay": 0.0,
+    "router_trainable": true,
+    "router_observation_disabled": true,
+    "model_eval": true,
+    "l1_target": "blocks.1.moe",
+    "num_experts": 8,
+    "top_k": 2,
+    "num_pairs": 28,
+    "h_g_source": "EXACT_REPLAY_715",
+    "incoming_task_source": "LOSS_ONLY",
+    "mu_definition": "theta0_output - current_output",
+    "q_gate_definition": "natural replay gate matrix g[:, pair]",
+    "forced_write_definition": "forced pair softmax for the actual training/write path only",
+    "closure_definition": "first k where DeltaA_finite <= 0",
+    "pair_delta_definition": "L2 current pair parameters minus trajectory-start pair parameters",
+    "pair_delta_row_timing": "POST_UPDATE_AT_RECORDED_K",
+    "hazard_model": "trajectory-clustered GEE, Binomial, Independence, robust covariance",
+    "trajectory_id": "state|batch|pair"
+  },
+  "closure": [
+    {
+      "state": "theta1",
+      "incoming_task": "T2",
+      "batch": "batch1_0_127",
+      "crossed_pairs_n": 0,
+      "censored_pairs_n": 28,
+      "censor_fraction": 1.0,
+      "W_mean": null,
+      "W_median": null,
+      "W_min": null,
+      "W_max": null,
+      "power_floor": 15,
+      "interpretable": false
+    },
+    {
+      "state": "theta1",
+      "incoming_task": "T2",
+      "batch": "batch2_128_255",
+      "crossed_pairs_n": 0,
+      "censored_pairs_n": 28,
+      "censor_fraction": 1.0,
+      "W_mean": null,
+      "W_median": null,
+      "W_min": null,
+      "W_max": null,
+      "power_floor": 15,
+      "interpretable": false
+    }
+  ],
+  "power_floor": {
+    "batch1_0_127": {
+      "crossed_pairs_n": 0,
+      "minimum_crossings": 15,
+      "interpretable": false,
+      "classification": "NOT_INTERPRETABLE"
+    },
+    "batch2_128_255": {
+      "crossed_pairs_n": 0,
+      "minimum_crossings": 15,
+      "interpretable": false,
+      "classification": "NOT_INTERPRETABLE"
+    }
+  },
+  "state_interpretable": false,
+  "expert7": {
+    "state": "theta1",
+    "method": "one-sided exact hypergeometric",
+    "null_probability": 0.25,
+    "results": [
+      {
+        "batch": "batch1_0_127",
+        "crossed_pairs_n": 0,
+        "crossed_with_7_n": 0,
+        "observed_expert7_fraction": null,
+        "null_probability": 0.25,
+        "one_sided_exact_hypergeom_p": 1.0,
+        "batch_expert7_enrichment_pass": false
+      },
+      {
+        "batch": "batch2_128_255",
+        "crossed_pairs_n": 0,
+        "crossed_with_7_n": 0,
+        "observed_expert7_fraction": null,
+        "null_probability": 0.25,
+        "one_sided_exact_hypergeom_p": 1.0,
+        "batch_expert7_enrichment_pass": false
+      }
+    ],
+    "hard_batch_consistency_pass": false,
+    "interpretation": "Marginal expert-7 enrichment is a different test from the expert-7 timing/hazard association. Failure of marginal enrichment does not negate a timing association."
+  },
+  "mu_k0": [
+    {
+      "batch": "batch1_0_127",
+      "mu_norm": 3.693711996078491
+    },
+    {
+      "batch": "batch2_128_255",
+      "mu_norm": 3.693711996078491
+    }
+  ],
+  "mu_k0_cross_batch_range": 0.0,
+  "models": {
+    "state_status": "NOT_INTERPRETABLE",
+    "reason": "At least one batch has fewer than 15 observed crossings.",
+    "models": {}
+  },
+  "guardrails": {
+    "checkpoint_sha": true,
+    "theta0_sha": true,
+    "replay_sha": true,
+    "replay_counts": true,
+    "replay_tokens": true,
+    "model_state_key_count": true,
+    "l1_router_continual": true,
+    "l1_experts_8": true,
+    "top_k_2": true,
+    "router_trainable": true,
+    "router_observation_disabled": true,
+    "model_eval": true,
+    "K_equals_40": true,
+    "eta_equals_1e3": true,
+    "optimizer_none": true,
+    "momentum_zero": true,
+    "weight_decay_zero": true,
+    "forward_without_labels": true,
+    "exact_replay_hg_source": true,
+    "incoming_task_loss_only": true,
+    "all_28_pairs": true,
+    "both_batches": true,
+    "q_uses_natural_replay_gates": true,
+    "natural_pair_gate_mass_recorded": true,
+    "mu_k0_cross_batch": true,
+    "all_guardrails_pass": true
+  },
+  "theta0_anchor_limitation": "theta0 is the task-0 checkpoint and is used as the historical functional anchor for theta1 and theta2. At theta2, theta0 does not encode the post-task-1 state; therefore the quantity is an anchor-to-theta0 retention direction rather than a complete all-old-tasks direction.",
+  "state_task_confound": "theta1 uses incoming task T2 while theta2 uses incoming task T3. Therefore contains_7 \u00d7 C(state) cannot isolate a pure checkpoint-state effect from an incoming-task effect.",
+  "rerivation_note": "Re-derivation from the trajectory log agreed to 11 digits on Model A contains_7 and on both expert-7 hypergeometric p-values, and differed on Model B and Model C pair_delta coefficients by ~10\u201313%, most likely due to a difference in person-period row retention near the event step. The JSON is authoritative.",
+  "json_authoritative": true,
+  "artifacts": {
+    "prereg": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta1_k40_closure_replay_corrected/fwr_theta1_k40_prereg.json",
+    "step_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta1_k40_closure_replay_corrected/fwr_theta1_k40_step_results.csv",
+    "pair_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta1_k40_closure_replay_corrected/fwr_theta1_k40_pair_results.csv",
+    "closure_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta1_k40_closure_replay_corrected/fwr_theta1_k40_closure_summary.csv",
+    "hazard_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta1_k40_closure_replay_corrected/fwr_theta1_k40_hazard_person_period.csv",
+    "expert7_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta1_k40_closure_replay_corrected/fwr_theta1_k40_expert7_enrichment.json",
+    "partial_models_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta1_k40_closure_replay_corrected/fwr_theta1_k40_partial_models.json",
+    "guardrails_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta1_k40_closure_replay_corrected/fwr_theta1_k40_guardrails.json"
+  }
+}

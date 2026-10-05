@@ -1,0 +1,4 @@
+state,state_id,batch1_mu_norm_k0,batch2_mu_norm_k0,absolute_difference,within_tolerance
+theta1,1,3.693711996078491,3.693711996078491,0.0,True
+theta2,2,6.752513885498047,6.752513885498047,0.0,True
+theta3,3,8.241799354553223,8.241799354553223,0.0,True

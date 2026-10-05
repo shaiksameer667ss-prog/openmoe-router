@@ -1,0 +1,61 @@
+{
+  "Model_A_contains7": {
+    "formula": "event ~ contains_7 + time_scaled + time2 + batch2",
+    "family": "Binomial",
+    "covariance": "GEE robust trajectory-clustered covariance",
+    "n_trajectories": 56,
+    "n_person_period_rows": 1457,
+    "terms": {
+      "contains_7": {
+        "coef": 3.684341388300683,
+        "standard_error": 0.6003012313511641,
+        "p_value": 8.383673950120795e-10,
+        "ci95_low": 2.5077725949773546,
+        "ci95_high": 4.8609101816240115
+      }
+    }
+  },
+  "Model_B_pair_delta_theta": {
+    "formula": "event ~ pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+    "family": "Binomial",
+    "covariance": "GEE robust trajectory-clustered covariance",
+    "n_trajectories": 56,
+    "n_person_period_rows": 1457,
+    "terms": {
+      "pair_delta_theta_cum_pre": {
+        "coef": -131.06099672262795,
+        "standard_error": 75.65480565333628,
+        "p_value": 0.08321033757062582,
+        "ci95_low": -279.34169106054435,
+        "ci95_high": 17.219697615288453
+      }
+    }
+  },
+  "Model_C_contains7_plus_pair_delta_theta": {
+    "formula": "event ~ contains_7 + pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+    "family": "Binomial",
+    "covariance": "GEE robust trajectory-clustered covariance",
+    "n_trajectories": 56,
+    "n_person_period_rows": 1457,
+    "terms": {
+      "contains_7": {
+        "coef": 3.7265187703759217,
+        "standard_error": 0.591844995274043,
+        "p_value": 3.045515613813977e-10,
+        "ci95_low": 2.566523895208519,
+        "ci95_high": 4.8865136455433245
+      },
+      "pair_delta_theta_cum_pre": {
+        "coef": -170.9225901429955,
+        "standard_error": 81.1698196518563,
+        "p_value": 0.03522688528692352,
+        "ci95_low": -330.01251329224533,
+        "ci95_high": -11.832666993745619
+      }
+    }
+  },
+  "pre_registered_decision": {
+    "Model_C_expert7_partial_support": true,
+    "rule": "Model C beta_contains_7 > 0 and two-sided 95% CI excludes 0."
+  }
+}

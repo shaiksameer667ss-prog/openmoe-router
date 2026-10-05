@@ -1,0 +1,20 @@
+{
+  "status": "INVALID_FOR_PREREGISTERED_ANALYSIS",
+  "deviation_code": "PROTOCOL_DEVIATION_HG_SOURCE_T4_BATCH",
+  "reason": "The previous K40 implementation computed natural h/g using the incoming T4 batch instead of the exact 715-example replay specified by the protocol.",
+  "correct_source": "exact replay: 715 images, 45,760 tokens, natural routing, synchronized probe",
+  "loss_source": "incoming T4 batch only",
+  "affected_outputs": [
+    "DeltaA_1st",
+    "DeltaA_finite",
+    "mu",
+    "closure times",
+    "censoring fraction",
+    "expert7 enrichment",
+    "hazard models",
+    "update-magnitude partial models",
+    "K60 extension decision"
+  ],
+  "rerun_required": true,
+  "replacement_output_dir": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected"
+}

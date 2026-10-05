@@ -1,0 +1,142 @@
+{
+  "theta3_sha_exact": {
+    "pass": true,
+    "detail": ""
+  },
+  "theta0_sha_exact": {
+    "pass": true,
+    "detail": ""
+  },
+  "replay_sha_exact": {
+    "pass": true,
+    "detail": ""
+  },
+  "replay_shape_exact": {
+    "pass": true,
+    "detail": ""
+  },
+  "replay_tokens_exact": {
+    "pass": true,
+    "detail": ""
+  },
+  "replay_task_counts_exact": {
+    "pass": true,
+    "detail": ""
+  },
+  "model_state_keys": {
+    "pass": true,
+    "detail": ""
+  },
+  "l1_name": {
+    "pass": true,
+    "detail": ""
+  },
+  "router_class": {
+    "pass": true,
+    "detail": ""
+  },
+  "experts_8": {
+    "pass": true,
+    "detail": ""
+  },
+  "top_k_2": {
+    "pass": true,
+    "detail": ""
+  },
+  "router_trainable": {
+    "pass": true,
+    "detail": ""
+  },
+  "router_updates_disabled": {
+    "pass": true,
+    "detail": ""
+  },
+  "all_28_pairs": {
+    "pass": true,
+    "detail": ""
+  },
+  "both_batches_present": {
+    "pass": true,
+    "detail": ""
+  },
+  "exact_K40": {
+    "pass": true,
+    "detail": ""
+  },
+  "exact_rows": {
+    "pass": true,
+    "detail": ""
+  },
+  "exact_pair_rows": {
+    "pass": true,
+    "detail": ""
+  },
+  "replay_h_shape": {
+    "pass": true,
+    "detail": ""
+  },
+  "T4_loss_only": {
+    "pass": true,
+    "detail": ""
+  },
+  "replay_k0_mu_batch_invariant": {
+    "pass": true,
+    "detail": "k0_mu_range=0.000000000e+00, tol=1.0e-05"
+  },
+  "DeltaA_first_finite": {
+    "pass": true,
+    "detail": ""
+  },
+  "DeltaA_finite_finite": {
+    "pass": true,
+    "detail": ""
+  },
+  "pair_cumulative_logged": {
+    "pass": true,
+    "detail": ""
+  },
+  "pair_step_logged": {
+    "pass": true,
+    "detail": ""
+  },
+  "full_cumulative_logged": {
+    "pass": true,
+    "detail": ""
+  },
+  "full_step_logged": {
+    "pass": true,
+    "detail": ""
+  },
+  "named_counterexample_present": {
+    "pass": true,
+    "detail": ""
+  },
+  "K20_near_archive": {
+    "pass": true,
+    "detail": ""
+  },
+  "K20_conditioned_QA_archive": {
+    "pass": true,
+    "detail": ""
+  },
+  "K40_conditioned_QA": {
+    "pass": true,
+    "detail": ""
+  },
+  "hazard_artifact": {
+    "pass": true,
+    "detail": ""
+  },
+  "partial_model_artifact": {
+    "pass": true,
+    "detail": ""
+  },
+  "expert7_artifacts": {
+    "pass": true,
+    "detail": ""
+  },
+  "corrected_output_directory": {
+    "pass": true,
+    "detail": ""
+  }
+}

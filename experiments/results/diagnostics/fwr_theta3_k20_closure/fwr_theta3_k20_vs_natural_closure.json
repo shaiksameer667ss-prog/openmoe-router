@@ -1,0 +1,68 @@
+{
+  "fwr_trajectory": {
+    "definition": "Each expert pair starts from fresh theta3 and receives 20 sequential direct-SGD updates under that forced pair.",
+    "population_counts": [
+      {
+        "trajectory": "FWR_FORCED_PAIR",
+        "batch": "batch1_0_127",
+        "k": 0,
+        "positive_pairs": 28
+      },
+      {
+        "trajectory": "FWR_FORCED_PAIR",
+        "batch": "batch1_0_127",
+        "k": 10,
+        "positive_pairs": 28
+      },
+      {
+        "trajectory": "FWR_FORCED_PAIR",
+        "batch": "batch1_0_127",
+        "k": 19,
+        "positive_pairs": 20
+      },
+      {
+        "trajectory": "FWR_FORCED_PAIR",
+        "batch": "batch2_128_255",
+        "k": 0,
+        "positive_pairs": 28
+      },
+      {
+        "trajectory": "FWR_FORCED_PAIR",
+        "batch": "batch2_128_255",
+        "k": 10,
+        "positive_pairs": 28
+      },
+      {
+        "trajectory": "FWR_FORCED_PAIR",
+        "batch": "batch2_128_255",
+        "k": 19,
+        "positive_pairs": 21
+      }
+    ]
+  },
+  "natural_trajectory_reference": {
+    "trajectory_type": "canonical natural T4 training",
+    "not_same_as_fwr_trajectory": true,
+    "theta3_boundary_positive_pairs": 28,
+    "natural_step10_positive_pairs": 6,
+    "natural_step25_positive_pairs": 0,
+    "natural_step50_positive_pairs": 0,
+    "natural_population_closure_bracket": "(10,25)",
+    "note": "Natural step10/25/50 are checkpoints on the canonical natural-routing trajectory. They are not the same states as FWR k=10/k=20 because the FWR trajectory repeatedly applies forced expert-pair SGD updates."
+  },
+  "pre_registered_comparisons": [
+    {
+      "name": "fwr_k10_vs_natural_step10",
+      "description": "Descriptively compare FWR positive-pair population at k=10 with the prior natural step10 population. These are not the same trajectory."
+    },
+    {
+      "name": "fwr_k20_vs_natural_step25",
+      "description": "Descriptively compare FWR positive-pair population at k=20 with the prior natural step25 population. The natural reference is at step25 and follows a different routing trajectory."
+    },
+    {
+      "name": "trajectory_window_direction",
+      "description": "A longer forced-trajectory positive regime indicates persistence under repeated forced updates. A shorter forced-trajectory regime indicates earlier loss of the positive state under forced updating."
+    }
+  ],
+  "interpretation_rule": "FWR closure and natural closure are separate measurements. The comparison is descriptive and must not treat equal step indices as trajectory equivalence."
+}

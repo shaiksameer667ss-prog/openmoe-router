@@ -1,0 +1,11 @@
+batch,k,sign_agreement_pairs,n_pairs,sign_agreement_fraction
+batch1_0_127,0,28,28,1.0
+batch1_0_127,1,28,28,1.0
+batch1_0_127,2,28,28,1.0
+batch1_0_127,3,28,28,1.0
+batch1_0_127,4,28,28,1.0
+batch2_128_255,0,28,28,1.0
+batch2_128_255,1,28,28,1.0
+batch2_128_255,2,28,28,1.0
+batch2_128_255,3,28,28,1.0
+batch2_128_255,4,28,28,1.0

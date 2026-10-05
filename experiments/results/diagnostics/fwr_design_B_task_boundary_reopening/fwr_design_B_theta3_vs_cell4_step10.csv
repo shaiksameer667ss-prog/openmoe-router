@@ -1,0 +1,3 @@
+comparison,batch,theta3_k0_positive_count,cell4_step10_K5_k0_positive_count,theta3_minus_step10_k0,theta3_cumulative_K5_positive_count,cell4_step10_K5_cumulative_positive_count,theta3_minus_step10_cumulative,theta3_W_ge3_count,cell4_step10_W_ge3_count,theta3_window_histogram,cell4_step10_window_histogram
+theta3_boundary_vs_cell4_step10_same_T4_task,batch1,28,6,22,28,2,26,28,2,"{'0': 0, '1': 0, '2': 0, '3': 0, '4': 0, '5': 28}","{'0': 22, '1': 2, '2': 2, '3': 1, '4': 0, '5': 1}"
+theta3_boundary_vs_cell4_step10_same_T4_task,batch2,28,5,23,28,1,27,28,1,"{'0': 0, '1': 0, '2': 0, '3': 0, '4': 0, '5': 28}","{'0': 23, '1': 4, '2': 0, '3': 0, '4': 0, '5': 1}"

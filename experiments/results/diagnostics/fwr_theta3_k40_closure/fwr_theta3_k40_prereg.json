@@ -1,0 +1,192 @@
+{
+  "protocol_id": "FWR_theta3_K40_closure_update_budget_expert7_v1_LOCKED",
+  "state": "theta3",
+  "incoming_task": "T4",
+  "task_classes": [
+    80,
+    99
+  ],
+  "K": 40,
+  "eta": 0.001,
+  "all_expert_pairs": [
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      0,
+      4
+    ],
+    [
+      0,
+      5
+    ],
+    [
+      0,
+      6
+    ],
+    [
+      0,
+      7
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      1,
+      5
+    ],
+    [
+      1,
+      6
+    ],
+    [
+      1,
+      7
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      2,
+      6
+    ],
+    [
+      2,
+      7
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      3,
+      5
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      3,
+      7
+    ],
+    [
+      4,
+      5
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      4,
+      7
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      5,
+      7
+    ],
+    [
+      6,
+      7
+    ]
+  ],
+  "batches": [
+    "batch1_0_127",
+    "batch2_128_255"
+  ],
+  "closure_definition": "first k with DeltaA_finite <= 0",
+  "censor_definition": "positive through k=39 => right-censored at K=40",
+  "extension_rule": {
+    "trigger": "pooled censoring fraction > 0.25 OR either batch censoring fraction > 0.25",
+    "next_horizon": 60,
+    "rule": "K=60 is required before a population-level closure-time claim when the trigger is met."
+  },
+  "update_magnitude_metrics": {
+    "pair_local_cumulative": "L2 norm restricted to the two forced L1 expert blocks: ||theta_k_pair - theta_0_pair||",
+    "pair_local_step": "L2 norm of one SGD step restricted to the two forced L1 expert blocks: ||theta_{k+1}_pair - theta_k_pair||",
+    "full_model_cumulative": "L2 norm over all model parameters: ||theta_k - theta_0||",
+    "full_model_step": "L2 norm of one SGD step over all model parameters: ||theta_{k+1} - theta_k||",
+    "logging": "Both cumulative and per-step quantities are logged for every pair, batch, and trajectory step."
+  },
+  "partial_relationship_models": {
+    "analysis_family": "discrete-time hazard GEE with Binomial family and trajectory-clustered robust covariance",
+    "event": "DeltaA_finite <= 0 at the first crossing step",
+    "time_basis": "time_scaled + time2",
+    "batch_adjustment": "batch2 indicator",
+    "Model_A": "event ~ contains_7 + time_scaled + time2 + batch2",
+    "Model_B": "event ~ pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+    "Model_C": "event ~ contains_7 + pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+    "Model_C_decision": "Expert-7 partial support requires beta_contains_7 > 0 AND the two-sided 95% CI excludes zero."
+  },
+  "expert7_enrichment": {
+    "null_probability": 0.25,
+    "null_statement": "Under random unordered pair involvement, P(expert 7 in pair) = 7/28 = 0.25.",
+    "test": "one-sided exact hypergeometric enrichment test P(X >= observed crossed-with-7 count)",
+    "alpha": 0.05,
+    "batch_consistency": "Both batches must independently show enrichment above 0.25 with p < alpha. Pooled significance cannot rescue a failed batch."
+  },
+  "predictor_QA": {
+    "positive_subset": "DeltaA_finite > 0",
+    "nonpositive_subset": "DeltaA_finite <= 0",
+    "per_step": "Within every batch and k, report first-vs-finite Spearman and sign agreement separately within positive and nonpositive subsets."
+  },
+  "K20_archive_supplement": {
+    "near_crossing": "For every K20 observed crossing, record DeltaA_1st and DeltaA_finite at W and W-1.",
+    "relative_error_denominator": "|finite|",
+    "interpretation": "Relative error is retained, but near-zero crossings must also be evaluated using absolute error."
+  },
+  "named_counterexample": {
+    "pair": [
+      1,
+      4
+    ],
+    "rule": "Pair (1,4) must remain in all K40 analyses and must not be dropped for expert-7 analysis."
+  },
+  "mu_reproducibility_note": "The K40 run records its own mu values. The earlier Design B theta3 k=0 estimate differed by ~9.5e-7 from the K20 run. This is within float32 tolerance and consistent with reduction-order differences, but the cause is not isolated and the runs are not bit-identical.",
+  "fixed_protocol": {
+    "router_parameters_trainable": true,
+    "router_observation_disabled": true,
+    "optimizer": null,
+    "momentum": 0.0,
+    "weight_decay": 0.0,
+    "model_eval": true,
+    "forward_without_labels": true,
+    "probe_sync_every_step": true,
+    "finite_same_preupdate_frame": true,
+    "fwr_training": false,
+    "num_experts": 8,
+    "top_k": 2
+  }
+}

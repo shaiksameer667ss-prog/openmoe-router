@@ -1,0 +1,3 @@
+state,batch,pairs_total,first_nonpositive_observed_pairs,right_censored_pairs,W_first_nonpositive_mean_observed,W_first_nonpositive_median_observed,W_first_nonpositive_min_observed,W_first_nonpositive_max_observed,right_censored_fraction
+theta3,batch1_0_127,28,8,20,16.75,17.0,14,19,0.7142857142857143
+theta3,batch2_128_255,28,7,21,17.0,17.0,15,19,0.75

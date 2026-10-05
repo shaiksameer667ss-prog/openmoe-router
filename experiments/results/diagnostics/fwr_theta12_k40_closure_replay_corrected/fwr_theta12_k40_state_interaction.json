@@ -1,0 +1,12 @@
+{
+  "formula": "event ~ contains_7 * C(state) + pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+  "status": "NOT_INTERPRETABLE",
+  "terms": {},
+  "model_family": "GEE",
+  "cov_struct": "Independence",
+  "cluster": "trajectory_id",
+  "covariance": "robust",
+  "state_task_confound": "theta1 corresponds to incoming T2 and theta2 corresponds to incoming T3. State and incoming task are therefore perfectly confounded in this comparison.",
+  "interpretation": "The interaction tests heterogeneity of the expert-7 timing association between the two checkpoint/task conditions. It does not isolate a pure checkpoint-state effect and does not establish causality.",
+  "reason": "At least one state was below the 15-crossing-per-batch floor."
+}

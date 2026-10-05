@@ -1,0 +1,151 @@
+{
+  "diagnostic": "FWR Cell 3b \u2014 batch stability with router-trainable parity",
+  "scientific_purpose": "Resolve Cell-3 batch/router-freeze confound.",
+  "protocol": {
+    "checkpoint_role": "prospective T4 step10",
+    "step10_sha256": "e69fb593e6b158db1b5db16ffe26c75da0113bcc8ee9fa9d9c8abd8077823041",
+    "theta0_sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+    "replay_sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "forced_pair": [
+      3,
+      4
+    ],
+    "eta": 0.001,
+    "k_steps": 20,
+    "replay_batch_size": 128,
+    "expert_chunk": 8192,
+    "natural_h_g": true,
+    "router_parameters_trainable": true,
+    "router_observation_enabled": false,
+    "router_state_updates_enabled": false,
+    "optimizer": null,
+    "momentum": 0.0,
+    "weight_decay": 0.0,
+    "full_model_direct_sgd": true,
+    "fwr_training": false,
+    "finite_uses_same_preupdate_frame": true,
+    "forward_labels_passed": false,
+    "canonical_checkpoint_mutated": false,
+    "t4_batch_start": 128,
+    "t4_batch_end_exclusive": 256,
+    "t4_positions": [
+      128,
+      255
+    ],
+    "t4_source": "canonical CIFAR100 train Task4 classes 80..99; shuffle=False; positions 128:255"
+  },
+  "sanity": {
+    "model_state_keys": 95,
+    "replay_shape": [
+      715,
+      3,
+      32,
+      32
+    ],
+    "replay_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ],
+    "token_count": 45760,
+    "h_shape": [
+      45760,
+      512
+    ],
+    "g_shape": [
+      45760,
+      8
+    ],
+    "l1_target": "model.blocks[1].moe",
+    "l1_router_type": "ContinualRouter",
+    "router_trainable_initial": true,
+    "router_trainable_after": true,
+    "step10_immutable": true,
+    "theta0_immutable": true
+  },
+  "primary": {
+    "spearman_rho": 0.9996239894584121,
+    "sign_agreement": 20,
+    "n_steps": 20
+  },
+  "secondary": {
+    "sum_first_order": -0.005371198756620288,
+    "sum_finite": -0.0053719282150268555,
+    "cumulative_residual": -7.294584065675735e-07,
+    "mean_residual": -3.647292032837868e-08,
+    "mean_abs_residual": 1.0375515557825565e-07,
+    "sd_residual": 1.3427108675774947e-07,
+    "median_relative_error": 0.00023781782799460179,
+    "max_relative_error": 0.006364078768906837
+  },
+  "shape": {
+    "rho_first5": 0.9999999999999999,
+    "rho_first10": 0.9999999999999999,
+    "rho_last10": 0.996965091635306,
+    "positive_first_order_steps": [
+      0
+    ],
+    "positive_finite_steps": [
+      0
+    ],
+    "first_negative_first_order": 1,
+    "first_negative_finite": 1,
+    "loss_k0": 3.7731590270996094,
+    "loss_k19": 2.9921011924743652,
+    "loss_drop_descriptive": 0.7810578346252441,
+    "largest_relative_errors": [
+      {
+        "k": 1,
+        "DeltaA_1st": -2.471439802320674e-05,
+        "DeltaA_finite": -2.4557113647460938e-05,
+        "residual": 1.5728437574580312e-07,
+        "relative_abs_error": 0.006364078768906837
+      },
+      {
+        "k": 4,
+        "DeltaA_1st": -0.0001849262189352885,
+        "DeltaA_finite": -0.00018525123596191406,
+        "residual": -3.2501702662557364e-07,
+        "relative_abs_error": 0.0017575497325195803
+      },
+      {
+        "k": 0,
+        "DeltaA_1st": 5.370169674279168e-05,
+        "DeltaA_finite": 5.3763389587402344e-05,
+        "residual": 6.169284461066127e-08,
+        "relative_abs_error": 0.0011488062454738403
+      },
+      {
+        "k": 19,
+        "DeltaA_1st": -0.0003774103824980557,
+        "DeltaA_finite": -0.000377655029296875,
+        "residual": -2.446467988193035e-07,
+        "relative_abs_error": 0.000648224877121826
+      },
+      {
+        "k": 14,
+        "DeltaA_1st": -0.00036764968535862863,
+        "DeltaA_finite": -0.00036787986755371094,
+        "residual": -2.3018219508230686e-07,
+        "relative_abs_error": 0.0006260910977192124
+      }
+    ]
+  },
+  "cell2_reference": {
+    "cell2_k0_mu_norm": 7.1135149,
+    "cell3b_k0_mu_norm": 7.1135149002075195,
+    "difference": 2.0751933504925546e-10,
+    "close": true
+  },
+  "provenance": {
+    "step10_path": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_010.pt",
+    "theta0_path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_0.pt",
+    "replay_path": "/kaggle/working/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+    "step10_state_hash_before": "97e6b71dbd385c8f9b226cedaddd4c7835efa5a7b424ad6b11b94b95179188e6",
+    "step10_state_hash_after": "97e6b71dbd385c8f9b226cedaddd4c7835efa5a7b424ad6b11b94b95179188e6",
+    "theta0_state_hash_before": "205073d0f6f1ab6fc8c23e83ff1f0f955d9acfc009a67f640290236bcfd76916",
+    "theta0_state_hash_after": "205073d0f6f1ab6fc8c23e83ff1f0f955d9acfc009a67f640290236bcfd76916"
+  }
+}

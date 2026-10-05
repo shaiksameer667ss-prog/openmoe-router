@@ -1,0 +1,145 @@
+{
+  "diagnostic": "FWR Cell 3 \u2014 batch stability",
+  "purpose": "Test Cell-2 FWR predictor stability on an independent deterministic T4 batch.",
+  "protocol": {
+    "checkpoint_role": "prospective T4 step10",
+    "step10_sha256": "e69fb593e6b158db1b5db16ffe26c75da0113bcc8ee9fa9d9c8abd8077823041",
+    "theta0_sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+    "replay_sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "forced_pair": [
+      3,
+      4
+    ],
+    "eta": 0.001,
+    "k_steps": 20,
+    "replay_batch_size": 128,
+    "expert_chunk": 8192,
+    "natural_h_g": true,
+    "router_observation_enabled": false,
+    "router_training": false,
+    "optimizer": null,
+    "fwr_training": false,
+    "full_model_sgd_update": true,
+    "weight_decay": 0.0,
+    "momentum": 0.0,
+    "finite_uses_same_preupdate_h_g_mu_hat": true,
+    "canonical_checkpoint_mutated": false,
+    "t4_batch_start": 128,
+    "t4_batch_end_exclusive": 256,
+    "t4_batch_positions": [
+      128,
+      255
+    ],
+    "t4_batch_source": "canonical CIFAR100 train Task4 classes 80..99; shuffle=False; positions 128:255"
+  },
+  "sanity": {
+    "model_state_keys": 95,
+    "replay_shape": [
+      715,
+      3,
+      32,
+      32
+    ],
+    "replay_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ],
+    "token_count": 45760,
+    "h_shape": [
+      45760,
+      512
+    ],
+    "g_shape": [
+      45760,
+      8
+    ],
+    "l1_target": "model.blocks[1].moe",
+    "l1_router_type": "ContinualRouter",
+    "step10_immutable": true,
+    "theta0_immutable": true
+  },
+  "primary": {
+    "spearman_rho": 1.0,
+    "sign_agreement": 20,
+    "n_steps": 20
+  },
+  "secondary": {
+    "sum_first_order": -0.005327336830305285,
+    "sum_finite": -0.0053261518478393555,
+    "cumulative_residual": 1.1849824659293517e-06,
+    "mean_residual": 5.9249123296467586e-08,
+    "median_relative_error": 0.000395058259990685,
+    "max_relative_error": 0.001643451787590592
+  },
+  "shape": {
+    "rho_first5": 0.9999999999999999,
+    "rho_first10": 0.9999999999999999,
+    "rho_last10": 0.9999999999999999,
+    "positive_first_order_steps": [
+      0
+    ],
+    "positive_finite_steps": [
+      0
+    ],
+    "first_negative_first_order": 1,
+    "first_negative_finite": 1,
+    "loss_k0": 3.7731590270996094,
+    "loss_k19": 2.9970579147338867,
+    "loss_drop_descriptive": 0.7761011123657227,
+    "largest_relative_errors": [
+      {
+        "k": 3,
+        "DeltaA_1st": -0.00013827160000801086,
+        "DeltaA_finite": -0.0001380443572998047,
+        "residual": 2.2724270820617676e-07,
+        "relative_abs_error": 0.001643451787590592
+      },
+      {
+        "k": 6,
+        "DeltaA_1st": -0.0002423591649858281,
+        "DeltaA_finite": -0.00024199485778808594,
+        "residual": 3.6430719774216413e-07,
+        "relative_abs_error": 0.0015031707084956615
+      },
+      {
+        "k": 0,
+        "DeltaA_1st": 5.370169674279168e-05,
+        "DeltaA_finite": 5.3763389587402344e-05,
+        "residual": 6.169284461066127e-08,
+        "relative_abs_error": 0.0011488062454738403
+      },
+      {
+        "k": 1,
+        "DeltaA_1st": -2.3818187401047908e-05,
+        "DeltaA_finite": -2.384185791015625e-05,
+        "residual": -2.367050910834223e-08,
+        "relative_abs_error": 0.0009937997677900887
+      },
+      {
+        "k": 16,
+        "DeltaA_1st": -0.0003739534586202353,
+        "DeltaA_finite": -0.00037360191345214844,
+        "residual": 3.515451680868864e-07,
+        "relative_abs_error": 0.0009400773277615131
+      }
+    ]
+  },
+  "cell2_reference": {
+    "cell2_k0_mu_norm": 7.1135149,
+    "cell3_k0_mu_norm": 7.1135149002075195,
+    "difference": 2.0751933504925546e-10,
+    "close": true
+  },
+  "provenance": {
+    "step10_path": "/kaggle/working/openmoe-router/experiments/results/diagnostics/prospective_refit_endpoint_trajectory_56C72R/task_4_step_010.pt",
+    "theta0_path": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_0.pt",
+    "replay_path": "/kaggle/working/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+    "step10_state_hash_before": "97e6b71dbd385c8f9b226cedaddd4c7835efa5a7b424ad6b11b94b95179188e6",
+    "step10_state_hash_after": "97e6b71dbd385c8f9b226cedaddd4c7835efa5a7b424ad6b11b94b95179188e6",
+    "theta0_state_hash_before": "205073d0f6f1ab6fc8c23e83ff1f0f955d9acfc009a67f640290236bcfd76916",
+    "theta0_state_hash_after": "205073d0f6f1ab6fc8c23e83ff1f0f955d9acfc009a67f640290236bcfd76916"
+  }
+}

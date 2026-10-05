@@ -1,0 +1,51 @@
+{
+  "status": "CORRECTED_REPLAY_DERIVED_K40",
+  "replaces_invalid_run": "PROTOCOL_DEVIATION_HG_SOURCE_T4_BATCH",
+  "protocol": "Original preregistration preserved unchanged.",
+  "state": "theta3",
+  "incoming_task": "T4",
+  "K": 40,
+  "eta": 0.001,
+  "hg_source": {
+    "type": "exact_replay",
+    "images": 715,
+    "tokens": 45760,
+    "shape": [
+      715,
+      3,
+      32,
+      32
+    ],
+    "routing": "natural",
+    "probe": "synchronized every step"
+  },
+  "loss_source": {
+    "type": "T4 batch",
+    "batch_size": 128
+  },
+  "finite_frame": "same pre-update replay h/g/mu_hat frame",
+  "optimizer": null,
+  "momentum": 0.0,
+  "weight_decay": 0.0,
+  "router_trainable": true,
+  "router_observation_updates": false,
+  "model_eval": true,
+  "forward_without_labels": true,
+  "k0_mu_guard": {
+    "min": 8.241799354553223,
+    "max": 8.241799354553223,
+    "range": 0.0,
+    "tolerance": 1e-05,
+    "pass": true
+  },
+  "files": {
+    "theta3": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_reproduced_checkpoints/task_3.pt",
+    "theta3_sha": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc",
+    "theta0": "/kaggle/working/openmoe-router/experiments/results/replication/arm_A_seed0_679/checkpoints/task_0.pt",
+    "theta0_sha": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+    "replay": "/kaggle/working/openmoe-router/experiments/results/diagnostics/canonical_seed0_replay715_exact_reconstruction.pt",
+    "replay_sha": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed"
+  },
+  "invalid_run_deviation_record": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure/PROTOCOL_DEVIATION_HG_SOURCE_T4_BATCH.json",
+  "original_prereg_copy": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_prereg_original_copy.json"
+}

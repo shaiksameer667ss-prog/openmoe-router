@@ -1,0 +1,250 @@
+{
+  "status": "CORRECTED_REPLAY_DERIVED_K40",
+  "invalid_previous_run": {
+    "status": "INVALID_FOR_PREREGISTERED_ANALYSIS",
+    "deviation_code": "PROTOCOL_DEVIATION_HG_SOURCE_T4_BATCH",
+    "record": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure/PROTOCOL_DEVIATION_HG_SOURCE_T4_BATCH.json"
+  },
+  "current_run": {
+    "state": "theta3",
+    "incoming_task": "T4",
+    "K": 40,
+    "eta": 0.001,
+    "device": "cuda"
+  },
+  "source_contract": {
+    "h_g_mu": "EXACT REPLAY ONLY",
+    "replay_images": 715,
+    "replay_tokens": 45760,
+    "replay_shape": [
+      715,
+      3,
+      32,
+      32
+    ],
+    "T4_loss_only": true
+  },
+  "k0_mu_guard": {
+    "min": 8.241799354553223,
+    "max": 8.241799354553223,
+    "range": 0.0,
+    "tolerance": 1e-05,
+    "pass": true,
+    "by_batch": [
+      {
+        "batch": "batch1_0_127",
+        "min": 8.241799354553223,
+        "max": 8.241799354553223,
+        "mean": 8.241799354553223
+      },
+      {
+        "batch": "batch2_128_255",
+        "min": 8.241799354553223,
+        "max": 8.241799354553223,
+        "mean": 8.241799354553223
+      }
+    ]
+  },
+  "closure": {
+    "by_batch": [
+      {
+        "batch": "batch1_0_127",
+        "n_pairs": 28,
+        "first_crossing_observed": 26,
+        "right_censored": 2,
+        "right_censored_fraction": 0.07142857142857142,
+        "W_mean_observed": 23.615384615384617,
+        "W_median_observed": 23.5,
+        "W_min_observed": 14,
+        "W_max_observed": 39
+      },
+      {
+        "batch": "batch2_128_255",
+        "n_pairs": 28,
+        "first_crossing_observed": 24,
+        "right_censored": 4,
+        "right_censored_fraction": 0.14285714285714285,
+        "W_mean_observed": 23.041666666666668,
+        "W_median_observed": 24.0,
+        "W_min_observed": 15,
+        "W_max_observed": 33
+      }
+    ],
+    "pooled_observed": 50,
+    "pooled_right_censored": 6,
+    "pooled_censor_fraction": 0.10714285714285714,
+    "batch_over_25pct": false,
+    "extension_to_K60_required": false
+  },
+  "expert7_enrichment": {
+    "null_probability": 0.25,
+    "batch_results": [
+      {
+        "batch": "batch1_0_127",
+        "crossed_pairs_n": 26,
+        "crossed_with_7_n": 7,
+        "observed_expert7_fraction": 0.2692307692307692,
+        "null_probability": 0.25,
+        "one_sided_exact_hypergeom_p": 0.5555555555555556,
+        "alpha": 0.05,
+        "enriched_above_null": 1,
+        "batch_expert7_enrichment_pass": 0
+      },
+      {
+        "batch": "batch2_128_255",
+        "crossed_pairs_n": 24,
+        "crossed_with_7_n": 7,
+        "observed_expert7_fraction": 0.2916666666666667,
+        "null_probability": 0.25,
+        "one_sided_exact_hypergeom_p": 0.2923076923076923,
+        "alpha": 0.05,
+        "enriched_above_null": 1,
+        "batch_expert7_enrichment_pass": 0
+      }
+    ],
+    "hard_batch_consistency_pass": false
+  },
+  "partial_models": {
+    "Model_A_contains7": {
+      "formula": "event ~ contains_7 + time_scaled + time2 + batch2",
+      "family": "Binomial",
+      "covariance": "GEE robust trajectory-clustered covariance",
+      "n_trajectories": 56,
+      "n_person_period_rows": 1457,
+      "terms": {
+        "contains_7": {
+          "coef": 3.684341388300683,
+          "standard_error": 0.6003012313511641,
+          "p_value": 8.383673950120795e-10,
+          "ci95_low": 2.5077725949773546,
+          "ci95_high": 4.8609101816240115
+        }
+      }
+    },
+    "Model_B_pair_delta_theta": {
+      "formula": "event ~ pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+      "family": "Binomial",
+      "covariance": "GEE robust trajectory-clustered covariance",
+      "n_trajectories": 56,
+      "n_person_period_rows": 1457,
+      "terms": {
+        "pair_delta_theta_cum_pre": {
+          "coef": -131.06099672262795,
+          "standard_error": 75.65480565333628,
+          "p_value": 0.08321033757062582,
+          "ci95_low": -279.34169106054435,
+          "ci95_high": 17.219697615288453
+        }
+      }
+    },
+    "Model_C_contains7_plus_pair_delta_theta": {
+      "formula": "event ~ contains_7 + pair_delta_theta_cum_pre + time_scaled + time2 + batch2",
+      "family": "Binomial",
+      "covariance": "GEE robust trajectory-clustered covariance",
+      "n_trajectories": 56,
+      "n_person_period_rows": 1457,
+      "terms": {
+        "contains_7": {
+          "coef": 3.7265187703759217,
+          "standard_error": 0.591844995274043,
+          "p_value": 3.045515613813977e-10,
+          "ci95_low": 2.566523895208519,
+          "ci95_high": 4.8865136455433245
+        },
+        "pair_delta_theta_cum_pre": {
+          "coef": -170.9225901429955,
+          "standard_error": 81.1698196518563,
+          "p_value": 0.03522688528692352,
+          "ci95_low": -330.01251329224533,
+          "ci95_high": -11.832666993745619
+        }
+      }
+    },
+    "pre_registered_decision": {
+      "Model_C_expert7_partial_support": true,
+      "rule": "Model C beta_contains_7 > 0 and two-sided 95% CI excludes 0."
+    }
+  },
+  "named_counterexample": {
+    "pair": [
+      1,
+      4
+    ],
+    "records": [
+      {
+        "batch": "batch1_0_127",
+        "pair_i": 1,
+        "pair_j": 4,
+        "pair": "(1, 4)",
+        "contains_7": 0,
+        "event_observed": 1,
+        "first_nonpositive_k": 18.0,
+        "right_censored": 0,
+        "censor_at": NaN,
+        "first_at_W": -2.5921764972736128e-05,
+        "finite_at_W": -2.5987625122070312e-05,
+        "first_at_W_minus_1": 5.682609116774984e-05,
+        "finite_at_W_minus_1": 5.6862831115722656e-05,
+        "pair_delta_theta_cum_pre_at_end": 0.062347471714019775,
+        "full_delta_theta_cum_pre_at_end": 0.3868451416492462,
+        "pair_delta_theta_cum_post_at_end": 0.06350919604301453,
+        "full_delta_theta_cum_post_at_end": 0.3918623626232147,
+        "pair_delta_theta_step_last": 0.0013122305972501636,
+        "full_delta_theta_step_last": 0.005885135382413864,
+        "pair_theta_path_length_end": 0.07068770250771195,
+        "full_theta_path_length_end": 0.42518757097423077,
+        "loss_at_k39": 3.467087507247925
+      },
+      {
+        "batch": "batch2_128_255",
+        "pair_i": 1,
+        "pair_j": 4,
+        "pair": "(1, 4)",
+        "contains_7": 0,
+        "event_observed": 1,
+        "first_nonpositive_k": 18.0,
+        "right_censored": 0,
+        "censor_at": NaN,
+        "first_at_W": -4.5310611312743276e-05,
+        "finite_at_W": -4.5299530029296875e-05,
+        "first_at_W_minus_1": 2.525653508200776e-05,
+        "finite_at_W_minus_1": 2.5153160095214844e-05,
+        "pair_delta_theta_cum_pre_at_end": 0.06321683526039124,
+        "full_delta_theta_cum_pre_at_end": 0.39113447070121765,
+        "pair_delta_theta_cum_post_at_end": 0.06449387967586517,
+        "full_delta_theta_cum_post_at_end": 0.39700087904930115,
+        "pair_delta_theta_step_last": 0.001464333152398467,
+        "full_delta_theta_step_last": 0.006705863401293755,
+        "pair_theta_path_length_end": 0.07186917623039335,
+        "full_theta_path_length_end": 0.42744850739836693,
+        "loss_at_k39": 3.582514524459839
+      }
+    ]
+  },
+  "natural_reference": {
+    "theta3_boundary_positive_pairs": 28,
+    "natural_step10_positive_pairs": 6,
+    "natural_step25_positive_pairs": 0,
+    "natural_step50_positive_pairs": 0,
+    "natural_population_closure_bracket": "(10,25)",
+    "note": "This is the previously validated natural trajectory reference and is not recomputed by the forced-pair run."
+  },
+  "K20_archive_supplements": {
+    "near_crossing": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k20_near_crossing_audit_copy.json",
+    "conditioned_QA_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k20_conditioned_predictor_qa_copy.csv",
+    "conditioned_QA_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k20_conditioned_predictor_qa_copy.json"
+  },
+  "artifacts": {
+    "run_manifest": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_corrected_run_manifest.json",
+    "step_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_replay_corrected_step_results.csv",
+    "pair_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_replay_corrected_pair_results.csv",
+    "closure_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_replay_corrected_closure_summary.csv",
+    "conditioned_QA_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_replay_corrected_conditioned_predictor_qa.csv",
+    "hazard_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_replay_corrected_hazard_person_period.csv",
+    "partial_models_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_replay_corrected_partial_models.json",
+    "expert7_csv": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_replay_corrected_expert7_enrichment.csv",
+    "expert7_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_replay_corrected_expert7_enrichment.json",
+    "guardrails_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_replay_corrected_guardrails.json",
+    "summary_json": "/kaggle/working/openmoe-router/experiments/results/diagnostics/fwr_theta3_k40_closure_replay_corrected/fwr_theta3_k40_replay_corrected_summary.json"
+  }
+}
