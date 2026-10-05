@@ -1,4 +1,3 @@
 # OpenMoE-Router Final Kaggle Archive SHA-256 Manifest
 # Date: 2026-10-05
 
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  docs/FINAL_KAGGLE_ARCHIVE_FILE_LIST_2026-10-05.txt
