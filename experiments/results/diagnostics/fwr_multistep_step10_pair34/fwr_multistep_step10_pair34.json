@@ -1,0 +1,171 @@
+{
+  "checkpoint_date": "2026-10-05",
+  "status": "FWR multi-step predictor validity PASS; do not train router yet",
+  "protocol": {
+    "exact_step10_sha256": "e69fb593e6b158db1b5db16ffe26c75da0113bcc8ee9fa9d9c8abd8077823041",
+    "exact_theta0_sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+    "exact_replay_sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "replay_examples": 715,
+    "replay_tokens": 45760,
+    "forced_pair": [
+      3,
+      4
+    ],
+    "eta": 0.001,
+    "K_steps": 20,
+    "T4_batch_size": 128,
+    "router_observation": false,
+    "optimizer": "none",
+    "mode": "eval"
+  },
+  "primary": {
+    "spearman_rho_20": 1,
+    "spearman_p_20": 0,
+    "sign_agreement_count": 20,
+    "sign_agreement_total": 20
+  },
+  "secondary": {
+    "sum_delta_A_1st": -0.003712977038049,
+    "sum_delta_A_finite": -0.003714323043823,
+    "cumulative_residual": -0.000001346005774394,
+    "mean_per_step_residual": -6.730028871971e-8,
+    "sd_per_step_residual": 1.950945780578e-7,
+    "mean_absolute_residual": 1.574394900672e-7,
+    "median_relative_error": 0.000411331,
+    "max_relative_error": 0.007337738
+  },
+  "shape_summary": {
+    "rho_steps_0_to_4": 1,
+    "rho_steps_0_to_9": 1,
+    "rho_steps_10_to_19": 1
+  },
+  "trajectory": [
+    {
+      "k": 0,
+      "delta_A_1st": 0.0002514987718314,
+      "delta_A_finite": 0.0002515316009521,
+      "residual": 3.28291207552e-8
+    },
+    {
+      "k": 1,
+      "delta_A_1st": 0.0001391399709973,
+      "delta_A_finite": 0.0001387596130371,
+      "residual": -3.803579602391e-7
+    },
+    {
+      "k": 2,
+      "delta_A_1st": 0.00005668270750903,
+      "delta_A_finite": 0.00005626678466797,
+      "residual": -4.159228410572e-7
+    },
+    {
+      "k": 3,
+      "delta_A_1st": -0.00001006377260637,
+      "delta_A_finite": -0.00001001358032227,
+      "residual": 5.019228410674e-8
+    },
+    {
+      "k": 4,
+      "delta_A_1st": -0.00006471338565461,
+      "delta_A_finite": -0.00006508827209473,
+      "residual": -3.748864401132e-7
+    },
+    {
+      "k": 5,
+      "delta_A_1st": -0.0001130984164774,
+      "delta_A_finite": -0.0001130104064941,
+      "residual": 8.800998330116e-8
+    },
+    {
+      "k": 6,
+      "delta_A_1st": -0.0001544553379063,
+      "delta_A_finite": -0.0001541376113892,
+      "residual": 3.177265170962e-7
+    },
+    {
+      "k": 7,
+      "delta_A_1st": -0.0001899721100926,
+      "delta_A_finite": -0.000190258026123,
+      "residual": -2.85916030407e-7
+    },
+    {
+      "k": 8,
+      "delta_A_1st": -0.0002163069875678,
+      "delta_A_finite": -0.0002162456512451,
+      "residual": 6.133632268757e-8
+    },
+    {
+      "k": 9,
+      "delta_A_1st": -0.0002415829658275,
+      "delta_A_finite": -0.0002413988113403,
+      "residual": 1.84154487215e-7
+    },
+    {
+      "k": 10,
+      "delta_A_1st": -0.0002630269154906,
+      "delta_A_finite": -0.0002630949020386,
+      "residual": -6.798654794693e-8
+    },
+    {
+      "k": 11,
+      "delta_A_1st": -0.0002818156208377,
+      "delta_A_finite": -0.0002819299697876,
+      "residual": -1.143489498645e-7
+    },
+    {
+      "k": 12,
+      "delta_A_1st": -0.0002982773003168,
+      "delta_A_finite": -0.0002985000610352,
+      "residual": -2.227607183158e-7
+    },
+    {
+      "k": 13,
+      "delta_A_1st": -0.0003098197339568,
+      "delta_A_finite": -0.0003098249435425,
+      "residual": -5.209585651755e-9
+    },
+    {
+      "k": 14,
+      "delta_A_1st": -0.0003209745045751,
+      "delta_A_finite": -0.0003210306167603,
+      "residual": -5.611218512058e-8
+    },
+    {
+      "k": 15,
+      "delta_A_1st": -0.0003288959851488,
+      "delta_A_finite": -0.0003287792205811,
+      "residual": 1.167645677924e-7
+    },
+    {
+      "k": 16,
+      "delta_A_1st": -0.0003354343061801,
+      "delta_A_finite": -0.0003355741500854,
+      "residual": -1.398439053446e-7
+    },
+    {
+      "k": 17,
+      "delta_A_1st": -0.0003384808078408,
+      "delta_A_finite": -0.0003385543823242,
+      "residual": -7.357448339462e-8
+    },
+    {
+      "k": 18,
+      "delta_A_1st": -0.000343849969795,
+      "delta_A_finite": -0.0003437995910645,
+      "residual": 5.037873052061e-8
+    },
+    {
+      "k": 19,
+      "delta_A_1st": -0.000349530368112,
+      "delta_A_finite": -0.0003496408462524,
+      "residual": -1.104781404138e-7
+    }
+  ],
+  "important_code_correction": {
+    "l1_h_shape_before_flattening": "[B,64,512]",
+    "router_gate_shape": "[B*64,8]",
+    "aligned_h_shape": "[45760,512]",
+    "aligned_g_shape": "[45760,8]",
+    "forced_patch_target": "L1 ContinualRouter"
+  }
+}
