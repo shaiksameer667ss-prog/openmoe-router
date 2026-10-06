@@ -1,0 +1,16 @@
+{
+  "all_cells_complete": true,
+  "all_pair_summaries_complete": true,
+  "all_zero_audit_rows_complete": true,
+  "all_pairs_complete": true,
+  "all_batches_complete": true,
+  "all_steps_complete": true,
+  "all_pair_batch_trajectories_complete": true,
+  "finite_rows_complete": true,
+  "zero_structural_contributions_exact": true,
+  "fixed_frame_available": true,
+  "fixed_E_sign_agreement_complete": true,
+  "group_sum_identity_pass": true,
+  "no_zero_denominators": true,
+  "no_lt_1e8_denominators": true
+}

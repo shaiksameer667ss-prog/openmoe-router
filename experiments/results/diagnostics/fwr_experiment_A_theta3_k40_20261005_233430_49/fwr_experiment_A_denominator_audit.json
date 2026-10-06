@@ -1,0 +1,13 @@
+{
+  "min_abs_D_total": 3.598984525164141e-06,
+  "q01_abs_D_total": 0.00023983384307917622,
+  "q05_abs_D_total": 0.001089801688829156,
+  "median_abs_D_total": 0.010980149585891193,
+  "q95_abs_D_total": 0.08484397881647943,
+  "max_abs_D_total": 0.20936775194136548,
+  "near_zero_lt_1e-12": 0,
+  "near_zero_lt_1e-10": 0,
+  "near_zero_lt_1e-8": 0,
+  "zero_exact": 0,
+  "cells": 2240
+}

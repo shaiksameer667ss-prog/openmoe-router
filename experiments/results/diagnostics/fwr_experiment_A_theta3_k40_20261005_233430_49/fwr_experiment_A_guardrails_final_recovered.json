@@ -1,0 +1,11 @@
+{
+  "all_cells_complete": true,
+  "all_pairs_complete": true,
+  "all_batches_complete": true,
+  "all_steps_complete": true,
+  "all_pair_batch_trajectories_complete": true,
+  "finite_full_state_rows_complete": true,
+  "fixed_frame_residual_available": true,
+  "fixed_frame_sign_agreement_complete": true,
+  "denominator_audit_available": true
+}

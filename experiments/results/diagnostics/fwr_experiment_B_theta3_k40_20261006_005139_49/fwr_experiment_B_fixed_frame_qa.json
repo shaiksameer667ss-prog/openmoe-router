@@ -1,0 +1,7 @@
+{
+  "max_abs_fixed_residual_vs_E": 1.090819111482233e-06,
+  "median_abs_fixed_residual_vs_E": 6.765424309662649e-08,
+  "mean_abs_fixed_residual_vs_E": 1.0287177761695019e-07,
+  "sign_agreement_E_vs_fixed": 2240,
+  "cells": 2240
+}

@@ -1,0 +1,51 @@
+{
+  "experiment": "FWR Attribution Decomposition \u2014 Experiment A",
+  "hypothesis": "The dominant parameter subspace contributing to FWR closure is the selected L1 expert-local write.",
+  "state": "theta3",
+  "incoming_task": "T4",
+  "K": 40,
+  "eta": 0.001,
+  "pairs_n": 28,
+  "experts_n": 8,
+  "top_k": 2,
+  "batches": [
+    "batch1_0_127",
+    "batch2_128_255"
+  ],
+  "finite_live_steps": [
+    0,
+    5,
+    10,
+    25,
+    39
+  ],
+  "parameter_groups": {
+    "E": "selected L1 pair expert parameters",
+    "B": "all non-router, non-selected-pair parameters",
+    "R": "all router parameters with requires_grad=True"
+  },
+  "primary_metric": "mean(abs(D_E)/abs(D_total))",
+  "weighted_secondary_metric": "sum(abs(D_E))/sum(abs(D_total))",
+  "gate_low": 0.3,
+  "gate_high": 0.7,
+  "decision_low": "CLOSE_CURRENT_FWR",
+  "decision_high": "CONTINUE_H2_H3",
+  "decision_middle": "MIXED",
+  "denominator_policy": "exclude exact zero only; report denominator distribution",
+  "theta3_sha256": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc",
+  "theta0_sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+  "replay_sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+  "replay_counts": [
+    179,
+    179,
+    179,
+    178,
+    0
+  ],
+  "replay_tokens": 45760,
+  "no_optimizer": true,
+  "momentum": 0.0,
+  "weight_decay": 0.0,
+  "router_observation_disabled": true,
+  "canonical_checkpoint_overwrite": false
+}

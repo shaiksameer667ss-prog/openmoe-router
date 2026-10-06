@@ -1,0 +1,81 @@
+{
+  "experiment": "FWR Attribution Decomposition \u2014 Experiment A",
+  "recovery_mode": "POST_RUN_FROM_INCREMENTAL_STEP_CSV",
+  "state": "theta3",
+  "incoming_task": "T4",
+  "K": 40,
+  "eta": 0.001,
+  "pairs": 28,
+  "batches": 2,
+  "cells": 2240,
+  "primary_mean_abs_D_E_over_abs_D_total": 0.14133167655880635,
+  "primary_median_abs_D_E_over_abs_D_total": 0.0228214050589038,
+  "primary_q25": 0.012812333413345174,
+  "primary_q75": 0.0523709417369929,
+  "weighted_abs_D_E_over_abs_D_total": 0.023977859676508895,
+  "absolute_group_sums": {
+    "E": 1.2107441065153344,
+    "B": 48.8407395952945,
+    "R": 1.4916224067951784,
+    "total": 50.494252733554035
+  },
+  "zero_total_cells": 0,
+  "threshold_low": 0.3,
+  "threshold_high": 0.7,
+  "decision": "CLOSE_CURRENT_FWR",
+  "global_correlations": {
+    "spearman_total_E": 0.7401432576901538,
+    "spearman_total_B": 0.9973714708255597,
+    "spearman_total_R": 0.483864907299288,
+    "spearman_total_vs_fixed_finite": 0.7401603006845722,
+    "spearman_E_vs_fixed_finite": 0.9999998676088449
+  },
+  "denominator_audit": {
+    "min_abs_D_total": 3.598984525164141e-06,
+    "q01_abs_D_total": 0.00023983384307913,
+    "q05_abs_D_total": 0.001089801688829135,
+    "median_abs_D_total": 0.010980149585891101,
+    "q95_abs_D_total": 0.0848439788164794,
+    "max_abs_D_total": 0.2093677519413654,
+    "near_zero_lt_1e-12": 0,
+    "near_zero_lt_1e-10": 0,
+    "near_zero_lt_1e-8": 0,
+    "zero_exact": 0,
+    "cells": 2240
+  },
+  "fixed_frame_qa": {
+    "max_abs_fixed_frame_residual_vs_dE": 9.893087735690642e-07,
+    "median_abs_fixed_frame_residual_vs_dE": 6.270492036719588e-08,
+    "mean_abs_fixed_frame_residual_vs_dE": 1.0206712715623685e-07,
+    "max_abs_fixed_frame_residual_vs_total": 0.2067105768772785,
+    "median_abs_fixed_frame_residual_vs_total": 0.01054142767223395,
+    "sign_agreement_dE_vs_fixed": 2240,
+    "cells": 2240
+  },
+  "full_state_finite_summary": {
+    "steps": [
+      0,
+      5,
+      10,
+      25,
+      39
+    ],
+    "cells": 280,
+    "mean_DeltaA_live_finite": 0.03420991471835544,
+    "median_DeltaA_live_finite": 0.016947507858276298,
+    "mean_live_state_residual": 0.0029609983792337514,
+    "median_abs_live_state_residual": 0.00889158962192505,
+    "max_abs_live_state_residual": 0.0668003560450847
+  },
+  "guardrails_final": {
+    "all_cells_complete": true,
+    "all_pairs_complete": true,
+    "all_batches_complete": true,
+    "all_steps_complete": true,
+    "all_pair_batch_trajectories_complete": true,
+    "finite_full_state_rows_complete": true,
+    "fixed_frame_residual_available": true,
+    "fixed_frame_sign_agreement_complete": true,
+    "denominator_audit_available": true
+  }
+}

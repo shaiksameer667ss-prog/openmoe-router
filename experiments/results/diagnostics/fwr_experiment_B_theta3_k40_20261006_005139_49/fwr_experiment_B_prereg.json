@@ -1,0 +1,48 @@
+{
+  "experiment": "FWR Fine-Grained Attribution \u2014 Experiment B",
+  "state": "theta3",
+  "incoming_task": "T4",
+  "K": 40,
+  "eta": 0.001,
+  "pairs": 28,
+  "batches": [
+    "batch1_0_127",
+    "batch2_128_255"
+  ],
+  "finite_steps": [
+    0,
+    5,
+    10,
+    25,
+    39
+  ],
+  "groups": {
+    "E": "selected L1 pair experts",
+    "U_embed": "patch_embed and pos_embed",
+    "U_block0": "all blocks.0 parameters except blocks.0.moe.router",
+    "U_block1_pre": "blocks.1.norm1, blocks.1.attn, blocks.1.norm2",
+    "R_L0": "blocks.0.moe.router parameters",
+    "R_L1": "blocks.1.moe.router parameters",
+    "Z_nonselected_L1_expert": "non-selected L1 expert parameters; expected zero gradient under forced-pair loss",
+    "Z_downstream": "final norm and classifier head; expected zero grad_A because A is defined at L1"
+  },
+  "primary_metric_per_group": "mean(abs(D_group)/abs(D_total))",
+  "weighted_metric_per_group": "sum(abs(D_group))/sum(abs(D_total))",
+  "decision_target": "identify dominant contributing upstream subspace",
+  "no_optimizer": true,
+  "momentum": 0.0,
+  "weight_decay": 0.0,
+  "router_observation_disabled": true,
+  "canonical_checkpoint_overwrite": false,
+  "theta3_sha256": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc",
+  "theta0_sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+  "replay_sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+  "replay_counts": [
+    179,
+    179,
+    179,
+    178,
+    0
+  ],
+  "replay_tokens": 45760
+}

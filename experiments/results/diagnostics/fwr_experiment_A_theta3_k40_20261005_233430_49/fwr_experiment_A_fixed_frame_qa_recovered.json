@@ -1,0 +1,9 @@
+{
+  "max_abs_fixed_frame_residual_vs_dE": 9.893087735690642e-07,
+  "median_abs_fixed_frame_residual_vs_dE": 6.270492036719588e-08,
+  "mean_abs_fixed_frame_residual_vs_dE": 1.0206712715623685e-07,
+  "max_abs_fixed_frame_residual_vs_total": 0.2067105768772785,
+  "median_abs_fixed_frame_residual_vs_total": 0.01054142767223395,
+  "sign_agreement_dE_vs_fixed": 2240,
+  "cells": 2240
+}

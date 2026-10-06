@@ -1,0 +1,15 @@
+{
+  "steps": [
+    0,
+    5,
+    10,
+    25,
+    39
+  ],
+  "cells": 280,
+  "mean_DeltaA_live_finite": 0.03420991471835544,
+  "median_DeltaA_live_finite": 0.016947507858276298,
+  "mean_live_state_residual": 0.0029609983792337514,
+  "median_abs_live_state_residual": 0.00889158962192505,
+  "max_abs_live_state_residual": 0.0668003560450847
+}

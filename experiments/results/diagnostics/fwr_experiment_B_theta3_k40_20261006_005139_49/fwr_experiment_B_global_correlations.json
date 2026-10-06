@@ -1,0 +1,10 @@
+{
+  "total_vs_E": 0.7401442260673737,
+  "total_vs_U_embed": 0.9525541659182296,
+  "total_vs_U_block0": 0.9821528259831048,
+  "total_vs_U_block1_pre": 0.8408953985191495,
+  "total_vs_R_L0": 0.12435900581419236,
+  "total_vs_R_L1": 0.4906125982054081,
+  "total_vs_fixed_finite": 0.7401443261758662,
+  "E_vs_fixed_finite": 0.999999871879527
+}
