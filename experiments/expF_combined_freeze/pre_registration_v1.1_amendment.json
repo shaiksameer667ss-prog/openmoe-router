@@ -12,8 +12,8 @@
   },
   "primary_endpoint": {
     "formula": "F_F - F_Arm_A_prime",
-    "support_gate_pp": -2.0,
-    "counter_support_gate_pp": 2.0,
+    "support_gate_pp": -2,
+    "counter_support_gate_pp": 2,
     "causal_support_rule": "classify as causal support only when delta_forget_pp <= -2.0 pp",
     "inconclusive_rule": "otherwise report the primary endpoint without treating the historical E-BOTH magnitude as a causal expectation"
   },
@@ -26,7 +26,15 @@
     "active_E_BOTH_v4_pre_eval_checkpoint_sha256": "f53a388536cbab0f0ccd901686fddc897ad16b9cb24d290ec81ca4efe495f658",
     "historical_E_BOTH_t3_bundle_sha256": "7f5af253a4b4f6e4f3a5587a3cb5e116bf9dc923a2611b27c1594e6b965f7d13",
     "historical_E_BOTH_t3_bundle_bytes": 237265897,
-    "bundle_relationship": "distinct files; relationship not assumed beyond matching T3 endpoint accuracy"
+    "bundle_relationship": "distinct files; relationship not assumed beyond matching T3 endpoint accuracy",
+    "arm_a_prime_reference_note": {
+      "Arm_A_prime_forgetting_pp": 32.0375,
+      "Arm_A_prime_t3_bundle_sha256": "7f5af253a4b4f6e4f3a5587a3cb5e116bf9dc923a2611b27c1594e6b965f7d13",
+      "freeze_arms_t3_bundle_sha256": "60a83ce0ff0729dc44de530d24f2fcea9047606ad992f13d71a1814fbf63b91c",
+      "interpretation": "All freeze-arm deltas versus Arm-A' carry a fixed cross-bundle offset because the Arm-A' reference was measured on the historical D-era bundle while E-W, E-B, E-BOTH v4, and F use the active current bundle.",
+      "interaction_offset_cancellation": "The interaction term F - (E-W + E-B) cancels the common Arm-A' reference algebraically and is therefore a same-bundle interaction when E-W, E-B, and F share the active bundle.",
+      "absolute_delta_policy": "Absolute delta_forget values versus Arm-A' are comparative freeze-arm quantities carrying a fixed bundle offset; do not interpret them as bundle-independent absolute effects."
+    }
   },
   "locked_references": {
     "Arm_A_prime_forgetting_pp": 32.0375,
@@ -104,7 +112,7 @@
   },
   "plasticity_gate": {
     "reference_T4_accuracy_percent": 45.1,
-    "collapse_drop_pp": 15.0,
+    "collapse_drop_pp": 15,
     "collapse_if_T4_below_percent": 30.1
   },
   "closure": {
@@ -116,6 +124,56 @@
   "execution_lock": {
     "run_F_only_after_this_amendment_is_recorded": true,
     "run_F_only_after_active_bundle_identity_is_verified_in_Kaggle": true,
-    "do_not_mix_historical_E_BOTH_bundle_with_active_F_bundle": true
+    "do_not_mix_historical_E_BOTH_bundle_with_active_F_bundle": true,
+    "amendment_additions": "Arm-A' cross-bundle reference note and v1.1 classification bands are locked before F execution."
+  },
+  "classification_bands_v1_1": {
+    "evaluation_order": [
+      "exact_boundary_cases first",
+      "then interval cases"
+    ],
+    "bands_pp": [
+      {
+        "condition": "delta_forget_pp <= -2.00",
+        "classification": "CAUSAL_SUPPORT"
+      },
+      {
+        "condition": "-2.00 < delta_forget_pp < -0.95",
+        "classification": "SUPER_ADDITIVE_BELOW_CAUSAL_GATE"
+      },
+      {
+        "condition": "delta_forget_pp == -0.95",
+        "classification": "ADDITIVE"
+      },
+      {
+        "condition": "-0.95 < delta_forget_pp < -0.75",
+        "classification": "SUB_ADDITIVE"
+      },
+      {
+        "condition": "delta_forget_pp == -0.75",
+        "classification": "E_BOTH_V4_LIKE"
+      },
+      {
+        "condition": "-0.75 < delta_forget_pp <= -0.5875",
+        "classification": "E_W_LIKE"
+      },
+      {
+        "condition": "-0.5875 < delta_forget_pp <= 0.00",
+        "classification": "ANTAGONISTIC"
+      },
+      {
+        "condition": "delta_forget_pp > 0.00",
+        "classification": "COUNTER_SUPPORT"
+      }
+    ],
+    "definitions": {
+      "SUB_ADDITIVE": "joint freeze is more protective than E-BOTH v4 but less protective than the same-bundle additive sum",
+      "E_BOTH_V4_LIKE": "F matches the active E-BOTH v4 delta within exact endpoint arithmetic; no additional retention benefit beyond E-BOTH v4",
+      "E_W_LIKE": "F falls between the active E-BOTH v4 and E-W magnitudes; no stronger joint effect than the E-W arm",
+      "ANTAGONISTIC": "F does not reach the E-W magnitude and remains at or below the Arm-A' reference",
+      "COUNTER_SUPPORT": "F increases forgetting relative to the Arm-A' reference"
+    },
+    "interaction_formula": "interaction_excess_pp = delta_forget_F_pp - (-0.95) = delta_forget_F_pp + 0.95",
+    "same_bundle_requirement": true
   }
 }
