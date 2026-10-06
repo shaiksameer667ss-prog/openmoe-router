@@ -1,0 +1,121 @@
+{
+  "experiment_id": "EXP-F-COMBINED-B0-EPATCH-FREEZE-v1.1",
+  "version": "1.1",
+  "title": "Combined B0 attention + E_patch freeze — preregistration amendment",
+  "status": "AMENDED_BEFORE_EXECUTION",
+  "supersedes": "experiments/expF_combined_freeze/pre_registration_v1.0.json",
+  "amendment_reason": {
+    "historical_e_both_nonreproduction": true,
+    "historical_e_both_delta_pp": -1.4875,
+    "current_e_both_delta_pp": -0.75,
+    "statement": "Historical E-BOTH was observed on a distinct D-era T3 bundle and was not reproduced on the current matched T3 reconstruction. Therefore the active F reference is the matched current-bundle E-BOTH result."
+  },
+  "primary_endpoint": {
+    "formula": "F_F - F_Arm_A_prime",
+    "support_gate_pp": -2.0,
+    "counter_support_gate_pp": 2.0,
+    "causal_support_rule": "classify as causal support only when delta_forget_pp <= -2.0 pp",
+    "inconclusive_rule": "otherwise report the primary endpoint without treating the historical E-BOTH magnitude as a causal expectation"
+  },
+  "active_bundle_alignment": {
+    "F_active_t3_bundle_sha256": "60a83ce0ff0729dc44de530d24f2fcea9047606ad992f13d71a1814fbf63b91c",
+    "F_active_t3_bundle_bytes": 237268777,
+    "active_E_BOTH_v4_delta_pp": -0.75,
+    "active_E_BOTH_v4_T4_accuracy_percent": 44.2,
+    "active_E_BOTH_v4_forgetting_pp": 31.2875,
+    "active_E_BOTH_v4_pre_eval_checkpoint_sha256": "f53a388536cbab0f0ccd901686fddc897ad16b9cb24d290ec81ca4efe495f658",
+    "historical_E_BOTH_t3_bundle_sha256": "7f5af253a4b4f6e4f3a5587a3cb5e116bf9dc923a2611b27c1594e6b965f7d13",
+    "historical_E_BOTH_t3_bundle_bytes": 237265897,
+    "bundle_relationship": "distinct files; relationship not assumed beyond matching T3 endpoint accuracy"
+  },
+  "locked_references": {
+    "Arm_A_prime_forgetting_pp": 32.0375,
+    "Arm_A_prime_T4_accuracy_percent": 45.1,
+    "D_B0_attn_forgetting_pp": 31.1625,
+    "D_delta_pp": -0.875,
+    "historical_E_BOTH_forgetting_pp": 30.55,
+    "historical_E_BOTH_delta_pp": -1.4875,
+    "current_E_BOTH_v4_forgetting_pp": 31.2875,
+    "current_E_BOTH_v4_delta_pp": -0.75,
+    "current_E_BOTH_v4_T4_accuracy_percent": 44.2
+  },
+  "same_bundle_additive_reference": {
+    "bundle_sha256": "60a83ce0ff0729dc44de530d24f2fcea9047606ad992f13d71a1814fbf63b91c",
+    "E_W_weight_only_delta_pp": -0.5875,
+    "E_B_bias_only_delta_pp": -0.3625,
+    "E_W_plus_E_B_sum_delta_pp": -0.95,
+    "interaction_term_allowed": true,
+    "interaction_formula": "delta_forget_F - (delta_forget_E_W + delta_forget_E_B)",
+    "interaction_baseline_requires_exact_bundle_match": true,
+    "interaction_result_may_be_reported_only_when_E_W_and_E_B_use_the_same_active_bundle": true
+  },
+  "historical_reference_policy": {
+    "historical_E_BOTH_is_reported_as": "historical observation only",
+    "historical_superadditivity_claim": "not treated as an active preregistered expectation for F",
+    "historical_E_BOTH_may_be_compared_descriptively": true
+  },
+  "intervention": {
+    "frozen_tensors": [
+      "blocks.0.attn.in_proj_weight",
+      "blocks.0.attn.in_proj_bias",
+      "blocks.0.attn.out_proj.weight",
+      "blocks.0.attn.out_proj.bias",
+      "patch_embed.weight",
+      "patch_embed.bias"
+    ],
+    "frozen_tensor_count": 6,
+    "frozen_parameter_count": 1075712,
+    "expected_trainable_tensor_count": 83,
+    "persistent_adamw_membership": true,
+    "clear_optimizer_state": false,
+    "router_updates_enabled": true
+  },
+  "replay": {
+    "capacity": 715,
+    "task_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ],
+    "file_sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "payload_sha256": "ac54b7af81500046ef1472d2236eb6eb7aa3e738aa17903e6d4ed7976bdc4963"
+  },
+  "checkpoints": {
+    "theta0_sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+    "theta3_sha256": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc"
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "learning_rate": 0.0003,
+    "weight_decay": 0.05,
+    "T4_current_batch": 64,
+    "T4_replay_batch": 64,
+    "T4_steps": 200,
+    "warmup_steps": 10,
+    "adaptation_steps": 190,
+    "continual_router": true,
+    "router_updates": true,
+    "stability": false,
+    "advanced_regularization": false,
+    "loss": "cross_entropy + z_loss",
+    "seed": 0
+  },
+  "plasticity_gate": {
+    "reference_T4_accuracy_percent": 45.1,
+    "collapse_drop_pp": 15.0,
+    "collapse_if_T4_below_percent": 30.1
+  },
+  "closure": {
+    "Experiment_C": "CLOSED — DO NOT RERUN",
+    "Experiment_D": "CLOSED — DO NOT RERUN",
+    "Experiment_E": "CLOSED — DO NOT RERUN",
+    "FWR_D_X_cross_reference": "NOT_ESTIMABLE — DO NOT REGENERATE FOR EXPERIMENT F"
+  },
+  "execution_lock": {
+    "run_F_only_after_this_amendment_is_recorded": true,
+    "run_F_only_after_active_bundle_identity_is_verified_in_Kaggle": true,
+    "do_not_mix_historical_E_BOTH_bundle_with_active_F_bundle": true
+  }
+}
