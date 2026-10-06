@@ -16,7 +16,7 @@
     "counterfactual_E": "no replay forward; evaluate all L1 expert functions on cached base H_k",
     "counterfactual_R_L1": "no replay forward; deltaE is structural zero",
     "structural_zero_groups": ["Z_nonselected_L1_expert","Z_downstream"],
-    "gate_weighting": "pre-update natural G_k for every group"
+    "gate_weighting": "pre-update natural G_k for every group, regardless of G'_X"
   },
   "cached_intermediates": {
     "base_H_k": "flattened L1 pre-MoE representation [45760,512]",
@@ -24,8 +24,8 @@
     "mu_g_k": "population vector in R^512",
     "mu_hat_k": "normalized mu_g direction",
     "base_loss": "forced-pair incoming-task loss scalar",
-    "group_grad_loss": "canonical forced-pair loss gradients",
-    "group_grad_q": "first-order q gradients"
+    "group_grad_loss": "canonical forced-pair loss gradients for each live group",
+    "group_grad_q": "first-order q gradients for each live group"
   },
   "logging": {
     "group_step_csv": "fwr_B_subsplit_group_step_results.csv",
@@ -46,12 +46,13 @@
     "dominant_absolute_count": "group_summary_csv.dominant_absolute_count"
   },
   "checks": {
-    "expected_group_step_rows": 20160,
+    "expected_group_step_rows": 26880,
     "expected_trajectory_step_rows": 2240,
+    "expected_zero_audit_rows": 4480,
     "expected_trajectory_count": 56,
     "expected_steps_per_trajectory": 40,
     "expected_full_counterfactual_replay_forwards_per_cell_step": 8,
-    "expected_forward_inclusions": "8 full upstream-group replay forwards; E direct evaluation; R_L1 skipped; structural-zero groups skipped"
+    "expected_forward_inclusions": "8 full upstream-group replay forwards; E direct evaluation; R_L1 skipped; structural-zero groups logged as exact zero without forward"
   },
   "performance": {
     "correctness_first": true,
