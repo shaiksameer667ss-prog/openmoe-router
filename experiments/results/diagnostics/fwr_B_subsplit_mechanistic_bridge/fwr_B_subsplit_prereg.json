@@ -1,0 +1,145 @@
+{
+  "experiment": "FWR_B_subsplit_mechanistic_bridge",
+  "version": "1.0_locked",
+  "status": "preregistered_before_run",
+  "purpose": "Refine Experiment B's validated parameter partition into mechanistic subgroups and test whether the FWR-dominant expert-output-drift contribution aligns with the pre-FWR historical retention direction mu_g.",
+  "protocol_identity": {
+    "state": "theta3",
+    "incoming_task": "T4",
+    "pairs": "all 28 unordered expert pairs from 8 experts",
+    "batches": ["batch1_0_127", "batch2_128_255"],
+    "steps": "k=0..39",
+    "eta": 0.001,
+    "replay_examples": 715,
+    "replay_tokens": 45760,
+    "replay_sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "theta3_sha256": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc",
+    "theta0_sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+    "l1_target": "blocks.1.moe",
+    "hidden_dim": 512,
+    "ff_dim": 1024,
+    "num_experts": 8,
+    "top_k": 2,
+    "depth": 2,
+    "patch_size": 4,
+    "forward_mode": "model.eval(), labels=None",
+    "router_trainable": true,
+    "router_observation_updates": false,
+    "optimizer": "none",
+    "weight_decay": 0.0,
+    "momentum": 0.0
+  },
+  "t4_batch_contract": {
+    "dataset": "canonical CIFAR100 train",
+    "classes": "80..99",
+    "shuffle": false,
+    "selection": "filter original CIFAR100 train targets to classes 80..99, preserve filtered order, take positions 0:255",
+    "batch1": "positions 0:127",
+    "batch2": "positions 128:255",
+    "batch_shape": [128, 3, 32, 32]
+  },
+  "groups": {
+    "E_patch": "patch_embed.weight, patch_embed.bias",
+    "E_pos": "pos_embed",
+    "B0_norm1": "blocks.0.norm1.*",
+    "B0_attn": "blocks.0.attn.*",
+    "B0_norm2": "blocks.0.norm2.*",
+    "B0_experts": "blocks.0.moe.experts.*",
+    "R_L0": "blocks.0.moe.router.proj.*",
+    "U_block1_pre": "blocks.1.norm1.*, blocks.1.attn.*, blocks.1.norm2.*",
+    "E": "blocks.1.moe.experts.* (all 8 L1 experts)",
+    "R_L1": "blocks.1.moe.router.proj.*",
+    "Z_nonselected_L1_expert": "non-selected L1 expert parameters",
+    "Z_downstream": "final norm/head and other parameters downstream of the L1 A-live frame"
+  },
+  "counterfactual_construction": {
+    "per_group_step": "theta'_X = theta_k - eta * grad_{theta_X} L_forced_pair,k",
+    "gradient_source": "the exact same forced-pair incoming-task loss used by validated Experiment B",
+    "independence": "each group X is perturbed independently from the same theta_k",
+    "upstream_rule": "apply the group-restricted perturbation only to a shadow model, then recompute the full replay forward so H'_X and G'_X are allowed to move",
+    "gate_measure": "pre-update natural G_k is the weighting measure for every X",
+    "deltaE": "deltaE_X = mean_h[ sum_e G_k(e,h) * (E_e(theta'_X,H'_X(h)) - E_e(theta_k,H_k(h))) ]",
+    "mu_g": "mu_g,k = mean_h[ sum_e G_k(e,h) * (E_e(theta_k,H_k(h)) - E_e(theta0,H_k(h))) ]",
+    "mu_hat": "mu_g,k / ||mu_g,k||",
+    "cos_X": "<deltaE_X, mu_g,k> / (||deltaE_X|| * ||mu_g,k||)",
+    "measure_lock": "G'_X is never used as the weighting measure in deltaE_X",
+    "r_l1_structural_zero": "For X=R_L1, H'_X=H_k and all L1 expert parameters are unchanged, so deltaE_R_L1 is exactly zero; record NOT_EVALUABLE when ||deltaE_R_L1|| < 1e-12"
+  },
+  "first_order_attribution": {
+    "q": "mean_h[ sum_{e in forced_pair} G_k(e,h) * <E_e(theta_k,H_k(h)), mu_hat_k> ]",
+    "DeltaA_1st": "-eta * <grad q, grad L_forced_pair>",
+    "D_X": "-eta * sum_{p in X} grad_q[p] * grad_L[p]",
+    "D_total": "sum_X D_X; structural-zero groups are exact-zero audit rows",
+    "weighted_absolute_ratio": "sum_cells |D_X| / sum_cells |D_total|",
+    "signed_share": "sum_cells D_X / sum_cells D_total",
+    "dominant_absolute_count": "count of cell-steps where |D_X| is the largest absolute group magnitude among non-structural groups"
+  },
+  "reporting": {
+    "all_steps_logged": true,
+    "required_steps": [0, 5, 10, 25, 39],
+    "batch_primary": true,
+    "pooled_secondary": true,
+    "required_group_metrics": ["deltaE_X_norm","mu_g_norm","cos_X","alignment_class","evaluable","D_X","D_total","weighted_absolute_ratio","signed_share","dominant_absolute_count"],
+    "alignment_classes": {
+      "aligned": "cos_X >= +0.50",
+      "weakly_aligned": "+0.20 <= cos_X < +0.50",
+      "orthogonal": "|cos_X| < 0.20",
+      "anti_aligned": "cos_X <= -0.20"
+    }
+  },
+  "dominance_thresholds": {
+    "dominant": "top group weighted_absolute_ratio > 0.50",
+    "weak_dominance": "top group weighted_absolute_ratio in [0.30, 0.50]",
+    "distributed": "top group weighted_absolute_ratio < 0.30",
+    "locked": true
+  },
+  "mechanistic_bridge": {
+    "rationale": "The subgroup with the largest accumulated absolute FWR change is tested against the independently defined mu_g historical retention direction.",
+    "decision_rule_1": "top-D_X group aligned => mechanism chain supported at the identified subgroup, subject to all audit guardrails passing",
+    "decision_rule_2": "top-D_X group orthogonal AND a smaller-D_X group aligned => FWR-dominant change is not retention-relevant; the proposed chain breaks at the subgroup-output bridge",
+    "decision_rule_3": "all evaluable groups orthogonal => retention direction is not represented by the tested expert-output-drift pathway in this branch",
+    "decision_rule_4": "top-D_X group weakly aligned => weak alignment only; do not claim full mechanistic support",
+    "decision_rule_5": "top-D_X group anti-aligned => FWR-dominant group moves opposite the retention direction",
+    "causal_scope": "alignment is a mechanistic bridge test, not causal proof of retention improvement",
+    "negative_result_policy": "a non-aligned dominant subgroup falsifies the current unified mechanism chain at the tested resolution; it does not prove another mechanism is causal"
+  },
+  "near_zero_rules": {
+    "mu_g_norm": "if ||mu_g,k|| < 1e-12, mark INVALID_MECHANISTIC_BRIDGE and do not compute cos_X",
+    "deltaE_norm": "if ||deltaE_X|| < 1e-12, mark NOT_EVALUABLE and do not compute cos_X",
+    "denominator": "never divide by a value below 1e-12",
+    "report_D_X": true,
+    "r_l1": "expected NOT_EVALUABLE by construction and is not a bridge failure"
+  },
+  "trajectory_state_invariants": [
+    "The canonical trajectory model is mutated only by its direct SGD update.",
+    "All counterfactual perturbations occur only on the separate shadow model.",
+    "The shadow is synchronized to theta_k before group counterfactuals.",
+    "The perturbed shadow group is restored before the next group.",
+    "Counterfactual forwards use labels=None and router observation/state updates disabled.",
+    "No optimizer state exists.",
+    "The canonical forced-pair trajectory remains the validated Experiment B trajectory."
+  ],
+  "guardrails": [
+    "exact theta3 SHA",
+    "exact theta0 SHA",
+    "exact replay SHA",
+    "replay shape/token count",
+    "T4 batch construction contract",
+    "8 L1 experts and Top-K=2",
+    "router trainable with observation disabled",
+    "model.eval() and labels=None",
+    "56 trajectories and 40 steps per trajectory",
+    "no unclassified live parameters",
+    "G_k is natural pre-update routing",
+    "structural-zero groups exactly zero",
+    "group-sum identity",
+    "no zero or <1e-8 D_total denominators",
+    "fixed-frame E sign QA",
+    "trajectory model unchanged by counterfactuals"
+  ],
+  "decision_lock": {
+    "locked_before_run": true,
+    "threshold_tuning_after_results": false,
+    "protocol_changes_after_start": false
+  }
+}

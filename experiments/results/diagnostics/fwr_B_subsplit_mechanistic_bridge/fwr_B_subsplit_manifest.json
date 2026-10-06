@@ -1,0 +1,62 @@
+{
+  "experiment": "FWR_B_subsplit_mechanistic_bridge",
+  "version": "1.0",
+  "runtime_root": "/kaggle/working/openmoe-router",
+  "implementation": {
+    "trajectory_model": "canonical model",
+    "counterfactual_model": "one persistent deepcopy shadow model",
+    "shadow_sync": "shadow.load_state_dict(model.state_dict()) once at the start of every canonical step k",
+    "mutation_rule": "trajectory model is never mutated by counterfactuals",
+    "group_restore": "restore each perturbed shadow group from its theta_k snapshot before the next group",
+    "canonical_update": "apply direct SGD to trajectory model only after all group counterfactuals at step k"
+  },
+  "forward_contract": {
+    "base_forward": "full replay forward with labels=None",
+    "counterfactual_full_replay_groups": ["E_patch","E_pos","B0_norm1","B0_attn","B0_norm2","B0_experts","R_L0","U_block1_pre"],
+    "counterfactual_E": "no replay forward; evaluate all L1 expert functions on cached base H_k",
+    "counterfactual_R_L1": "no replay forward; deltaE is structural zero",
+    "structural_zero_groups": ["Z_nonselected_L1_expert","Z_downstream"],
+    "gate_weighting": "pre-update natural G_k for every group"
+  },
+  "cached_intermediates": {
+    "base_H_k": "flattened L1 pre-MoE representation [45760,512]",
+    "base_G_k": "natural dense gate matrix [45760,8]",
+    "mu_g_k": "population vector in R^512",
+    "mu_hat_k": "normalized mu_g direction",
+    "base_loss": "forced-pair incoming-task loss scalar",
+    "group_grad_loss": "canonical forced-pair loss gradients",
+    "group_grad_q": "first-order q gradients"
+  },
+  "logging": {
+    "group_step_csv": "fwr_B_subsplit_group_step_results.csv",
+    "trajectory_step_csv": "fwr_B_subsplit_step_results.csv",
+    "group_summary_csv": "fwr_B_subsplit_group_summary.csv",
+    "guardrails_json": "fwr_B_subsplit_guardrails.json",
+    "summary_json": "fwr_B_subsplit_summary.json",
+    "prereg_json": "fwr_B_subsplit_prereg.json",
+    "deltaE_X_norm": "group_step_csv.deltaE_X_norm",
+    "mu_g_norm": "group_step_csv.mu_g_norm",
+    "cos_X": "group_step_csv.cos_X",
+    "alignment_class": "group_step_csv.alignment_class",
+    "evaluable": "group_step_csv.evaluable",
+    "D_X": "group_step_csv.D_X",
+    "D_total": "group_step_csv.D_total",
+    "weighted_absolute_ratio": "group_summary_csv.weighted_absolute_ratio",
+    "signed_share": "group_summary_csv.signed_share",
+    "dominant_absolute_count": "group_summary_csv.dominant_absolute_count"
+  },
+  "checks": {
+    "expected_group_step_rows": 20160,
+    "expected_trajectory_step_rows": 2240,
+    "expected_trajectory_count": 56,
+    "expected_steps_per_trajectory": 40,
+    "expected_full_counterfactual_replay_forwards_per_cell_step": 8,
+    "expected_forward_inclusions": "8 full upstream-group replay forwards; E direct evaluation; R_L1 skipped; structural-zero groups skipped"
+  },
+  "performance": {
+    "correctness_first": true,
+    "partial_path_cache": false,
+    "reason": "Use full replay counterfactuals as the reference implementation; optimization is deliberately deferred.",
+    "memory_policy": "replay images stay CPU until transfer; counterfactual H/G and expert-output scratch tensors are freed after each group"
+  }
+}
