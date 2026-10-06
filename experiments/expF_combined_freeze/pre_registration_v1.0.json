@@ -1,0 +1,79 @@
+{
+  "experiment_id": "EXP-F-COMBINED-B0-EPATCH-FREEZE-v1.0",
+  "version": "1.0",
+  "title": "Combined B0 attention + E_patch freeze",
+  "status": "PREREGISTERED_BEFORE_EXECUTION",
+  "primary_endpoint": {
+    "formula": "F_F - F_Arm_A_prime",
+    "support_gate_pp": -2,
+    "counter_support_gate_pp": 2
+  },
+  "locked_references": {
+    "Arm_A_prime_forgetting_pp": 32.0375,
+    "D_B0_attn_forgetting_pp": 31.1625,
+    "E_E_patch_forgetting_pp": 30.55,
+    "D_delta_pp": -0.875,
+    "E_delta_pp": -1.4875,
+    "additive_reference_pp": -2.3625,
+    "Arm_A_prime_T4_accuracy_percent": 45.1
+  },
+  "intervention": {
+    "frozen_tensors": [
+      "blocks.0.attn.in_proj_weight",
+      "blocks.0.attn.in_proj_bias",
+      "blocks.0.attn.out_proj.weight",
+      "blocks.0.attn.out_proj.bias",
+      "patch_embed.weight",
+      "patch_embed.bias"
+    ],
+    "frozen_tensor_count": 6,
+    "frozen_parameter_count": 1075712,
+    "expected_trainable_tensor_count": 83,
+    "persistent_adamw_membership": true,
+    "clear_optimizer_state": false,
+    "router_updates_enabled": true
+  },
+  "replay": {
+    "capacity": 715,
+    "task_counts": [
+      179,
+      179,
+      179,
+      178,
+      0
+    ],
+    "file_sha256": "de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed",
+    "payload_sha256": "ac54b7af81500046ef1472d2236eb6eb7aa3e738aa17903e6d4ed7976bdc4963"
+  },
+  "checkpoints": {
+    "theta0_sha256": "66dc3ac61695a96da3f23352d7c63c2bdd3e24f02056b94ed71c39a495c51ef7",
+    "theta3_sha256": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc"
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "learning_rate": 0.0003,
+    "weight_decay": 0.05,
+    "T4_current_batch": 64,
+    "T4_replay_batch": 64,
+    "T4_steps": 200,
+    "warmup_steps": 10,
+    "adaptation_steps": 190,
+    "continual_router": true,
+    "router_updates": true,
+    "stability": false,
+    "advanced_regularization": false,
+    "loss": "cross_entropy + z_loss",
+    "seed": 0
+  },
+  "plasticity_gate": {
+    "reference_T4_accuracy_percent": 45.1,
+    "collapse_drop_pp": 15,
+    "collapse_if_T4_below_percent": 30.1
+  },
+  "closure": {
+    "Experiment_C": "CLOSED — DO NOT RERUN",
+    "Experiment_D": "CLOSED — DO NOT RERUN",
+    "Experiment_E": "CLOSED — DO NOT RERUN",
+    "FWR_D_X_cross_reference": "NOT_ESTIMABLE — DO NOT REGENERATE FOR EXPERIMENT F"
+  }
+}
