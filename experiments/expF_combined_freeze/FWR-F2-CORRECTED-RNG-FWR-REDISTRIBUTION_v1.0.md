@@ -24,7 +24,9 @@ When the two leading natural harmful write pathways are frozen, does harmful ret
 - Bundle SHA256: `60a83ce0ff0729dc44de530d24f2fcea9047606ad992f13d71a1814fbf63b91c`
 - Canonical theta3 SHA256: `26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc`
 - Canonical replay SHA256: `de9136168116970af6051e73e64b208ee776ac127367f52862daabcaf65da8ed`
-- Locked experiment HEAD: `34382c0b2cc68f3d456486df096e1d278c83d263`
+- Execution checkout commit: `3854bd254634eafcb5ac29edf37818654fe281de`
+- Source-tree baseline before documentation-only commits: `6932d6c1c9a192e0d547875cf498b586f3112d3e`
+- Historical local-only F preregistration checkout `34382c0b2cc68f3d456486df096e1d278c83d263`: **UNRECOVERABLE FROM REMOTE/LOCAL OBJECT DATABASE**
 - Seed identifier: `0` (T4 replay/global RNG is restored from the saved T3 state; no fresh T4 seed is permitted)
 
 ## 4. Starting-state identity
@@ -377,3 +379,11 @@ At completion, preserve:
 ## 20. Lock statement
 
 This preregistration is locked before F2 execution. No threshold tuning, intervention changes, RNG substitutions, diagnostic loader consumption, or post hoc endpoint redefinition is permitted after training begins.
+
+## 21. Provenance amendment — pre-execution
+
+The originally recorded F execution checkout `34382c0b2cc68f3d456486df096e1d278c83d263` cannot be recovered from the current Kaggle Git object database or the remote GitHub repository.
+
+Before F2 execution, the remote history was audited. The verifiable F2 branch currently ends at `3854bd254634eafcb5ac29edf37818654fe281de`. A GitHub commit comparison from `6932d6c1c9a192e0d547875cf498b586f3112d3e` to `3854bd254634eafcb5ac29edf37818654fe281de` shows only documentation-file changes and no model/training source changes. Therefore F2 will execute from the verifiable `3854bd...` checkout, while preserving the unrecoverable `34382c...` identifier as historical provenance only.
+
+This amendment is recorded before any F2 training step. No scientific endpoint, intervention, RNG rule, checkpoint schedule, FWR definition, harmful-mass aggregation, or classification band is changed by this provenance amendment.
