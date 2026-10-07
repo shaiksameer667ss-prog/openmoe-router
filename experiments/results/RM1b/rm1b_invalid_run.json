@@ -1,0 +1,66 @@
+{
+  "experiment_id": "RM1b",
+  "run_status": "INVALID_FOR_DECISION",
+  "reason": "Margin class indexing bug in RM1b runner",
+  "scientific_consequence": "The reported Case 1 decision must not be used. The runner evaluated old classes 0:60 vs new classes 60:80 for T3, F, and E-BOTH. For F/E-BOTH the checkpoint-relative comparison must be old classes 0:80 vs new classes 80:100.",
+  "run_provenance": {
+    "gpu": "Tesla T4",
+    "torch": "2.11.0+cu128",
+    "local_git_head": "f10fd09b1b88a51561f1912b502635d5cc692d9a",
+    "source_files_restored_from_origin_main": "2b4f0989566eff8bdf5313c8b07b9614a480a912",
+    "rm1b_script_blob_sha256": "0c6d3e9fc209d0ba3a6202f630cb75baa478db3e",
+    "permutations": 1000,
+    "ridge_alpha": 1.0,
+    "cv_seed": 0,
+    "samples": 8000
+  },
+  "reported_checkpoint_results_under_wrong_fixed_target": {
+    "T3": {
+      "A_R2": 0.060061,
+      "A_p": 0.000999,
+      "B_R2": 0.053964,
+      "B_p": 0.000999,
+      "C_R2": 0.050397,
+      "C_p": 0.000999,
+      "D_mean_R2": 0.075958,
+      "D_range": [0.041286, 0.125165],
+      "E_mean_R2": 0.045046,
+      "margin_mean": -2.526397,
+      "margin_std": 2.329262
+    },
+    "F": {
+      "A_R2": 0.057763,
+      "A_p": 0.000999,
+      "B_R2": 0.043336,
+      "B_p": 0.000999,
+      "C_R2": 0.027288,
+      "C_p": 0.000999,
+      "D_mean_R2": 0.057927,
+      "D_range": [0.029497, 0.084032],
+      "E_mean_R2": 0.024405,
+      "margin_mean": 0.178587,
+      "margin_std": 2.289334
+    },
+    "E-BOTH": {
+      "A_R2": 0.072340,
+      "A_p": 0.000999,
+      "B_R2": 0.056078,
+      "B_p": 0.000999,
+      "C_R2": 0.036066,
+      "C_p": 0.000999,
+      "D_mean_R2": 0.072563,
+      "D_range": [0.057889, 0.098347],
+      "E_mean_R2": 0.032134,
+      "margin_mean": 0.425811,
+      "margin_std": 2.338875
+    }
+  },
+  "archived_rm1_margin_means_for_audit": {
+    "T3": 7.365677,
+    "F": -3.285769,
+    "E-BOTH": -2.827610
+  },
+  "reported_decision": "CASE_1_PER_EXAMPLE_SIGNAL_CONFIRMED",
+  "decision_validity": "REJECTED",
+  "next_action": "Run corrected RM1b with checkpoint-relative old/new class ranges: T3 old 0:60 vs new 60:80; F and E-BOTH old 0:80 vs new 80:100."
+}
