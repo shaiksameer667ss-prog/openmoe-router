@@ -1,0 +1,105 @@
+{
+  "experiment_id": "RM1b",
+  "run_id": "20261008_corrected_partial",
+  "status": "PARTIALLY_VALID",
+  "scientific_decision_status": "VALID_FOR_F_AND_E_BOTH_DECISION",
+  "protocol": "RM1b-v1.0",
+  "amendment": "checkpoint-relative indexing correction",
+  "hardware": {
+    "gpu": "Tesla T4",
+    "torch": "2.11.0+cu128",
+    "device": "cuda"
+  },
+  "run_parameters": {
+    "ridge_alpha": 1.0,
+    "cv_seed": 0,
+    "permutations": 1000,
+    "samples": 8000
+  },
+  "checkpoint_margin_definitions_used": {
+    "T3": {
+      "used": "max(logits[0:40]) - max(logits[40:60])",
+      "status": "INVALID_T3_ONLY"
+    },
+    "F": {
+      "used": "max(logits[0:80]) - max(logits[80:100])",
+      "status": "VALID"
+    },
+    "E-BOTH": {
+      "used": "max(logits[0:80]) - max(logits[80:100])",
+      "status": "VALID"
+    }
+  },
+  "results_full16": {
+    "T3": {
+      "status": "INVALID_T3_TARGET",
+      "A_R2": 0.077273,
+      "B_R2": 0.069692,
+      "C_R2": 0.037734,
+      "C_permutation_p": 0.000999,
+      "D_mean_R2": 0.083840,
+      "D_range": [0.06342795878840139, 0.09840568139039038],
+      "E_mean_R2": 0.035228
+    },
+    "F": {
+      "status": "VALID",
+      "A_R2": 0.051198,
+      "A_permutation_p": 0.000999,
+      "B_R2": 0.051789,
+      "B_permutation_p": 0.000999,
+      "C_R2": 0.038009,
+      "C_permutation_p": 0.000999,
+      "D_mean_R2": 0.057905,
+      "D_range": [0.034799330957219675, 0.0949680366549561],
+      "E_mean_R2": 0.033056
+    },
+    "E-BOTH": {
+      "status": "VALID",
+      "A_R2": 0.037822,
+      "A_permutation_p": 0.000999,
+      "B_R2": 0.039278,
+      "B_permutation_p": 0.000999,
+      "C_R2": 0.017198,
+      "C_permutation_p": 0.000999,
+      "D_mean_R2": 0.052810,
+      "D_range": [0.020941020910918963, 0.0830726740530539],
+      "E_mean_R2": 0.011985
+    }
+  },
+  "preregistered_decision": "NO_PRE_REGISTERED_CASE",
+  "decision_basis": {
+    "F_C_R2": 0.038009,
+    "E_BOTH_C_R2": 0.017198,
+    "F_C_p": 0.000999,
+    "E_BOTH_C_p": 0.000999,
+    "case1": "FAILS because E-BOTH C_R2 < 0.02",
+    "case2": "FAILS because F C_R2 >= 0.01",
+    "case3": "FAILS because F B_R2 >= 0.01",
+    "case4": "FAILS because F B_R2 and C_R2 are not both < 0.01"
+  },
+  "archived_margin_audit": {
+    "T3": {
+      "archived_margin_mean": 7.365677,
+      "run_margin_mean": -0.144636,
+      "status": "INVALID_T3_TARGET"
+    },
+    "F": {
+      "archived_margin_mean": -3.285769,
+      "run_margin_mean": -3.285768,
+      "difference": 0.000001,
+      "status": "PASS"
+    },
+    "E-BOTH": {
+      "archived_margin_mean": -2.827610,
+      "run_margin_mean": -2.827610,
+      "difference": 0.0,
+      "status": "PASS"
+    }
+  },
+  "notes": [
+    "The uploaded T3 target used 0:40 vs 40:60 and is invalid for the RM1b T3 endpoint.",
+    "F and E-BOTH use the correct final-task split 0:80 vs 80:100 and therefore support the preregistered decision.",
+    "No training was performed and no checkpoint was modified.",
+    "A complete RM1b ledger still requires a T3-only rerun with 0:60 vs 60:80 if the T3 results themselves are to be reported."
+  ]
+}
