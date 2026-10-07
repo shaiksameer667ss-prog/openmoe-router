@@ -1,0 +1,197 @@
+{
+  "experiment_id": "RM1",
+  "experiment_name": "Routing-to-Margin Predictability",
+  "status": "complete",
+  "training_performed": false,
+  "checkpoint_modified": false,
+  "hardware": {
+    "gpu": "Tesla T4",
+    "torch": "2.11.0+cu128"
+  },
+  "inputs": {
+    "theta3_sha256": "26f0c00cbe53d20d535cc701c2e53c7d488af5eca51a8117c9b2da21d85307fc",
+    "f_final_sha256": "a011b0f5ae4fb691d6cc8173d14acb10e96e415b1384d60a38829c945262a5c4",
+    "e_both_final_sha256": "1cc2548309f5f61e86c9960eabab0ff2d96f1a98989ac152af85493aafd2aa90",
+    "canonical_identity_checks": "PASS",
+    "deterministic_old_task_loaders": 4,
+    "samples_per_checkpoint": 8000,
+    "cv_folds": 5,
+    "permutations": 1000
+  },
+  "target": "m(x) = max_old_logits - max_new_logits",
+  "signatures": {
+    "pooled8": {
+      "feature_count": 8,
+      "cv_r2": {
+        "T3": 0.03585542,
+        "F": 0.04329553,
+        "E-BOTH": 0.02663877
+      },
+      "permutation_null_mean": {
+        "T3": -0.00138147,
+        "F": -0.00137781,
+        "E-BOTH": -0.00138609
+      },
+      "permutation_null_std": {
+        "T3": 0.00073106,
+        "F": 0.00071726,
+        "E-BOTH": 0.00071710
+      },
+      "null_95th_percentile": {
+        "T3": -0.00019223,
+        "F": -0.00021397,
+        "E-BOTH": -0.00023861
+      },
+      "null_99th_percentile": {
+        "T3": 0.00042351,
+        "F": 0.00026890,
+        "E-BOTH": 0.00024809
+      },
+      "observed_null_z": {
+        "T3": 50.9354,
+        "F": 62.2837,
+        "E-BOTH": 39.0807
+      },
+      "permutation_p": {
+        "T3": 0.000999,
+        "F": 0.000999,
+        "E-BOTH": 0.000999
+      }
+    },
+    "block0_8": {
+      "feature_count": 8,
+      "cv_r2": {
+        "T3": 0.09298929,
+        "F": 0.01643079,
+        "E-BOTH": 0.00670214
+      },
+      "permutation_null_mean": {
+        "T3": -0.00138651,
+        "F": -0.00141333,
+        "E-BOTH": -0.00147071
+      },
+      "permutation_null_std": {
+        "T3": 0.00072915,
+        "F": 0.00073602,
+        "E-BOTH": 0.00077854
+      },
+      "null_95th_percentile": {
+        "T3": -0.00019536,
+        "F": -0.00022847,
+        "E-BOTH": -0.00020900
+      },
+      "null_99th_percentile": {
+        "T3": 0.00031705,
+        "F": 0.00018605,
+        "E-BOTH": 0.00027714
+      },
+      "observed_null_z": {
+        "T3": 129.4326,
+        "F": 24.2442,
+        "E-BOTH": 10.4977
+      },
+      "permutation_p": {
+        "T3": 0.000999,
+        "F": 0.000999,
+        "E-BOTH": 0.000999
+      }
+    },
+    "block1_8": {
+      "feature_count": 8,
+      "cv_r2": {
+        "T3": 0.04841426,
+        "F": 0.03854904,
+        "E-BOTH": 0.03331054
+      },
+      "permutation_null_mean": {
+        "T3": -0.00139153,
+        "F": -0.00136075,
+        "E-BOTH": -0.00135602
+      },
+      "permutation_null_std": {
+        "T3": 0.00074626,
+        "F": 0.00075399,
+        "E-BOTH": 0.00071743
+      },
+      "null_95th_percentile": {
+        "T3": -0.00013985,
+        "F": -0.00017037,
+        "E-BOTH": -0.00016545
+      },
+      "null_99th_percentile": {
+        "T3": 0.00053953,
+        "F": 0.00042005,
+        "E-BOTH": 0.00041595
+      },
+      "observed_null_z": {
+        "T3": 66.7407,
+        "F": 52.9317,
+        "E-BOTH": 48.3206
+      },
+      "permutation_p": {
+        "T3": 0.000999,
+        "F": 0.000999,
+        "E-BOTH": 0.000999
+      }
+    },
+    "full16": {
+      "feature_count": 16,
+      "cv_r2": {
+        "T3": 0.13364613,
+        "F": 0.05240563,
+        "E-BOTH": 0.03784760
+      },
+      "permutation_null_mean": {
+        "T3": -0.00248678,
+        "F": -0.00250081,
+        "E-BOTH": -0.00255411
+      },
+      "permutation_null_std": {
+        "T3": 0.00102510,
+        "F": 0.00102079,
+        "E-BOTH": 0.00100696
+      },
+      "null_95th_percentile": {
+        "T3": -0.00081386,
+        "F": -0.00078220,
+        "E-BOTH": -0.00093326
+      },
+      "null_99th_percentile": {
+        "T3": -0.00001626,
+        "F": -0.00002964,
+        "E-BOTH": -0.00029551
+      },
+      "observed_null_z": {
+        "T3": 132.7997,
+        "F": 53.7884,
+        "E-BOTH": 40.1223
+      },
+      "permutation_p": {
+        "T3": 0.000999,
+        "F": 0.000999,
+        "E-BOTH": 0.000999
+      }
+    }
+  },
+  "margin_summary": {
+    "T3": {"mean": 7.365677, "std": 1.514167},
+    "F": {"mean": -3.285769, "std": 2.011655},
+    "E-BOTH": {"mean": -2.827610, "std": 2.000669}
+  },
+  "strongest_signature": {
+    "T3": "full16",
+    "F": "full16",
+    "E-BOTH": "full16"
+  },
+  "decision_aid": {
+    "T3": "ROUTING->MARGIN PREDICTABILITY",
+    "F": "ROUTING->MARGIN PREDICTABILITY",
+    "E-BOTH": "ROUTING->MARGIN PREDICTABILITY"
+  },
+  "notes": [
+    "Permutation p=0.000999 is the empirical minimum resolvable with 1000 permutations using the +1 correction.",
+    "RM1 establishes detectable but modest routing-to-margin predictability.",
+    "Random CV mixes tasks, so task-identity confounding is not controlled by RM1; RM1b is the planned task-controlled follow-up.",
+    "No training, optimizer creation, checkpoint write, or checkpoint modification occurred."
+  ]
+}
