@@ -42,8 +42,8 @@ def checkpoint_margin(checkpoint_name, logits):
         )
 
     if checkpoint_name == "T3":
-        old_start, old_end = 0, 40
-        new_start, new_end = 40, 60
+        old_start, old_end = 0, 60
+        new_start, new_end = 60, 80
     elif checkpoint_name in {"F", "E-BOTH"}:
         old_start, old_end = 0, 80
         new_start, new_end = 80, 100
@@ -272,8 +272,9 @@ def build_results(
 
     results = {
         "protocol": {
-            "id": "RM1b-v1.0-A1",
+            "id": "RM1b-v1.0-A3",
             "base_protocol": "RM1b-v1.0",
+            "amendment": "A3 final correction",
             "correction": "checkpoint-relative class indexing",
             "device": str(device),
             "torch": torch.__version__,
@@ -286,7 +287,7 @@ def build_results(
             "source_tasks": [0, 1, 2, 3],
             "samples_per_source_task": 2000,
             "margin_definition": {
-                "T3": "max(logits[0:40]) - max(logits[40:60])",
+                "T3": "max(logits[0:60]) - max(logits[60:80])",
                 "F": "max(logits[0:80]) - max(logits[80:100])",
                 "E-BOTH": "max(logits[0:80]) - max(logits[80:100])",
             },
@@ -550,7 +551,7 @@ def main():
 
     print()
     print("CHECKPOINT-RELATIVE TARGETS:")
-    print("  T3     : old 0:40, new 40:60")
+    print("  T3     : old 0:60, new 60:80")
     print("  F      : old 0:80, new 80:100")
     print("  E-BOTH : old 0:80, new 80:100")
     print("=" * 110)
