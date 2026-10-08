@@ -123,6 +123,28 @@ Gate 2 fails:
 Gate 3 is descriptive/model-selection guidance:
 if A1 beats A2 and A3 by >0.01, treat the relationship as sufficiently linear and avoid unnecessary MLP/factorized complexity in RM2b.
 
+
+## A2 implementation lock
+
+Because the model family specification requires a deterministic executable training procedure, the following settings are locked before execution and are not tuned:
+
+- A1 optimizer: closed-form ordinary least squares; no regularization.
+- A3 optimizer: closed-form ordinary least squares independently for each expert.
+- A2 optimizer: Adam.
+- A2 learning rate: 1e-3.
+- A2 weight decay: 0.0.
+- A2 batch size: 1024.
+- A2 epochs: 100.
+- A2 activation: ReLU.
+- A2 output: one scalar with no output activation.
+- A2 training seed: 0 plus fold identifier (seed = fold_index for fold 0..4).
+- A2 batches: deterministic, no shuffle.
+- No early stopping.
+- No model selection using the held-out fold.
+- The reported A2 model is the state after exactly 100 training epochs for each training fold.
+
+A2 therefore has exactly 520 -> 256 -> 1 dimensions, where the 520 input is h_L1 (512) concatenated with the 8-dimensional one-hot expert identity.
+
 ## Sign convention
 
 Delta margin = counterfactual margin - original margin.
